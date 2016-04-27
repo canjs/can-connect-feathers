@@ -12,7 +12,8 @@ npm install can-connect-feathers --save
 
 Instantiate a `Feathers` instance for each Feathers API server:
 ```js
-import Feathers from './can-connect-feathers';
+// models/feathers.js
+import Feathers from 'can-connect-feathers';
 
 const feathers = new Feathers();
 
@@ -21,6 +22,7 @@ export default feathers;
 
 Use it in your can-connect model:
 ```js
+// models/message.js
 import can from 'can';
 import superMap from 'can-connect/can/super-map/';
 import tag from 'can-connect/can/tag/';
