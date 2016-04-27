@@ -1,5 +1,5 @@
-@page feathers-connect
+@page can-connect-feathers
 
-# feathers-connect
+# can-connect-feathers
 
 Feathers client library for DoneJS and can-connect

@@ -1,18 +1,18 @@
-# feathers-connect
+# can-connect-feathers
 
-[![Build Status](https://travis-ci.org/feathersjs/feathers-connect.png?branch=master)](https://travis-ci.org/feathersjs/feathers-connect)
+[![Build Status](https://travis-ci.org/feathersjs/can-connect-feathers.png?branch=master)](https://travis-ci.org/feathersjs/can-connect-feathers)
 
 The FeathersJS client library for DoneJS and can-connect
 
 ## Quick start
 Install the plugin:
 ```
-npm install feathers-connect --save
+npm install can-connect-feathers --save
 ```
 
 Instantiate a `Feathers` instance for each Feathers API server:
 ```js
-import Feathers from './feathers-connect';
+import Feathers from './can-connect-feathers';
 
 const feathers = new Feathers();
 
@@ -143,7 +143,7 @@ feathers.authenticate({
 ## Configuration
 When instantiating a `Feathers` instance, you can pass a configuration object to the constructor.  For most applications, the only options that will need to be specified will be the `url` and the `idProp`.
 ```js
-import Feathers from 'feathers-connect';
+import Feathers from 'can-connect-feathers';
 
 const feathers = new Feathers({
   // The current server is assumed to be the API server.

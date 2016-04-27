@@ -5,21 +5,21 @@
 With StealJS, you can import this module directly in a template that is autorendered:
 
 ```js
-import plugin from 'feathers-connect';
+import plugin from 'can-connect-feathers';
 ```
 
 ### CommonJS use
 
-Use `require` to load `feathers-connect` and everything else
-needed to create a template that uses `feathers-connect`:
+Use `require` to load `can-connect-feathers` and everything else
+needed to create a template that uses `can-connect-feathers`:
 
 ```js
-var plugin = require("feathers-connect");
+var plugin = require("can-connect-feathers");
 ```
 
 ## AMD use
 
-Configure the `can` and `jquery` paths and the `feathers-connect` package:
+Configure the `can` and `jquery` paths and the `can-connect-feathers` package:
 
 ```html
 <script src="require.js"></script>
@@ -30,9 +30,9 @@ Configure the `can` and `jquery` paths and the `feathers-connect` package:
 	        "can": "node_modules/canjs/dist/amd/can"
 	    },
 	    packages: [{
-		    	name: 'feathers-connect',
-		    	location: 'node_modules/feathers-connect/dist/amd',
-		    	main: 'lib/feathers-connect'
+		    	name: 'can-connect-feathers',
+		    	location: 'node_modules/can-connect-feathers/dist/amd',
+		    	main: 'lib/can-connect-feathers'
 	    }]
 	});
 	require(["main-amd"], function(){});
@@ -44,5 +44,5 @@ Configure the `can` and `jquery` paths and the `feathers-connect` package:
 Load the `global` version of the plugin:
 
 ```html
-<script src='./node_modules/feathers-connect/dist/global/feathers-connect.js'></script>
+<script src='./node_modules/can-connect-feathers/dist/global/can-connect-feathers.js'></script>
 ```

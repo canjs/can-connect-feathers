@@ -1,7 +1,7 @@
 import QUnit from 'steal-qunit';
-import Feathers from './feathers-connect';
+import Feathers from './can-connect-feathers';
 
-QUnit.module('feathers-connect');
+QUnit.module('can-connect-feathers');
 
 QUnit.test('Initialized the plugin', function(){
   let feathers = new Feathers();

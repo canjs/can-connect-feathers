@@ -2,7 +2,7 @@
   "sites": {
     "docs": {
       "dest": "docs",
-      "parent": "feathers-connect",
+      "parent": "can-connect-feathers",
       "pageConfig": {
         "page": "docs"
       },

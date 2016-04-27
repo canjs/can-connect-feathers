@@ -1,1 +1,1 @@
-import '../src/feathers-connect_test';
+import '../src/can-connect-feathers_test';
