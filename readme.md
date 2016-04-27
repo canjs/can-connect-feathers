@@ -198,3 +198,7 @@ Automated tests that run the tests from the command line in Firefox can be run w
 ```
 npm test
 ```
+
+## Changelog
+- `0.2.0` - Added socket.io auth to the `authenticate` method to get authenticated real-time events.
+- `0.1.0` - Initial version

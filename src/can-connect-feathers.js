@@ -170,6 +170,20 @@ class Feathers {
       data.token = token;
     }
 
+    // Authenticate the socket.io connection
+    if (token) {
+      let authenticateSocket = function(data){
+        this.io.once('unauthorized', res => console.log(res));
+        this.io.once('authenticated', res => console.log(res));
+        this.io.emit('authenticate', data);
+      };
+      if (this.io.connected) {
+        authenticateSocket(data);
+      } else {
+        this.io.once('connect', () => authenticateSocket(data));
+      }
+    }
+
     let location = data.type === 'token' ? this.tokenEndpoint : this.localEndpoint;
 
     return this.makeXhr(null, data, location, 'POST')
