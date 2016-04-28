@@ -174,7 +174,7 @@ class Feathers {
     if (token) {
       let authenticateSocket = function(data){
         this.io.once('unauthorized', res => console.log(res));
-        this.io.once('authenticated', res => console.log(res));
+        // this.io.once('authenticated', res => console.log(res));
         this.io.emit('authenticate', data);
       };
       if (this.io.connected) {
