@@ -178,9 +178,9 @@ class Feathers {
         this.io.emit('authenticate', data);
       };
       if (this.io.connected) {
-        authenticateSocket(data);
+        authenticateSocket.call(this, data);
       } else {
-        this.io.once('connect', () => authenticateSocket(data));
+        this.io.once('connect', () => authenticateSocket.call(this, data));
       }
     }
 
