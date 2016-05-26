@@ -5,6 +5,8 @@ import $ from 'jquery';
 import {CookieStorage} from 'cookie-storage';
 import decode from 'jwt-decode';
 import {stripSlashes} from './utils';
+import errors from 'feathers-errors';
+
 const cookieStorage = new CookieStorage();
 
 class Feathers {
@@ -110,11 +112,28 @@ class Feathers {
       });
     }
 
-    return $.ajax(ajaxConfig)
-      .fail(function(err){
-        console.warn(err);
-        return err;
-      });
+    return new Promise((resolve, reject) => {
+			$.ajax(ajaxConfig)
+				.then(resolve)
+	      .fail(function(err) {
+	      	if(!err.responseText) {
+	      		return reject(err);
+	      	}
+
+	        try {
+	        	const error = JSON.parse(err.responseText);
+	        	const FeathersError = errors[error.name];
+	        	
+	        	if(FeathersError) {
+	        		return reject(new FeathersError(error.message, error.data));
+	        	}
+
+	        	throw error;
+	        } catch(e) {
+	        	reject(e);
+	        }
+	      });
+    });
   }
 
   /**
