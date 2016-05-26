@@ -113,26 +113,26 @@ class Feathers {
     }
 
     return new Promise((resolve, reject) => {
-			$.ajax(ajaxConfig)
-				.then(resolve)
-	      .fail(function(err) {
-	      	if(!err.responseText) {
-	      		return reject(err);
-	      	}
+      $.ajax(ajaxConfig)
+        .then(resolve)
+        .fail(function(err) {
+          if(!err.responseText) {
+            return reject(err);
+          }
 
-	        try {
-	        	const error = JSON.parse(err.responseText);
-	        	const FeathersError = errors[error.name];
-	        	
-	        	if(FeathersError) {
-	        		return reject(new FeathersError(error.message, error.data));
-	        	}
+          try {
+            const error = JSON.parse(err.responseText);
+            const FeathersError = errors[error.name];
 
-	        	throw error;
-	        } catch(e) {
-	        	reject(e);
-	        }
-	      });
+            if(FeathersError) {
+              return reject(new FeathersError(error.message, error.data));
+            }
+
+            throw error;
+          } catch(e) {
+            reject(e);
+          }
+        });
     });
   }
 
