@@ -121,14 +121,7 @@ class Feathers {
           }
 
           try {
-            const error = JSON.parse(err.responseText);
-            const FeathersError = errors[error.name];
-
-            if(FeathersError) {
-              return reject(new FeathersError(error.message, error.data));
-            }
-
-            throw error;
+            reject(errors.convert(JSON.parse(err.responseText)));
           } catch(e) {
             reject(e);
           }
