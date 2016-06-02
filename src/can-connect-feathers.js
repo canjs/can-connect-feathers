@@ -98,7 +98,7 @@ class Feathers {
       url,
       type,
       contentType,
-      datatype: 'json',
+      dataType: 'json',
       data: params
     };
 
