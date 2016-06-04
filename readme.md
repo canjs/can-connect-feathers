@@ -200,7 +200,8 @@ npm test
 ```
 
 ## Changelog
-- `0.4.0` - The `rest` methods now use a Promise instead of a Deferred.
-          - Error responses are now converted to [feathers-errors](http://docs.feathersjs.com/middleware/error-handling.html).
+- `0.4.0` 
+  - The `rest` methods now use a Promise instead of a Deferred.
+  - Error responses are now converted to [feathers-errors](http://docs.feathersjs.com/middleware/error-handling.html).
 - `0.2.0` - Added socket.io auth to the `authenticate` method to get authenticated real-time events.
 - `0.1.0` - Initial version
