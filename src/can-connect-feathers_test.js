@@ -13,7 +13,7 @@ QUnit.test('Initialized the plugin', function(){
   QUnit.ok(feathers.storeToken, 'Token is set to be stored by default.');
   QUnit.equal(feathers.localEndpoint, 'auth/local', 'Default localEndpoint is auth/local');
   QUnit.equal(feathers.tokenEndpoint, 'auth/token', 'Default tokenEndpoint is auth/token');
-  QUnit.equal(feathers.tokenLocation, 'ssr-cookie', 'Default tokenLocation key is ssr-cookie');
+  QUnit.equal(feathers.tokenLocation, 'feathers-jwt', 'Default tokenLocation key is feathers-jwt');
   QUnit.equal(feathers.url, '', 'Default url is empty string');
   QUnit.equal(typeof feathers.rest, 'function', 'rest function is available.');
   QUnit.equal(typeof feathers.makeXhr, 'function', 'makeXhr function is available.');
