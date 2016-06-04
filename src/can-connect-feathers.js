@@ -19,7 +19,7 @@ class Feathers {
       // The storage engine used to persist the token on the client.
       storage: cookieStorage,
       // The key name of the location where the token will be stored.
-      tokenLocation: 'ssr-cookie',
+      tokenLocation: 'feathers-jwt',
       // The default `idProp` for all services.
       idProp: 'id',
       // The endpoint for token authentication.
