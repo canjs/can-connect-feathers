@@ -200,7 +200,8 @@ npm test
 ```
 
 ## Changelog
-- `0.4.0` 
+- `0.5.0` - The default cookie name is now `feathers-jwt` to match the Feathers default.
+- `0.4.0`
   - The `rest` methods now use a Promise instead of a Deferred.
   - Error responses are now converted to [feathers-errors](http://docs.feathersjs.com/middleware/error-handling.html).
 - `0.2.0` - Added socket.io auth to the `authenticate` method to get authenticated real-time events.
