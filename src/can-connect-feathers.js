@@ -234,11 +234,11 @@ class Feathers {
    * Logout simply removes the token from the storage engine(s).  It returns
    * a resolved promise to allow customizing the logout behavior of the app.
    */
-  logout(){
+  logout(data){
     return new Promise(resolve => {
       this.storage.removeItem(this.tokenLocation);
       cookieStorage.removeItem(this.tokenLocation);
-      resolve();
+      resolve(data);
     });
   }
 }
