@@ -30,7 +30,10 @@ class Feathers {
       ssr: true
     };
     $.extend(this, defaults, config);
-    this.io = io(this.url);
+
+    if(this.socketio !== false) {
+    	this.io = io(this.url, this.socketio || {});
+    }
   }
 
   /**
