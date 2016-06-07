@@ -177,6 +177,7 @@ export feathers;
 * `tokenEndpoint` - The endpoint for token authentication.  It needs to match the service location configured on the Feathers server.
 * `localEndpoint` - The endpoint for username/password authentication.  It needs to match the service location configured on the Feathers server.
 * `ssr` - You can set this to false to prevent the token from being stored in an SSR cookie.  Setting both `ssr` and `storeToken` to false will disable token storage completely.
+* `socketio` - A boolean that determines if socket.io is enabled.  Default is `true`.
 
 
 ## Contributing
@@ -200,6 +201,7 @@ npm test
 ```
 
 ## Changelog
+- `0.6.0` - it's now possible to turn off socket.io by passing `socketio = false` to the options.
 - `0.5.0` - The default cookie name is now `feathers-jwt` to match the Feathers default.
 - `0.4.0`
   - The `rest` methods now use a Promise instead of a Deferred.
