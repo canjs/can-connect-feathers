@@ -105,9 +105,9 @@ class Feathers {
       data: params
     };
 
-    // When on a browser, add the Authorization header.
+    // Add the Authorization header if a token is available.
     let token = this.getToken();
-    if (token && window.localStorage) {
+    if (token) {
       $.extend(ajaxConfig, {
         headers: {
           'Authorization': 'Bearer ' + token
