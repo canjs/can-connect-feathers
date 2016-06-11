@@ -51,13 +51,13 @@ class Feathers {
         return self.makeXhr(null, params, location);
       },
       getData(params){
-        // If params is a string, turn it into an object with the idProp set.
-        if (typeof params === 'string') {
-          let id = params;
+        // If params is a primitive, it's the id and params = {}.
+        let id = null;
+        if (typeof params === 'string' || typeof params === 'number') {
+          id = params;
           params = {};
-          params[idProp] = id;
         }
-        return self.makeXhr(params[idProp], params, location);
+        return self.makeXhr(id, params, location);
       },
       createData(data){
         return self.makeXhr(null, data, location, 'POST');
