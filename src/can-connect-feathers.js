@@ -65,6 +65,9 @@ class Feathers {
       updateData(data){
         return self.makeXhr(data[idProp], data, location, 'PUT');
       },
+      patchData(data){
+        return self.makeXhr(data[idProp], data, location, 'PATCH');
+      },
       destroyData(id){
         return self.makeXhr(id, null, location, 'DELETE');
       }
@@ -74,6 +77,7 @@ class Feathers {
     service.get = service.getData;
     service.create = service.createData;
     service.update = service.updateData;
+    service.patch = service.patchData;
     service.remove = service.destroyData;
     return service;
   }
