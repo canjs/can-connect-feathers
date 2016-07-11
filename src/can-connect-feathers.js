@@ -68,8 +68,8 @@ class Feathers {
       patchData(data){
         return self.makeXhr(data[idProp], data, location, 'PATCH');
       },
-      destroyData(id){
-        return self.makeXhr(id, null, location, 'DELETE');
+      destroyData(data){
+        return self.makeXhr(data[idProp], null, location, 'DELETE');
       }
     };
     // Alias the Feathers service methods so either will work.
