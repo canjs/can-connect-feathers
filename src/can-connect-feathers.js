@@ -98,7 +98,8 @@ class Feathers {
     let contentType = 'application/x-www-form-urlencoded';
     if (type !== 'GET') {
       contentType = 'application/json';
-      params = JSON.stringify(params);
+      // Disabling this since it is causing "Double escapted" strings
+      // params = JSON.stringify(params);
     }
 
     let ajaxConfig = {
