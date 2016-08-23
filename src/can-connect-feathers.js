@@ -98,7 +98,6 @@ class Feathers {
     let contentType = 'application/x-www-form-urlencoded';
     if (type !== 'GET') {
       contentType = 'application/json';
-      params = JSON.stringify(params);
     }
 
     let ajaxConfig = {
