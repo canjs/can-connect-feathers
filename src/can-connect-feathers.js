@@ -110,9 +110,14 @@ class Feathers {
       url,
       type,
       contentType,
-      dataType: 'json',
-      data: params
+      dataType: 'json'
     };
+
+    if (type !== 'DELETE') {
+    	$.extend(ajaxConfig, {
+    		data: params
+    	});
+    }
 
     // Add the Authorization header if a token is available.
     let token = this.getToken();
