@@ -65,11 +65,10 @@
     "npmAlgorithm": "flat"
   },
   "dependencies": {
-    "can": "^2.3.16",
     "cookie-storage": "^1.0.4",
-    "feathers-errors": "^2.2.0",
-    "jquery": "^2.2.3",
-    "jwt-decode": "^2.0.1",
+    "feathers-errors": "^2.4.0",
+    "jquery": "^3.1.0",
+    "jwt-decode": "^2.1.0",
     "steal-socket.io": "^2.0.3"
   },
   "devDependencies": {
