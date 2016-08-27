@@ -85,12 +85,12 @@ class Feathers {
     location = stripSlashes(location);
 
     // If id is present, append it to the url.
-    let url = `${this.url}/${location}`;
+    let url = `${this.url}/${location}/`;
     if (id !== null && id !== undefined) {
-      url += `/${id}`;
+      url += `${id}`;
     }
     else if (params[this.idProp]) {
-      url += `/${params[this.idProp]}`;
+      url += `${params[this.idProp]}`;
       // remove the property from the params so that
       // it is not passed as query string
       delete params[this.idProp];
