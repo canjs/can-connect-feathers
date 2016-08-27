@@ -5,6 +5,7 @@ import $ from 'jquery';
 import {CookieStorage} from 'cookie-storage';
 import decode from 'jwt-decode';
 import {stripSlashes} from './utils';
+import {addAliases} from './utils';
 import errors from 'feathers-errors';
 
 const cookieStorage = new CookieStorage();
@@ -72,13 +73,7 @@ class Feathers {
         return self.makeXhr(data[idProp], data, location, 'DELETE');
       }
     };
-    // Alias the Feathers service methods so either will work.
-    service.find = service.getListData;
-    service.get = service.getData;
-    service.create = service.createData;
-    service.update = service.updateData;
-    service.patch = service.patchData;
-    service.remove = service.destroyData;
+    service = addAliases(service);
     return service;
   }
 
