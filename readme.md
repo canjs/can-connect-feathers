@@ -23,21 +23,18 @@ export default feathers;
 Use it in your can-connect model:
 ```js
 // models/message.js
-import can from 'can';
-import superMap from 'can-connect/can/super-map/';
+import DefineMap from 'can-define/map/';
+import DefineList from 'can-define/list/';
 import tag from 'can-connect/can/tag/';
 import feathers from './feathers'; // Import the feathers instance.
-import 'can/map/define/define';
 
-export const Message = can.Map.extend({
-  define: {
-    text: { }
-  }
+export const Message = DefineMap.extend({
+  text: 'string'
 });
 
-Message.List = can.List.extend({
-  Map: Message
-}, {});
+Message.List = DefineList.extend({
+  '*': Message
+});
 
 export const messageConnection = superMap({
   url: feathers.rest('messages'), // Connect the instance to your model.
