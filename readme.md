@@ -198,7 +198,11 @@ npm test
 ```
 
 ## Changelog
-- `0.6.0` - it's now possible to turn off socket.io by passing `socketio = false` to the options.
+- `0.6.9` - Bugfix: Allow socket.io to connect to non-origin servers. (Upgrade steal-socket.io)
+- `0.6.8` - Bugfix: Don't send data with DELETE requests. Thanks @kylegifford!
+- `0.6.7` - Feature: Allow passing of id into `get` as an object literal `{_id: 1}`, in addition to string and number ids.  Thanks @obaidott!
+- `0.6.6` - Bugfix: disable JSON stringify for params, prevent params from being double stringified. Thanks @obaidott!
+- `0.6.0` - it's now possible to turn off socket.io by passing `socketio = false` to the options. This has been renamed as of version `1.0.0`.
 - `0.5.0` - The default cookie name is now `feathers-jwt` to match the Feathers default.
 - `0.4.0`
   - The `rest` methods now use a Promise instead of a Deferred.
