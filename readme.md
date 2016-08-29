@@ -167,7 +167,12 @@ const feathers = new Feathers({
   // Store the token in a cookie for SSR by default.
   ssr: true,
   // Set to false to disable socketio and force any socketio services to use rest.
-  allowSocketIO: true
+  allowSocketIO: true,
+  // Options passed to the socket.io connection manager.
+  socketOptions: {
+    // Force socket.io-client to use websockets (if browser doesn't support websockets, this fails.)
+    transports: ['websocket']
+  }
 });
 
 export feathers;
@@ -181,7 +186,8 @@ export feathers;
 * `tokenEndpoint` - The endpoint for token authentication.  It needs to match the service location configured on the Feathers server.
 * `localEndpoint` - The endpoint for username/password authentication.  It needs to match the service location configured on the Feathers server.
 * `ssr` - You can set this to false to prevent the token from being stored in an SSR cookie.  Setting both `ssr` and `storeToken` to false will disable token storage completely.
-* `socketio` - A boolean that determines if socket.io is enabled.  If set to `false`, any services that use the `socketio` method will fall back to using `rest`.  Default is `true`.
+* `allowSocketIO` - A boolean that determines if socket.io is enabled.  If set to `false`, any services that use the `socketio` method will fall back to using `rest`.  Default is `true`.
+* `socketOptions` An object literal that gets passed to the socket.io connection.  Available options can be found in the [socket.io-client docs](https://github.com/socketio/socket.io-client#managerurlstring-optsobject) ).
 
 
 ## Contributing
