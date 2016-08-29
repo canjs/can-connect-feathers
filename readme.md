@@ -25,6 +25,7 @@ Use it in your can-connect model:
 // models/message.js
 import DefineMap from 'can-define/map/';
 import DefineList from 'can-define/list/';
+import superMap from 'can-connect/can/super-map/';
 import tag from 'can-connect/can/tag/';
 import feathers from './feathers'; // Import the feathers instance.
 
@@ -37,7 +38,7 @@ Message.List = DefineList.extend({
 });
 
 export const messageConnection = superMap({
-  url: feathers.rest('messages'), // Connect the instance to your model.
+  url: feathers.socketio('messages'), // Connect the instance to your model.
   idProp: 'id',
   Map: Message,
   List: Message.List,
@@ -58,10 +59,13 @@ export default Message;
 Your `Message` model is ready to go with all real-time features in place.
 
 ## Usage
-See [the usage page](usage.md).
+It's possible to use this plugin with or without DoneSSR.  If you're using SSR, you must have the [feathers-rest](http://docs.feathersjs.com/rest/readme.html) provider configured on your Feathers server.
+
+See [the usage page](usage.md) for more details.
 
 ## Authentication
 Feathers requires a JWT token in the Authorization header to authenticate requests. This package includes methods to assist with token management.  The `feathers.authenticate()` method persists the token to a storage engine.  Request made through the `feathers.rest()` helper automatically look for the token on the storage engine.  The `feathers.logout()` method removes the token from storage.  Here is an example session model.  The magic happens in the `sessionConnection`.
+
 ```js
 /* global window */
 
@@ -124,7 +128,7 @@ export default Session;
 ```
 
 ### API
-* `feathers.authenticate(data)` - Can authenticate using either the `tokenEndpoint` or the `localEndpoint`. (see the Configuration section, below).  `token` authentication is the default, so calling `feathers.authenticate()` with no options will attempt to find the token in the storage engine and will send it with the request.  If the token is valid, the Feathers server will return a fresh token.
+* `feathers.authenticate(data)` - Can authenticate using either the `tokenEndpoint` or the `localEndpoint`. (see the Configuration section, below).  `token` authentication is the default, so calling `feathers.authenticate()` with no options will attempt to find the token in the storage engine and will send it with the request.  If the token is valid, the Feathers server will return a fresh token.  Whether using `rest` or `socketio` services, the `authenticate` method will attempt to authenticate a socket connection unless you use `allowSocketIO: false` in the options.
 
 To authenticate with username and password, pass in an object of this format:
 ```js
@@ -136,7 +140,8 @@ feathers.authenticate({
   console.log('Yay! I logged in!');
 });
 ```
-* `feathers.rest(location, idProp)` - This is used to configure can-connect's `url` behavior.  The `location` is required, but `idProp` is optional if the service uses the default `idProp`. (see the configuration options in the Configuration section.)
+* `feathers.rest(location, idProp)` - This is used to configure can-connect's `url` behavior to use the REST adapter (XHR).  The `location` is required, but `idProp` is optional if the service uses the default `idProp`. (see the configuration options.)
+* `feathers.socketio(location, idProp)` - This is used to configure can-connect's `url` behavior to use the Socket.io adapter.  The `location` is required, but `idProp` is optional if the service uses the default `idProp`. (see the configuration options.)  During Server Side Rendering, requests will go over XHR, since DoneSSR doesn't have support for socket.io.
 * `feathers.logout()` - This simply removes the token from storage.  It's actually synchronous, but returns a promise if you prefer to use one.
 
 ## Configuration
@@ -160,7 +165,9 @@ const feathers = new Feathers({
   // The endpoint for username/password authentication.
   localEndpoint: 'auth/local',
   // Store the token in a cookie for SSR by default.
-  ssr: true
+  ssr: true,
+  // Set to false to disable socketio and force any socketio services to use rest.
+  allowSocketIO: true
 });
 
 export feathers;
@@ -174,7 +181,7 @@ export feathers;
 * `tokenEndpoint` - The endpoint for token authentication.  It needs to match the service location configured on the Feathers server.
 * `localEndpoint` - The endpoint for username/password authentication.  It needs to match the service location configured on the Feathers server.
 * `ssr` - You can set this to false to prevent the token from being stored in an SSR cookie.  Setting both `ssr` and `storeToken` to false will disable token storage completely.
-* `socketio` - A boolean that determines if socket.io is enabled.  Default is `true`.
+* `socketio` - A boolean that determines if socket.io is enabled.  If set to `false`, any services that use the `socketio` method will fall back to using `rest`.  Default is `true`.
 
 
 ## Contributing
@@ -190,14 +197,16 @@ node build
 
 ### Running the tests
 
-Tests can run in the browser by opening a webserver and visiting the `test.html` page.
-Automated tests that run the tests from the command line in Firefox can be run with
+Run tests manually with `npm run start` then visit [http://localhost:3333/test/test.html](http://localhost:3333/test/test.html).
 
-```
-npm test
-```
+Automated tests from the command line can be run in Firefox with `npm test`.
 
 ## Changelog
+- `1.0.0`
+  - Adds full socket.io support. Going all-in on socket.io is much faster and more efficient than the hybrid `rest`/ real-time events setup!
+  - Renamed the `socketio` option to `allowSocketIO`. Now you pass `allowSocketIO: false` to disable sockets.
+  - Added `socketio` method to support socket.io as a transport for services.
+  - Added integration tests with an actual Feathers server.
 - `0.6.9` - Bugfix: Allow socket.io to connect to non-origin servers. (Upgrade steal-socket.io)
 - `0.6.8` - Bugfix: Don't send data with DELETE requests. Thanks @kylegifford!
 - `0.6.7` - Feature: Allow passing of id into `get` as an object literal `{_id: 1}`, in addition to string and number ids.  Thanks @obaidott!
