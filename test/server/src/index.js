@@ -8,7 +8,7 @@ server.on('listening', () =>
   console.log(`Feathers application started on ${app.get('host')}:${port}`)
 );
 
-if (process.argv.indexOf('timeout') >= 0) {
+if (process.argv.indexOf('--timeout') >= 0) {
   setTimeout(function(){
     server.close();
     process.exit(0);
