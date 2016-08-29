@@ -69,7 +69,7 @@
     "feathers-errors": "^2.4.0",
     "jquery": "^3.1.0",
     "jwt-decode": "^2.1.0",
-    "steal-socket.io": "^2.0.3"
+    "steal-socket.io": "^2.0.4"
   },
   "devDependencies": {
     "documentjs": "^0.4.2",
