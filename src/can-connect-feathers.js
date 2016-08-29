@@ -28,13 +28,25 @@ class Feathers {
       // The endpoint for username/password authentication.
       localEndpoint: 'auth/local',
       // Store the token in a cookie for SSR by default.
-      ssr: true
+      ssr: true,
+      // Set to false to disable socketio and force any socketio services to use rest.
+      allowSocketIO: true,
+      // socket.io connection options
+      socketOptions: {}
     };
     $.extend(this, defaults, config);
 
-    if(this.socketio !== false) {
-    	this.io = io(this.url, this.socketio || {});
+    if(this.allowSocketIO !== false) {
+      this.connectSocket();
     }
+  }
+
+  connectSocket(){
+    this.ioConnected = new Promise((resolve, reject) => {
+      this.io = io(this.url, this.socketOptions);
+      this.io.once('connect', resolve);
+      this.io.once('error', reject);
+    });
   }
 
   /**
@@ -78,6 +90,105 @@ class Feathers {
   }
 
   /**
+   * `socketio` is a utility function to hook up can-connect's url behavior to
+   * a Feathers service using socket.io.  An `idProp` can be provided if a
+   * service uses a different `idProp` than the default.  The Feathers service
+   * methods are aliased to make it possible to use either Feathers' or can-connect's
+   * method names, when being used individually.
+   */
+  socketio(location, idProp){
+    // If on the SSR server, use the rest adapter.
+    if (window.doneSsr || this.forceRest) {
+      return this.rest(location, idProp);
+    }
+
+    let self = this;
+    idProp = idProp || this.idProp;
+    let service = {
+      getListData(params){
+        return new Promise((resolve, reject) => {
+          self.ioConnected.then(() => {
+            self.io.emit(`${location}::find`, params, (error, data) => {
+              if (error) {
+                return reject(error);
+              }
+              return resolve(data);
+            });
+          });
+        });
+      },
+      getData(params){
+        return new Promise((resolve, reject) => {
+          self.ioConnected.then(() => {
+            // If params is a primitive, it's the id and params = {}.
+            let id = null;
+            if (typeof params === 'string' || typeof params === 'number') {
+              id = params;
+              params = {};
+            }
+            self.io.emit(`${location}::get`, id, params, (error, data) => {
+              if (error) {
+                return reject(error);
+              }
+              return resolve(data);
+            });
+          });
+        });
+      },
+      createData(data){
+        return new Promise((resolve, reject) => {
+          self.ioConnected.then(() => {
+            self.io.emit(`${location}::create`, data, (error, data) => {
+              if (error) {
+                return reject(error);
+              }
+              return resolve(data);
+            });
+          });
+        });
+      },
+      updateData(data){
+        return new Promise((resolve, reject) => {
+          self.ioConnected.then(() => {
+            self.io.emit(`${location}::update`, data[idProp], data, (error, data) => {
+              if (error) {
+                return reject(error);
+              }
+              return resolve(data);
+            });
+          });
+        });
+      },
+      patchData(data){
+        return new Promise((resolve, reject) => {
+          self.ioConnected.then(() => {
+            self.io.emit(`${location}::patch`, data[idProp], data, (error, data) => {
+              if (error) {
+                return reject(error);
+              }
+              return resolve(data);
+            });
+          });
+        });
+      },
+      destroyData(data){
+        return new Promise((resolve, reject) => {
+          self.ioConnected.then(() => {
+            self.io.emit(`${location}::remove`, data[idProp], data, (error, data) => {
+              if (error) {
+                return reject(error);
+              }
+              return resolve(data);
+            });
+          });
+        });
+      }
+    };
+    service = addAliases(service);
+    return service;
+  }
+
+  /**
    * A utility to create an Ajax request with the Feathers JWT token. It
    * automatically includes the JWT token if it's available.
    */
@@ -110,7 +221,7 @@ class Feathers {
 
     if (type !== 'DELETE') {
     	$.extend(ajaxConfig, {
-    		data: params
+    		data: JSON.stringify(params)
     	});
     }
 
@@ -195,7 +306,7 @@ class Feathers {
     }
 
     // Authenticate the socket.io connection
-    if (token) {
+    if (token && this.allowSocketIO) {
       let authenticateSocket = function(data){
         this.io.once('unauthorized', res => console.log(res));
         // this.io.once('authenticated', res => console.log(res));
