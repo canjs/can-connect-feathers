@@ -35,6 +35,7 @@
     "feathers-socketio": "^1.4.1",
     "nedb": "^1.8.0",
     "passport": "^0.3.2",
+    "rimraf": "^2.5.4",
     "serve-favicon": "^2.3.0",
     "winston": "^2.2.0"
   },

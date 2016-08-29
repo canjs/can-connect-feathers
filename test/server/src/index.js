@@ -1,5 +1,9 @@
 'use strict';
 
+// Remove data folder before the server starts so we have fresh data.
+const rm = require('rimraf');
+rm.sync('./test/server/data');
+
 const app = require('./app');
 const port = app.get('port');
 const server = app.listen(port);
