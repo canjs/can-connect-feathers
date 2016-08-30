@@ -5,27 +5,23 @@ const hooks = require('feathers-hooks');
 const auth = require('feathers-authentication').hooks;
 
 exports.before = {
-  all: [],
+  all: [
+    auth.verifyToken(),
+    auth.populateUser(),
+    auth.restrictToAuthenticated()
+  ],
   find: [],
   get: [],
   create: [
-    auth.hashPassword()
+    auth.associateCurrentUser({ idField: '_id', as: 'userId' })
   ],
-  update: [
-    auth.populateUser(),
-    auth.hashPassword()
-  ],
-  patch: [
-    auth.populateUser(),
-    auth.hashPassword()
-  ],
-  remove: [
-    auth.populateUser(),
-  ]
+  update: [],
+  patch: [],
+  remove: []
 };
 
 exports.after = {
-  all: [hooks.remove('password')],
+  all: [],
   find: [],
   get: [],
   create: [],
