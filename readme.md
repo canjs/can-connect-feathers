@@ -69,45 +69,42 @@ Feathers requires a JWT token in the Authorization header to authenticate reques
 ```js
 /* global window */
 
-import can from 'can';
-import $ from 'jquery';
 import feathers from './feathers';
 import connect from 'can-connect';
+import DefineMap from 'can-define/map/';
+import DefineList from 'can-define/list/';
 
-import 'can-connect/constructor/';
-import 'can-connect/can/map/';
-import 'can-connect/can/';
-import 'can-connect/constructor/store/';
-import 'can-connect/constructor/callbacks-once/';
-import 'can-connect/data/callbacks/';
-import 'can-connect/data/callbacks-cache/';
-import 'can-connect/data/combine-requests/';
-import 'can-connect/data/inline-cache/';
-import 'can-connect/data/parse/';
-import 'can-connect/data/url/';
-import 'can-connect/fall-through-cache/';
-import 'can-connect/real-time/';
-import 'can/map/define/define';
+import dataUrl from 'can-connect/data/url/';
+import dataParse from 'can-connect/data/parse/';
+import construct from 'can-connect/constructor/';
+import constructStore from 'can-connect/constructor/store/';
+import constructOnce from 'can-connect/constructor/callbacks-once/';
+import canMap from 'can-connect/can/map/';
+import canRef from 'can-connect/can/ref/';
+import dataCallbacks from 'can-connect/data/callbacks/';
+import realtime from 'can-connect/real-time/';
 
 var behaviors = [
-  'constructor',
-  'can-map',
-  'constructor-store',
-  'data-callbacks',
-  'data-combine-requests',
-  'data-inline-cache',
-  'data-parse',
-  'data-url',
-  'constructor-callbacks-once'
+  dataUrl,
+  dataParse,
+  construct,
+  constructStore,
+  constructOnce,
+  canMap,
+  canRef,
+  dataCallbacks,
+  realtime
 ];
 
-export const Session = can.Map.extend('Session', {
-  define: {}
+export const Session = DefineMap.extend('Session', {
+  _id: '*',
+  username: 'string',
+  password: 'string'
 });
 
-Session.List = can.List.extend({
-  Map: Session
-}, {});
+Session.List = DefineList.extend({
+  '*': Session
+});
 
 export const sessionConnection = connect(behaviors, {
   parseInstanceProp: 'data',
@@ -118,7 +115,7 @@ export const sessionConnection = connect(behaviors, {
       window.location.pathname = '/';
     })
   },
-  idProp: 'id',
+  idProp: '_id',
   Map: Session,
   List: Session.List,
   name: 'session'
@@ -166,12 +163,14 @@ const feathers = new Feathers({
   localEndpoint: 'auth/local',
   // Store the token in a cookie for SSR by default.
   ssr: true,
-  // Set to false to disable socketio and force any socketio services to use rest.
+  // Set to false to disable socketio and force any socketio services to switch to rest.
   allowSocketIO: true,
   // Options passed to the socket.io connection manager.
   socketOptions: {
     // Force socket.io-client to use websockets (if browser doesn't support websockets, this fails.)
-    transports: ['websocket']
+    transports: ['websocket'],
+    // Forces socket.io to open a new websocket instead of reusing an existing one.
+    forceNew: true
   }
 });
 
