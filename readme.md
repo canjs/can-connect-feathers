@@ -207,6 +207,7 @@ Run tests manually with `npm run start` then visit [http://localhost:3333/test/t
 Automated tests from the command line can be run in Firefox with `npm test`.
 
 ## Changelog
+- `1.1.2` - Added some documentation.
 - `1.1.1` - Added tests for auth over XHR/REST.
 - `1.1.0` - Feature: Can now authenticate directly with socket.io
 - `1.0.0`

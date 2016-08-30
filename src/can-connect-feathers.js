@@ -46,6 +46,11 @@ class Feathers {
     }
   }
 
+  /**
+   * `connectSocket` provides a promise for other methods to watch.  It helps
+   * make sure that requests don't get sent over socket.io until the socket
+   * has fully connected.  Otherwise, requests get lost.
+   */
   connectSocket(){
     this.ioConnected = new Promise((resolve, reject) => {
       this.io = io(this.url, this.socketOptions);
