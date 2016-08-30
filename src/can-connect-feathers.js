@@ -103,7 +103,7 @@ class Feathers {
    */
   socketio(location, idProp){
     // If on the SSR server, use the rest adapter.
-    if (window.doneSsr || this.forceRest) {
+    if (this.allowSocketIO === false) {
       return this.rest(location, idProp);
     }
 
