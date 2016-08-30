@@ -36,6 +36,11 @@ class Feathers {
     };
     $.extend(this, defaults, config);
 
+    // Make sure the SSR server never attempts anything with sockets.
+    if (window.doneSsr) {
+      this.allowSocketIO = false;
+    }
+
     if(this.allowSocketIO !== false) {
       this.connectSocket();
     }
@@ -288,12 +293,7 @@ class Feathers {
     return session;
   }
 
-  /**
-   * Authenticates the user using either the `tokenEndpoint` or the
-   * `localEndpoint`. It then runs the `persistToken` and `makeSSRCookie`
-   * functions with the response.
-   */
-  authenticate(params){
+  prepareAuthParams(params){
     let data = {
       type: 'token'
     };
@@ -304,26 +304,78 @@ class Feathers {
     if (token && data.type === 'token') {
       data.token = token;
     }
+    return data;
+  }
+
+  /**
+   * Authenticates the user using either the `tokenEndpoint` or the
+   * `localEndpoint`. It then runs the `persistToken` and `makeSSRCookie`
+   * functions with the response.
+   */
+  authenticate(params){
+    let data = this.prepareAuthParams(params),
+      location = data.type === 'token' ? this.tokenEndpoint : this.localEndpoint,
+      authPromise;
 
     // Authenticate the socket.io connection
-    if (token && this.allowSocketIO) {
-      let authenticateSocket = function(data){
-        this.io.once('unauthorized', res => console.log(res));
-        // this.io.once('authenticated', res => console.log(res));
-        this.io.emit('authenticate', data);
-      };
-      if (this.io.connected) {
-        authenticateSocket.call(this, data);
-      } else {
-        this.io.once('connect', () => authenticateSocket.call(this, data));
-      }
+    if (this.allowSocketIO) {
+      authPromise = this.authenticateSocket(params);
+    } else {
+      authPromise = this.makeXhr(null, data, location, 'POST');
     }
 
-    let location = data.type === 'token' ? this.tokenEndpoint : this.localEndpoint;
-
-    return this.makeXhr(null, data, location, 'POST')
+    return authPromise
       .then(data => this.persistToken(data))
       .then(data => this.makeSSRCookie(data));
+  }
+
+  /**
+   * Authenticates the socket. While it can be called directly, it's safer
+   * to use the `authenticate` method, which wraps this if socket.io is
+   * available.
+   */
+  authenticateSocket(params){
+    let data = this.prepareAuthParams(params);
+
+    return new Promise((resolve, reject) => {
+      let sendSocketAuthRequest = function(data){
+        this.io.once('authenticated', res => {
+          // If the socket is disconnected, reconnect.
+          if (!this._reconnectsHandled) {
+            this.handleSocketReconnects(data);
+            this._reconnectsHandled = true;
+          }
+          resolve(res);
+        });
+        this.io.once('unauthorized', res => {
+          reject(res);
+        });
+        this.io.emit('authenticate', data);
+      };
+
+      // If the socket is connected, authenticate right away.
+      if (this.io.connected) {
+        sendSocketAuthRequest.call(this, data);
+
+      // Otherwise, authenticate once it connects.
+      } else {
+        this.io.once('connect', () => sendSocketAuthRequest.call(this, data));
+      }
+    });
+  }
+
+  /**
+   * When the socket gets disconnected, this makes sure that it re-authenticates
+   * upon reconnection. It simply calls `authenticateSocket` and persists
+   * the token.
+   */
+  handleSocketReconnects(data){
+    // Make sure the socket re-authenticates if it gets disconnected.
+    this.io.on('reconnect', () => {
+      this.authenticateSocket(data)
+        .then(data => this.persistToken(data))
+        .then(data => this.makeSSRCookie(data));
+    });
   }
 
   /**
@@ -354,13 +406,20 @@ class Feathers {
   }
 
   /**
-   * Logout simply removes the token from the storage engine(s).  It returns
-   * a resolved promise to allow customizing the logout behavior of the app.
+   * Logout removes the token from the storage engine(s).  It returns
+   * a resolved promise. If socket.io is enabled, it forces the socket to
+   * reconnect unauthenticated.
    */
   logout(data){
     return new Promise(resolve => {
       this.storage.removeItem(this.tokenLocation);
       cookieStorage.removeItem(this.tokenLocation);
+
+      if (this.allowSocketIO) {
+        // Disconnect the socket to purge auth.
+        this.io.disconnect();
+        this.connectSocket();
+      }
       resolve(data);
     });
   }
