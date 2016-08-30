@@ -41,8 +41,18 @@ class Feathers {
       this.allowSocketIO = false;
     }
 
-    if(this.allowSocketIO !== false) {
+    if(this.allowSocketIO) {
       this.connectSocket();
+
+    // Without this, temporarily turning off auth will break listening to
+    // real-time events like `feathers.io.on`, `once`, and `off`.
+    } else {
+      var noOp = function(){};
+      this.io = {
+        on: noOp,
+        once: noOp,
+        off: noOp
+      };
     }
   }
 

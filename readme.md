@@ -207,6 +207,7 @@ Run tests manually with `npm run start` then visit [http://localhost:3333/test/t
 Automated tests from the command line can be run in Firefox with `npm test`.
 
 ## Changelog
+- `1.1.3` - Bugfix: Make sure the `feathers.io.on`, `feathers.io.once`, and `feathers.io.off` methods are always available, so you don't have to remove them when you set `allowSocketIO` to `false`, temporarily.
 - `1.1.2` - Added some documentation.
 - `1.1.1` - Added tests for auth over XHR/REST.
 - `1.1.0` - Feature: Can now authenticate directly with socket.io

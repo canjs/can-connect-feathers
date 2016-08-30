@@ -285,13 +285,20 @@ QUnit.module('REST Auth Integration', {
     '*': Message
   });
 
-  superMap({
-    url: feathers.socketio('messages'), // Connect the instance to your model.
+  const messageConnection = superMap({
+    url: feathers.rest('messages'), // Connect the instance to your model.
     idProp: '_id',
     Map: Message,
     List: Message.List,
     name: 'message'
   });
+
+  // Connect to realtime events.
+  feathers.io.on('messages created', message => messageConnection.createInstance(message));
+  feathers.io.on('messages updated', message => messageConnection.updateInstance(message));
+  feathers.io.on('messages patched', message => messageConnection.updateInstance(message));
+  feathers.io.on('messages removed', message => messageConnection.destroyInstance(message));
+
 
   var User = DefineMap.extend({
     _id: '*',
@@ -303,7 +310,7 @@ QUnit.module('REST Auth Integration', {
   });
 
   superMap({
-    url: feathers.socketio('users'), // Connect the instance to your model.
+    url: feathers.rest('users'), // Connect the instance to your model.
     idProp: '_id',
     Map: User,
     List: User.List,
@@ -321,7 +328,7 @@ QUnit.module('REST Auth Integration', {
   });
 
   superMap({
-    url: feathers.socketio('accounts'), // Connect the instance to your model.
+    url: feathers.rest('accounts'), // Connect the instance to your model.
     idProp: '_id',
     Map: Account,
     List: Account.List,
