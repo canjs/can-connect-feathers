@@ -6,6 +6,7 @@ import {CookieStorage} from 'cookie-storage';
 import decode from 'jwt-decode';
 import {stripSlashes} from './utils';
 import {addAliases} from './utils';
+import {isEmptyObject} from './utils';
 import errors from 'feathers-errors';
 
 const cookieStorage = new CookieStorage();
@@ -66,6 +67,70 @@ class Feathers {
       this.io = io(this.url, this.socketOptions);
       this.io.once('connect', resolve);
       this.io.once('error', reject);
+    });
+  }
+
+  /**
+   * A utility to create an Ajax request with the Feathers JWT token. It
+   * automatically includes the JWT token if it's available.
+   */
+  makeXhr(id, params, location, type = 'GET'){
+    location = stripSlashes(location);
+
+    // If id is present, append it to the url.
+    let url = `${this.url}/${location}/`;
+    if (id !== null && id !== undefined) {
+      url += `${id}`;
+    }
+    else if (params[this.idProp]) {
+      url += `${params[this.idProp]}`;
+      // remove the property from the params so that
+      // it is not passed as query string
+      delete params[this.idProp];
+    }
+
+    let contentType = 'application/x-www-form-urlencoded';
+    if (type !== 'GET') {
+      contentType = 'application/json';
+    }
+
+    let ajaxConfig = {
+      url,
+      type,
+      contentType,
+      dataType: 'json'
+    };
+
+    if (type !== 'DELETE' && !isEmptyObject(params)) {
+    	$.extend(ajaxConfig, {
+    		data: JSON.stringify(params)
+    	});
+    }
+
+    // Add the Authorization header if a token is available.
+    let token = this.getToken();
+    if (token) {
+      $.extend(ajaxConfig, {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      });
+    }
+
+    return new Promise((resolve, reject) => {
+      $.ajax(ajaxConfig)
+        .then(resolve)
+        .fail(function(err) {
+          if(!err.responseText) {
+            return reject(err);
+          }
+
+          try {
+            reject(errors.convert(JSON.parse(err.responseText)));
+          } catch(e) {
+            reject(e);
+          }
+        });
     });
   }
 
@@ -206,70 +271,6 @@ class Feathers {
     };
     service = addAliases(service);
     return service;
-  }
-
-  /**
-   * A utility to create an Ajax request with the Feathers JWT token. It
-   * automatically includes the JWT token if it's available.
-   */
-  makeXhr(id, params, location, type = 'GET'){
-    location = stripSlashes(location);
-
-    // If id is present, append it to the url.
-    let url = `${this.url}/${location}/`;
-    if (id !== null && id !== undefined) {
-      url += `${id}`;
-    }
-    else if (params[this.idProp]) {
-      url += `${params[this.idProp]}`;
-      // remove the property from the params so that
-      // it is not passed as query string
-      delete params[this.idProp];
-    }
-
-    let contentType = 'application/x-www-form-urlencoded';
-    if (type !== 'GET') {
-      contentType = 'application/json';
-    }
-
-    let ajaxConfig = {
-      url,
-      type,
-      contentType,
-      dataType: 'json'
-    };
-
-    if (type !== 'DELETE') {
-    	$.extend(ajaxConfig, {
-    		data: JSON.stringify(params)
-    	});
-    }
-
-    // Add the Authorization header if a token is available.
-    let token = this.getToken();
-    if (token) {
-      $.extend(ajaxConfig, {
-        headers: {
-          'Authorization': 'Bearer ' + token
-        }
-      });
-    }
-
-    return new Promise((resolve, reject) => {
-      $.ajax(ajaxConfig)
-        .then(resolve)
-        .fail(function(err) {
-          if(!err.responseText) {
-            return reject(err);
-          }
-
-          try {
-            reject(errors.convert(JSON.parse(err.responseText)));
-          } catch(e) {
-            reject(e);
-          }
-        });
-    });
   }
 
   /**

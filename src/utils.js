@@ -18,3 +18,10 @@ export function addAliases(service){
   service.remove = service.destroyData;
   return service;
 }
+
+export function isEmptyObject(obj){
+	for(var prop in obj) { // jshint ignore:line
+		return false;
+	}
+	return true;
+}
