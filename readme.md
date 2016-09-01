@@ -207,6 +207,7 @@ Run tests manually with `npm run start` then visit [http://localhost:3333/test/t
 Automated tests from the command line can be run in Firefox with `npm test`.
 
 ## Changelog
+- `1.1.6` - Bugfix: Adds makeUrl function to fix URLs and rest query strings.
 - `1.1.5` - Bugfix: Don't stringify empty objects in the XHR data.
 - `1.1.4` - Feature: Add a .vscode config for easier debugging with Visual Studio Code.
 - `1.1.3` - Bugfix: Make sure the `feathers.io.on`, `feathers.io.once`, and `feathers.io.off` methods are always available, so you don't have to remove them when you set `allowSocketIO` to `false`, temporarily.

@@ -126,6 +126,7 @@ QUnit.module('Basic REST Integration', {
     });
     message.save().then(function(msg){
       msg.text = 'Hello!';
+      localStorage.clear();
       // Make sure the message was deleted.
       msg.save().then(function(saveResponse){
         assert.equal(saveResponse.text, 'Hello!', 'message text updated correctly');

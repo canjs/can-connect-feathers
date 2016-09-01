@@ -8,6 +8,7 @@ import {stripSlashes} from './utils';
 import {addAliases} from './utils';
 import {isEmptyObject} from './utils';
 import errors from 'feathers-errors';
+import query from 'qs';
 
 const cookieStorage = new CookieStorage();
 
@@ -70,38 +71,46 @@ class Feathers {
     });
   }
 
+  makeUrl(location, params, id, type) {
+    location = stripSlashes(location);
+    params = params || {};
+    let url = `${this.url}/${location}`;
+
+    // If there's a plain id, append it to the url.
+    if (id !== null && id !== undefined) {
+      url += `/${id}`;
+
+    // If the id is in the params, do the same.
+    } else if (params[this.idProp]) {
+      url += `/${params[this.idProp]}`;
+      // remove the id from params so it's not passed as a query string.
+      delete params[this.idProp];
+    }
+
+    if(Object.keys(params).length !== 0 && type === 'GET') {
+      url += '?' + query.stringify(params);
+    }
+
+    return url;
+  }
+
   /**
    * A utility to create an Ajax request with the Feathers JWT token. It
    * automatically includes the JWT token if it's available.
    */
   makeXhr(id, params, location, type = 'GET'){
-    location = stripSlashes(location);
-
-    // If id is present, append it to the url.
-    let url = `${this.url}/${location}/`;
-    if (id !== null && id !== undefined) {
-      url += `${id}`;
-    }
-    else if (params[this.idProp]) {
-      url += `${params[this.idProp]}`;
-      // remove the property from the params so that
-      // it is not passed as query string
-      delete params[this.idProp];
-    }
-
-    let contentType = 'application/x-www-form-urlencoded';
-    if (type !== 'GET') {
-      contentType = 'application/json';
-    }
-
+    let url = this.makeUrl(location, params, id, type);
     let ajaxConfig = {
       url,
       type,
-      contentType,
       dataType: 'json'
     };
 
-    if (type !== 'DELETE' && !isEmptyObject(params)) {
+    if (type !== 'GET') {
+      ajaxConfig.contentType = 'application/json';
+    }
+
+    if (type !== 'DELETE' && type !== 'GET' && !isEmptyObject(params)) {
     	$.extend(ajaxConfig, {
     		data: JSON.stringify(params)
     	});
