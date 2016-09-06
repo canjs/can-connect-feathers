@@ -107,7 +107,6 @@ Session.List = DefineList.extend({
 });
 
 export const sessionConnection = connect(behaviors, {
-  parseInstanceProp: 'data',
   url: {
     createData: data => feathers.authenticate(data),
     destroyData: data => feathers.logout().then(() => {
