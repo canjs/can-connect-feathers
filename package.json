@@ -1,6 +1,6 @@
 {
   "name": "can-connect-feathers",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "Feathers client library for DoneJS and can-connect",
   "homepage": "https://github.com/feathersjs/can-connect-feathers",
   "repository": {
