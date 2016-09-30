@@ -289,9 +289,9 @@ class Feathers {
     let token;
     if (this.storage) {
       token = this.storage.getItem(this.tokenLocation);
-      if (!token) {
-        token = cookieStorage.getItem(this.tokenLocation);
-      }
+    }
+    if (!token) {
+      token = cookieStorage.getItem(this.tokenLocation);
     }
     return token;
   }
@@ -302,17 +302,14 @@ class Feathers {
    * wasn't found on the primary storage engine.
    */
   getSession(){
-    let session, token;
-    if (window.localStorage) {
-      token = this.getToken();
-      if (token) {
-        let tokenData = decode(token);
-        if (tokenData.exp * 1000 > new Date().getTime()) {
-          session = $.extend({}, tokenData);
-          delete session.exp;
-          delete session.iat;
-          delete session.iss;
-        }
+    let session, token = this.getToken();
+    if (token) {
+      let tokenData = decode(token);
+      if (tokenData.exp * 1000 > new Date().getTime()) {
+        session = $.extend({}, tokenData);
+        delete session.exp;
+        delete session.iat;
+        delete session.iss;
       }
     }
     return session;
@@ -342,7 +339,7 @@ class Feathers {
       location = data.type === 'token' ? this.tokenEndpoint : this.localEndpoint,
       authPromise;
 
-    // Authenticate the socket.io connection
+    // Authenticate over socket.io or Xhr.
     if (this.allowSocketIO) {
       authPromise = this.authenticateSocket(params);
     } else {
