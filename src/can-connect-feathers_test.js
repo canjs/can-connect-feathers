@@ -14,6 +14,16 @@ import canRef from 'can-connect/can/ref/';
 import dataCallbacks from 'can-connect/data/callbacks/';
 import realtime from 'can-connect/real-time/';
 
+// Clear all cookies
+var cookies = document.cookie.split(";");
+
+for (var i = 0; i < cookies.length; i++) {
+  var cookie = cookies[i];
+  var eqPos = cookie.indexOf("=");
+  var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+  document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+}
+
 QUnit.module('can-connect-feathers');
 
 QUnit.test('Plugin initializes correctly', function(){
@@ -454,6 +464,11 @@ QUnit.module('REST Auth Integration', {
         assert.notOk(err.name, `this error shouldn't happen: ${err.name}`);
         done();
       });
+    })
+    // Leave this here for easier tracking if it breaks.
+    .catch(function(err){
+      assert.notOk(err.name, `this error shouldn't happen: ${err.name}`);
+      done();
     });
   });
 
