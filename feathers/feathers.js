@@ -1,15 +1,22 @@
 const connect = require('can-connect');
 
 module.exports = connect.behavior('data/feathers', function () {
+
+  if (!service) {
+    throw new Error('You must provide a Feathers service to the feathersBehavior');
+  }
+
+  const service = this.service;
+
   // Connect to realtime events.
-  this.service.on('created', message => this.createInstance(message));
-  this.service.on('updated', message => this.updateInstance(message));
-  this.service.on('patched', message => this.updateInstance(message));
-  this.service.on('removed', message => this.destroyInstance(message));
+  service.on('created', message => this.createInstance(message));
+  service.on('updated', message => this.updateInstance(message));
+  service.on('patched', message => this.updateInstance(message));
+  service.on('removed', message => this.destroyInstance(message));
 
   return {
     getListData (params) {
-      return this.service.find(params);
+      return service.find(params);
     },
 
     getData (params) {
@@ -18,19 +25,19 @@ module.exports = connect.behavior('data/feathers', function () {
         id = params;
         params = {};
       }
-      return this.service.get(id, params);
+      return service.get(id, params);
     },
 
     createData (data) {
-      return this.service.create(data);
+      return service.create(data);
     },
 
     updateData (instance) {
-      return this.service.update(instance[this.idProp], instance);
+      return service.update(instance[this.idProp], instance);
     },
 
     destroyData (instance) {
-      return this.service.remove(instance[this.idProp]);
+      return service.remove(instance[this.idProp]);
     }
   };
 });
