@@ -1,9 +1,9 @@
 const connect = require('can-connect');
 
 module.exports = connect.behavior('data/feathers', function () {
-
+  let helpURL = 'http://canjs.github.io/canjs/doc/can-connect-feathers.html';
   if (!service) {
-    throw new Error('You must provide a Feathers service to the feathersBehavior');
+    throw new Error('You must provide a Feathers service to the feathersBehavior: ' + helpURL);
   }
 
   const service = this.service;
