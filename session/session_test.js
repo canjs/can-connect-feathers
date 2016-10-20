@@ -1,11 +1,11 @@
-const QUnit = require('steal-qunit');
-const runCrossProviderTests = require('./session_tests-x-provider');
-const clearCookies = require('../test/clear-cookies');
+var QUnit = require('steal-qunit');
+var runCrossProviderTests = require('./session_tests-x-provider');
+var clearCookies = require('../test/clear-cookies');
 
-const socketio = require('feathers-socketio/client');
-const rest = require('feathers-rest/client');
-const jQuery = require('jquery');
-const io = require('socket.io-client/socket.io');
+var socketio = require('feathers-socketio/client');
+var rest = require('feathers-rest/client');
+var jQuery = require('jquery');
+var io = require('socket.io-client/socket.io');
 
 QUnit.module('can-connect-feathers');
 
@@ -17,10 +17,10 @@ runCrossProviderTests({
 });
 
 // Run basic tests for the feathers-socketio provider.
-const socket = io('http://localhost:3333', {
+var socket = io('http://localhost:3333', {
   transports: ['websocket']
 });
-const socketioProvider = socketio(socket);
+var socketioProvider = socketio(socket);
 clearCookies();
 runCrossProviderTests({
   moduleName: 'feathers-socketio',

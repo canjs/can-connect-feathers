@@ -1,21 +1,21 @@
-const QUnit = require('steal-qunit');
-const DefineMap = require('can-define/map/');
-const DefineList = require('can-define/list/');
+var QUnit = require('steal-qunit');
+var DefineMap = require('can-define/map/');
+var DefineList = require('can-define/list/');
 // Behaviors
-const feathersBehavior = require('./feathers');
-const connect = require('can-connect');
-const dataParse = require('can-connect/data/parse/');
-const construct = require('can-connect/constructor/');
-const constructStore = require('can-connect/constructor/store/');
-const constructOnce = require('can-connect/constructor/callbacks-once/');
-const canMap = require('can-connect/can/map/');
-const canRef = require('can-connect/can/ref/');
-const dataCallbacks = require('can-connect/data/callbacks/');
-const realtime = require('can-connect/real-time/');
+var feathersBehavior = require('./feathers');
+var connect = require('can-connect');
+var dataParse = require('can-connect/data/parse/');
+var construct = require('can-connect/constructor/');
+var constructStore = require('can-connect/constructor/store/');
+var constructOnce = require('can-connect/constructor/callbacks-once/');
+var canMap = require('can-connect/can/map/');
+var canRef = require('can-connect/can/ref/');
+var dataCallbacks = require('can-connect/data/callbacks/');
+var realtime = require('can-connect/real-time/');
 
-const feathers = require('feathers/client');
-const hooks = require('feathers-hooks');
-const auth = require('feathers-authentication/client');
+var feathers = require('feathers/client');
+var hooks = require('feathers-hooks');
+var auth = require('feathers-authentication/client');
 
 module.exports = function runProviderTests (options) {
   QUnit.module(`Basics: ${options.moduleName}`, {
@@ -23,7 +23,7 @@ module.exports = function runProviderTests (options) {
       window.localStorage.clear();
     }
   }, function () {
-    const app = feathers()
+    var app = feathers()
       .configure(options.provider)
       .configure(hooks())
       .configure(auth());
@@ -49,21 +49,15 @@ module.exports = function runProviderTests (options) {
       feathersBehavior
     ];
 
-    var service = app.service('messages');
+    var feathersService = app.service('messages');
 
-    var messageConnection = connect(behaviors, {
-      service, // Connect the instance to your model.
+    connect(behaviors, {
+      feathersService, // Connect the instance to your model.
       idProp: '_id',
       Map: Message,
       List: Message.List,
       name: 'message'
     });
-
-    // Connect to realtime events.
-    service.on('created', message => messageConnection.createInstance(message));
-    service.on('updated', message => messageConnection.updateInstance(message));
-    service.on('patched', message => messageConnection.updateInstance(message));
-    service.on('removed', message => messageConnection.destroyInstance(message));
 
     QUnit.test('findAll', function (assert) {
       var done = assert.async();

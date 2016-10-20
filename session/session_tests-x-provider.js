@@ -1,22 +1,22 @@
-const QUnit = require('steal-qunit');
-const DefineMap = require('can-define/map/');
-const DefineList = require('can-define/list/');
+var QUnit = require('steal-qunit');
+var DefineMap = require('can-define/map/');
+var DefineList = require('can-define/list/');
 // Behaviors
-const feathersBehavior = require('../feathers/');
-const feathersSession = require('./session');
-const connect = require('can-connect');
-const dataParse = require('can-connect/data/parse/');
-const construct = require('can-connect/constructor/');
-const constructStore = require('can-connect/constructor/store/');
-const constructOnce = require('can-connect/constructor/callbacks-once/');
-const canMap = require('can-connect/can/map/');
-const canRef = require('can-connect/can/ref/');
-const dataCallbacks = require('can-connect/data/callbacks/');
-const realtime = require('can-connect/real-time/');
+var feathersBehavior = require('../feathers/');
+var feathersSession = require('./session');
+var connect = require('can-connect');
+var dataParse = require('can-connect/data/parse/');
+var construct = require('can-connect/constructor/');
+var constructStore = require('can-connect/constructor/store/');
+var constructOnce = require('can-connect/constructor/callbacks-once/');
+var canMap = require('can-connect/can/map/');
+var canRef = require('can-connect/can/ref/');
+var dataCallbacks = require('can-connect/data/callbacks/');
+var realtime = require('can-connect/real-time/');
 
-const feathers = require('feathers/client');
-const hooks = require('feathers-hooks');
-const auth = require('feathers-authentication/client');
+var feathers = require('feathers/client');
+var hooks = require('feathers-hooks');
+var auth = require('feathers-authentication/client');
 
 module.exports = function runSessionTests (options) {
   QUnit.module(`Authentication: ${options.moduleName}`, {
@@ -24,7 +24,7 @@ module.exports = function runSessionTests (options) {
       window.localStorage.clear();
     }
   }, function () {
-    const app = feathers()
+    var app = feathers()
       .configure(options.provider)
       .configure(hooks())
       .configure(auth());
@@ -52,19 +52,13 @@ module.exports = function runSessionTests (options) {
 
     var messageService = app.service('messages');
 
-    var messageConnection = connect(behaviors, {
-      service: messageService,
+    connect(behaviors, {
+      feathersService: messageService,
       idProp: '_id',
       Map: Message,
       List: Message.List,
       name: 'message'
     });
-
-    // Connect to realtime events.
-    messageService.on('created', message => messageConnection.createInstance(message));
-    messageService.on('updated', message => messageConnection.updateInstance(message));
-    messageService.on('patched', message => messageConnection.updateInstance(message));
-    messageService.on('removed', message => messageConnection.destroyInstance(message));
 
     var User = DefineMap.extend({
       _id: '*',
@@ -75,21 +69,15 @@ module.exports = function runSessionTests (options) {
       '*': User
     });
 
-    const userService = app.service('users');
+    var userService = app.service('users');
 
-    var userConnection = connect(behaviors, {
-      service: userService,
+    connect(behaviors, {
+      feathersService: userService,
       idProp: '_id',
       Map: User,
       List: User.List,
       name: 'user'
     });
-
-    // Connect to realtime events.
-    userService.on('created', user => userConnection.createInstance(user));
-    userService.on('updated', user => userConnection.updateInstance(user));
-    userService.on('patched', user => userConnection.updateInstance(user));
-    userService.on('removed', user => userConnection.destroyInstance(user));
 
     var Account = DefineMap.extend('Account', {
       _id: '*',
@@ -101,21 +89,15 @@ module.exports = function runSessionTests (options) {
       '*': Account
     });
 
-    const accountService = app.service('accounts');
+    var accountService = app.service('accounts');
 
-    var accountConnection = connect(behaviors, {
-      service: accountService,
+    connect(behaviors, {
+      feathersService: accountService,
       idProp: '_id',
       Map: Account,
       List: Account.List,
       name: 'account'
     });
-
-    // Connect to realtime events.
-    accountService.on('created', account => accountConnection.createInstance(account));
-    accountService.on('updated', account => accountConnection.updateInstance(account));
-    accountService.on('patched', account => accountConnection.updateInstance(account));
-    accountService.on('removed', account => accountConnection.destroyInstance(account));
 
     var sessionBehaviors = [
       dataParse,
@@ -129,7 +111,7 @@ module.exports = function runSessionTests (options) {
       feathersSession
     ];
 
-    const Session = DefineMap.extend('Session', {
+    var Session = DefineMap.extend('Session', {
       seal: false
     }, {
       _id: '*',

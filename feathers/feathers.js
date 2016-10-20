@@ -1,12 +1,12 @@
-const connect = require('can-connect');
+var connect = require('can-connect');
 
 module.exports = connect.behavior('data/feathers', function () {
-  let helpURL = 'http://canjs.github.io/canjs/doc/can-connect-feathers.html';
-  if (!service) {
-    throw new Error('You must provide a Feathers service to the feathersBehavior: ' + helpURL);
+  var helpURL = 'http://canjs.github.io/canjs/doc/can-connect-feathers.html';
+  if (!this.feathersService) {
+    throw new Error('You must provide a feathersService to the feathersBehavior: ' + helpURL);
   }
 
-  const service = this.service;
+  var service = this.feathersService;
 
   // Connect to realtime events.
   service.on('created', message => this.createInstance(message));
@@ -20,7 +20,7 @@ module.exports = connect.behavior('data/feathers', function () {
     },
 
     getData (params) {
-      let id = null;
+      var id = null;
       if (typeof params === 'string' || typeof params === 'number') {
         id = params;
         params = {};
