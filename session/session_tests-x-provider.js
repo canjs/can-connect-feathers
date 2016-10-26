@@ -170,6 +170,53 @@ module.exports = function runSessionTests (options) {
       });
     });
 
+    QUnit.test('Session.get() with no token returns NotAuthenticated error', function (assert) {
+      var done = assert.async();
+      
+      // Clear the token.
+      app.logout();
+
+      Session.get()
+      .then(function (res) {
+        console.log('res', res);
+      })
+      .catch(function (err) {
+        assert.equal(err.name, 'NotAuthenticated', `got back error message: ${err.name}`);
+        done();
+      });
+    });
+
+    QUnit.test('Session.get() returns a token payload after logged in', function (assert) {
+      var done = assert.async();
+      var validToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZXhwIjozNDc2MzkyNDgwLCJpYXQiOjE0NzYzOTI0ODAsImlzcyI6ImZlYXRoZXJzIn0.0V6NKoNszBPeIA72xWs2FDW6aPxOnHzEmskulq20uyo';
+
+      // Clear the token.
+      app.logout();
+
+      var user = new User({
+        email: 'marshall@bitovi.com',
+        password: 'L1nds3y-Stirling-R0cks!'
+      });
+      user.save().then(createdUser => {
+        var newLoginUser = new User({
+          email: 'marshall@bitovi.com',
+          password: 'L1nds3y-Stirling-R0cks!'
+        });
+        var session = new Session({
+          type: 'local',
+          user: newLoginUser
+        });
+        session.save()
+        .then(function (res) {
+          console.log('res', res);
+        })
+        .catch(function (err) {
+          assert.equal(err.name, 'NotAuthenticated', `got back error message: ${err.name}`);
+          done();
+        });
+      });
+    });
+
     QUnit.test('authenticate type=local', function (assert) {
       var done = assert.async();
 

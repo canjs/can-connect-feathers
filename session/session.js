@@ -1,4 +1,5 @@
 var connect = require('can-connect');
+var errors = require('feathers-errors');
 
 module.exports = connect.behavior('data/feathers-session', function () {
   let helpURL = 'http://canjs.github.io/canjs/doc/can-connect-feathers.html';
@@ -14,11 +15,24 @@ module.exports = connect.behavior('data/feathers-session', function () {
 
   return {
     createData (data) {
-      return new Promise((resolve, reject) => {
+      return new Promise(function (resolve, reject) {
         return app.authenticate(data)
           .then(app.authentication.verifyJWT)
-          .then(payload => resolve(new Session(payload)))
+          .then(function (payload) {
+            return resolve(new Session(payload));
+          })
           .catch(reject);
+      });
+    },
+    getData () {
+      return new Promise(function (resolve, reject) {
+        app.authentication.getJWT()
+        .then(function (data) {
+          if (data) {
+            return resolve(data);
+          }
+          reject(new errors.NotAuthenticated('Not Authenticated'));
+        });
       });
     },
     destroyData () {
