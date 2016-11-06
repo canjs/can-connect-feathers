@@ -196,6 +196,7 @@ class Feathers {
       return this.rest(location, idProp);
     }
 
+    var token = this.getToken();
     let self = this;
     idProp = idProp || this.idProp;
     let service = {
