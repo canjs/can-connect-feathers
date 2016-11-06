@@ -1,6 +1,6 @@
 # can-connect-feathers
 
-[![Build Status](https://travis-ci.org/feathersjs/can-connect-feathers.png?branch=master)](https://travis-ci.org/feathersjs/can-connect-feathers)
+[![Build Status](https://travis-ci.org/canjs/can-connect-feathers.png?branch=master)](https://travis-ci.org/canjs/can-connect-feathers)
 
 The FeathersJS client library for DoneJS and can-connect
 
