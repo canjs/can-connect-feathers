@@ -18,6 +18,7 @@
     "postversion": "git push --tags && git checkout master && git branch -D release && git push",
     "testee": "testee test/test.html --browsers firefox",
     "install-server-deps": ". ./build-server.sh",
+    "postinstall": "cd ./test/server && npm install",
     "start-test": "node ./test/server/src/index.js --timeout",
     "start": "node ./test/server/src/index.js",
     "test": "npm run jshint && npm run install-server-deps && concurrently 'npm run start-test' 'npm run testee' ",
