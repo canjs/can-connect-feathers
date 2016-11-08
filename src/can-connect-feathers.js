@@ -305,7 +305,7 @@ class Feathers {
         return new Promise((resolve, reject) => {
           self.ioConnected.then(() => {
             var executeAction = function() {
-              self.io.emit(`${location}::remove`, data[idProp], data, (error, data) => {
+              self.io.emit(`${location}::remove`, data[idProp], {}, (error, data) => {
                 if (error) {
                   return reject(error);
                 }
