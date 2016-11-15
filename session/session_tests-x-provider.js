@@ -172,7 +172,7 @@ module.exports = function runSessionTests (options) {
 
     QUnit.test('Session.get() with no token returns NotAuthenticated error', function (assert) {
       var done = assert.async();
-      
+
       // Clear the token.
       app.logout();
 
@@ -188,7 +188,6 @@ module.exports = function runSessionTests (options) {
 
     QUnit.test('Session.get() returns a token payload after logged in', function (assert) {
       var done = assert.async();
-      var validToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZXhwIjozNDc2MzkyNDgwLCJpYXQiOjE0NzYzOTI0ODAsImlzcyI6ImZlYXRoZXJzIn0.0V6NKoNszBPeIA72xWs2FDW6aPxOnHzEmskulq20uyo';
 
       // Clear the token.
       app.logout();
