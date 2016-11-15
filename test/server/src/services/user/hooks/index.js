@@ -1,6 +1,6 @@
 'use strict';
 
-const globalHooks = require('../../../hooks');
+// const globalHooks = require('../../../hooks');
 const hooks = require('feathers-hooks');
 const auth = require('feathers-authentication').hooks;
 
@@ -20,7 +20,7 @@ exports.before = {
     auth.hashPassword()
   ],
   remove: [
-    auth.populateUser(),
+    auth.populateUser()
   ]
 };
 
