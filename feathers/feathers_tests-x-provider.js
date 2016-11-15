@@ -85,6 +85,21 @@ module.exports = function runProviderTests (options) {
       });
     });
 
+    QUnit.test('findOne with params', function (assert) {
+      var done = assert.async();
+
+      var message = new Message({
+        text: 'Hi there!'
+      });
+      message.save().then(function (msg) {
+        var id = msg._id;
+        Message.findOne({_id: id}).then(function (findResponse) {
+          assert.deepEqual(msg, findResponse, 'got same instance in find passing params');
+          done();
+        });
+      });
+    });
+
     QUnit.test('create', function (assert) {
       var done = assert.async();
       var message = new Message({

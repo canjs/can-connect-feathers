@@ -24,6 +24,9 @@ module.exports = connect.behavior('data/feathers', function () {
       if (typeof params === 'string' || typeof params === 'number') {
         id = params;
         params = {};
+      } else if (params && typeof params[this.idProp] !== 'undefined') {
+        id = params[this.idProp];
+        delete params[this.idProp];
       }
       return service.get(id, params);
     },
