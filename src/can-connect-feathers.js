@@ -196,18 +196,26 @@ class Feathers {
       return this.rest(location, idProp);
     }
 
+    var token = this.getToken();
     let self = this;
     idProp = idProp || this.idProp;
     let service = {
       getListData(params){
         return new Promise((resolve, reject) => {
           self.ioConnected.then(() => {
-            self.io.emit(`${location}::find`, params, (error, data) => {
-              if (error) {
-                return reject(error);
-              }
-              return resolve(data);
-            });
+            var executeAction = function() {
+              self.io.emit(`${location}::find`, params, (error, data) => {
+                if (error) {
+                  return reject(error);
+                }
+                return resolve(data);
+              });
+            };
+            if (token) {
+              self.authenticateSocket({ token: token }).then(executeAction);
+            } else {
+              executeAction();
+            }
           });
         });
       },
@@ -220,60 +228,95 @@ class Feathers {
               id = params;
               params = {};
             }
-            self.io.emit(`${location}::get`, id, params, (error, data) => {
-              if (error) {
-                return reject(error);
-              }
-              return resolve(data);
-            });
+            var executeAction = function() {
+              self.io.emit(`${location}::get`, id, params, (error, data) => {
+                if (error) {
+                  return reject(error);
+                }
+                return resolve(data);
+              });
+            };
+            if (token) {
+              self.authenticateSocket({ token: token }).then(executeAction);
+            } else {
+              executeAction();
+            }
           });
         });
       },
       createData(data){
         return new Promise((resolve, reject) => {
           self.ioConnected.then(() => {
-            self.io.emit(`${location}::create`, data, (error, data) => {
-              if (error) {
-                return reject(error);
-              }
-              return resolve(data);
-            });
+            var executeAction = function() {
+              self.io.emit(`${location}::create`, data, (error, data) => {
+                if (error) {
+                  return reject(error);
+                }
+                return resolve(data);
+              });
+            };
+            if (token) {
+              self.authenticateSocket({ token: token }).then(executeAction);
+            } else {
+              executeAction();
+            }
           });
         });
       },
       updateData(data){
         return new Promise((resolve, reject) => {
           self.ioConnected.then(() => {
-            self.io.emit(`${location}::update`, data[idProp], data, (error, data) => {
-              if (error) {
-                return reject(error);
-              }
-              return resolve(data);
-            });
+            var executeAction = function() {
+              self.io.emit(`${location}::update`, data[idProp], data, (error, data) => {
+                if (error) {
+                  return reject(error);
+                }
+                return resolve(data);
+              });
+            };
+            if (token) {
+              self.authenticateSocket({ token: token }).then(executeAction);
+            } else {
+              executeAction();
+            }
           });
         });
       },
       patchData(data){
         return new Promise((resolve, reject) => {
           self.ioConnected.then(() => {
-            self.io.emit(`${location}::patch`, data[idProp], data, (error, data) => {
-              if (error) {
-                return reject(error);
-              }
-              return resolve(data);
-            });
+            var executeAction = function() {
+              self.io.emit(`${location}::patch`, data[idProp], data, (error, data) => {
+                if (error) {
+                  return reject(error);
+                }
+                return resolve(data);
+              });
+            };
+            if (token) {
+              self.authenticateSocket({ token: token }).then(executeAction);
+            } else {
+              executeAction();
+            }
           });
         });
       },
       destroyData(data){
         return new Promise((resolve, reject) => {
           self.ioConnected.then(() => {
-            self.io.emit(`${location}::remove`, data[idProp], data, (error, data) => {
-              if (error) {
-                return reject(error);
-              }
-              return resolve(data);
-            });
+            var executeAction = function() {
+              self.io.emit(`${location}::remove`, data[idProp], {}, (error, data) => {
+                if (error) {
+                  return reject(error);
+                }
+                return resolve(data);
+              });
+            };
+            if (token) {
+              self.authenticateSocket({ token: token }).then(executeAction);
+            } else {
+              executeAction();
+            }
           });
         });
       }
