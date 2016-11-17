@@ -72,18 +72,17 @@
   },
   "dependencies": {
     "can-util": "^3.0.0-pre.70",
-    "cookie-storage": "^1.0.4",
+    "cookie-storage": "^2.0.2",
     "feathers-errors": "^2.4.0",
     "jquery": "^3.1.0",
     "jwt-decode": "^2.1.0",
-    "qs": "^6.2.1",
-    "steal-socket.io": "^2.0.4"
+    "qs": "^6.2.1"
   },
   "devDependencies": {
-    "can-connect": "^0.6.0-pre.22",
-    "can-define": "^0.7.25",
-    "concurrently": "^2.2.0",
-    "cssify": "^0.6.0",
+    "can-connect": "^1.0.12",
+    "can-define": "^1.0.4",
+    "concurrently": "^3.1.0",
+    "cssify": "^1.0.3",
     "documentjs": "^0.4.2",
     "done-serve": "^0.2.0",
     "donejs-cli": "^0.8.0",
@@ -97,6 +96,7 @@
     "socket.io-client": "^1.5.0",
     "steal": "^0.16.0",
     "steal-qunit": "^0.1.1",
+    "steal-socket.io": "^4.0.3",
     "steal-tools": "^0.16.0",
     "testee": "^0.2.4"
   }
