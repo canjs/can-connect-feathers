@@ -14,7 +14,7 @@ module.exports = connect.behavior('data/feathers-session', function () {
   var app = this.feathersApp;
 
   return {
-    createData: function(data) {
+    createData: function (data) {
       return new Promise(function (resolve, reject) {
         return app.authenticate(data)
           .then(app.authentication.verifyJWT)
@@ -24,7 +24,7 @@ module.exports = connect.behavior('data/feathers-session', function () {
           .catch(reject);
       });
     },
-    getData: function() {
+    getData: function () {
       return new Promise(function (resolve, reject) {
         app.authentication.getJWT()
         .then(function (data) {
@@ -35,7 +35,7 @@ module.exports = connect.behavior('data/feathers-session', function () {
         });
       });
     },
-    destroyData: function() {
+    destroyData: function () {
       return app.logout();
     }
   };

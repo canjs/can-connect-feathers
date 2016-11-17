@@ -10,17 +10,17 @@ module.exports = connect.behavior('data/feathers', function () {
 
   // Connect to realtime events.
   var self = this;
-  service.on('created', function(message){ self.createInstance(message); });
-  service.on('updated', function(message){ self.updateInstance(message); });
-  service.on('patched', function(message){ self.updateInstance(message); });
-  service.on('removed', function(message){ self.destroyInstance(message); });
+  service.on('created', function (message) { self.createInstance(message); });
+  service.on('updated', function (message) { self.updateInstance(message); });
+  service.on('patched', function (message) { self.updateInstance(message); });
+  service.on('removed', function (message) { self.destroyInstance(message); });
 
   return {
-    getListData: function(params) {
+    getListData: function (params) {
       return service.find(params);
     },
 
-    getData: function(params) {
+    getData: function (params) {
       var id = null;
       if (typeof params === 'string' || typeof params === 'number') {
         id = params;
@@ -32,15 +32,15 @@ module.exports = connect.behavior('data/feathers', function () {
       return service.get(id, params);
     },
 
-    createData: function(data) {
+    createData: function (data) {
       return service.create(data);
     },
 
-    updateData: function(instance) {
+    updateData: function (instance) {
       return service.update(instance[this.idProp], instance);
     },
 
-    destroyData: function(instance) {
+    destroyData: function (instance) {
       return service.remove(instance[this.idProp]);
     }
   };
