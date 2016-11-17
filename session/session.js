@@ -2,7 +2,7 @@ var connect = require('can-connect');
 var errors = require('feathers-errors');
 
 module.exports = connect.behavior('data/feathers-session', function () {
-  let helpURL = 'http://canjs.github.io/canjs/doc/can-connect-feathers.html';
+  var helpURL = 'http://canjs.github.io/canjs/doc/can-connect-feathers.html';
   if (!this.feathersApp) {
     throw new Error('You must provide a feathersApp instance to the feathersSession behavior. See ' + helpURL);
   }
@@ -14,7 +14,7 @@ module.exports = connect.behavior('data/feathers-session', function () {
   var app = this.feathersApp;
 
   return {
-    createData (data) {
+    createData: function(data) {
       return new Promise(function (resolve, reject) {
         return app.authenticate(data)
           .then(app.authentication.verifyJWT)
@@ -24,7 +24,7 @@ module.exports = connect.behavior('data/feathers-session', function () {
           .catch(reject);
       });
     },
-    getData () {
+    getData: function() {
       return new Promise(function (resolve, reject) {
         app.authentication.getJWT()
         .then(function (data) {
@@ -35,7 +35,7 @@ module.exports = connect.behavior('data/feathers-session', function () {
         });
       });
     },
-    destroyData () {
+    destroyData: function() {
       return app.logout();
     }
   };
