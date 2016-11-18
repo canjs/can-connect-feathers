@@ -129,7 +129,7 @@ module.exports = function runSessionTests (options) {
     });
 
     connect(sessionBehaviors, {
-      feathersApp: app,
+      feathersClient: app,
       idProp: '_id',
       Map: Session,
       List: Session.List,
