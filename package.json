@@ -74,7 +74,7 @@
     "jquery": "^3.1.0",
     "jwt-decode": "^2.1.0",
     "qs": "^6.2.1",
-    "steal-socket.io": "^2.0.4"
+    "steal-socket.io": "^2.0.5"
   },
   "devDependencies": {
     "can-connect": "^1.0.12",
