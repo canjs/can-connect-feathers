@@ -8,14 +8,16 @@ module.exports = connect.behavior('data/feathers', function () {
 
   var service = this.feathersService;
 
-  // Connect to realtime events.
-  var self = this;
-  service.on('created', function (message) { self.createInstance(message); });
-  service.on('updated', function (message) { self.updateInstance(message); });
-  service.on('patched', function (message) { self.updateInstance(message); });
-  service.on('removed', function (message) { self.destroyInstance(message); });
-
   return {
+    init: function () {
+      var self = this;
+      // Connect to realtime events.
+      service.on('created', function (message) { self.createInstance(message); });
+      service.on('updated', function (message) { self.updateInstance(message); });
+      service.on('patched', function (message) { self.updateInstance(message); });
+      service.on('removed', function (message) { self.destroyInstance(message); });
+    },
+
     getListData: function (params) {
       return service.find(params);
     },
