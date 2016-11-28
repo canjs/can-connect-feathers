@@ -39,15 +39,15 @@ module.exports = function runSessionTests (options) {
     });
 
     var behaviors = [
-      dataParse,
+      feathersBehavior,
       construct,
       constructStore,
       constructOnce,
       canMap,
       canRef,
+      dataParse,
       dataCallbacks,
-      realtime,
-      feathersBehavior
+      realtime
     ];
 
     var messageService = app.service('messages');

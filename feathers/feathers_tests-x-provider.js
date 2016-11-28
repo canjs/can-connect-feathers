@@ -38,15 +38,15 @@ module.exports = function runProviderTests (options) {
     });
 
     var behaviors = [
+      feathersBehavior,
       dataParse,
+      canMap,
+      canRef,
+      realtime,
       construct,
       constructStore,
       constructOnce,
-      canMap,
-      canRef,
-      dataCallbacks,
-      realtime,
-      feathersBehavior
+      dataCallbacks
     ];
 
     var feathersService = app.service('messages');
