@@ -2,15 +2,15 @@
   "name": "can-connect-feathers",
   "version": "2.0.0-beta.6",
   "description": "Feathers client library for DoneJS and can-connect",
-  "homepage": "https://github.com/feathersjs/can-connect-feathers",
+  "homepage": "https://github.com/canjs/can-connect-feathers",
   "repository": {
     "type": "git",
-    "url": "git://github.com/feathersjs/can-connect-feathers.git"
+    "url": "git://github.com/canjs/can-connect-feathers.git"
   },
   "author": {
     "name": "Marshall Thompson",
     "email": "marshall@creativeideal.net",
-    "url": "https://github.com/feathersjs"
+    "url": "https://github.com/icanjs"
   },
   "scripts": {
     "preversion": "npm test && npm run build",
@@ -93,10 +93,10 @@
     "feathers-socketio": "^1.4.1",
     "generator-donejs": "^0.9.0",
     "semistandard": "^9.1.0",
-    "socket.io-client": "^1.5.0",
+    "socket.io-client": "^1.7.1",
     "steal": "^0.16.0",
     "steal-qunit": "^0.1.1",
-    "steal-socket.io": "^4.0.3",
+    "steal-socket.io": "^4.0.4",
     "steal-tools": "^0.16.0",
     "testee": "^0.2.4"
   }
