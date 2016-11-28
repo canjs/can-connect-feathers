@@ -4,9 +4,7 @@ import io from 'steal-socket.io';
 import $ from 'jquery';
 import cookie from 'cookie-storage';
 import decode from 'jwt-decode';
-import {stripSlashes} from './utils';
-import {addAliases} from './utils';
-import {isEmptyObject} from './utils';
+import {stripSlashes, addAliases, isEmptyObject} from './utils';
 import errors from 'feathers-errors';
 import query from 'qs';
 
