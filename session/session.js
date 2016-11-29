@@ -4,10 +4,10 @@ var errors = require('feathers-errors');
 module.exports = connect.behavior('data/feathers-session', function () {
   var helpURL = 'http://canjs.github.io/canjs/doc/can-connect-feathers.html';
   if (!this.feathersClient) {
-    throw new Error('You must provide a feathersClient instance to the feathersSession behavior. See ' + helpURL);
+    throw new Error('You must provide a feathersClient instance to the feathers-session behavior. See ' + helpURL);
   }
   if (!this.Map) {
-    throw new Error('You must provide a Map instance to the feathersSession behavior. See ' + helpURL);
+    throw new Error('You must provide a Map instance to the feathers-session behavior. See ' + helpURL);
   }
 
   var Session = this.Map;

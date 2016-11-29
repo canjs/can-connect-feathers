@@ -1,1 +1,4 @@
-module.exports = require('./feathers/feathers');
+module.exports = {
+  service: require('./service/service'),
+  session: require('./session/session')
+};

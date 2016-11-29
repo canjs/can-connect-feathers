@@ -2,7 +2,7 @@ var QUnit = require('steal-qunit');
 var DefineMap = require('can-define/map/');
 var DefineList = require('can-define/list/');
 // Behaviors
-var feathersBehavior = require('../feathers/');
+var feathersBehavior = require('../service/');
 var feathersSession = require('./session');
 var connect = require('can-connect');
 var dataParse = require('can-connect/data/parse/');

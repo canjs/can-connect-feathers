@@ -1,5 +1,5 @@
 var QUnit = require('steal-qunit');
-var runCrossProviderTests = require('./feathers_tests-x-provider');
+var runCrossProviderTests = require('./service_tests-x-provider');
 var clearCookies = require('../test/clear-cookies');
 
 var socketio = require('feathers-socketio/client');
