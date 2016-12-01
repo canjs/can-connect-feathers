@@ -9,19 +9,19 @@ var io = require('socket.io-client');
 
 QUnit.module('can-connect-feathers/session');
 
-QUnit.test('feathers-authentication-popups', function (assert) {
-  var done = assert.async();
+// QUnit.test('feathers-authentication-popups', function (assert) {
+//   var done = assert.async();
 
-  assert.throws(function () {
-    window.authAgent.emit('login', 'blah');
-  },
-  /invalid token/,
-  'The authAgent handler rejected an invalid token.');
+//   assert.throws(function () {
+//     window.authAgent.emit('login', 'blah');
+//   },
+//   /invalid token/,
+//   'The authAgent handler rejected an invalid token.');
 
-  setTimeout(function () {
-    done();
-  }, 100);
-});
+//   setTimeout(function () {
+//     done();
+//   }, 100);
+// });
 
 // Run basic tests for the feathers-socketio provider.
 clearCookies();
