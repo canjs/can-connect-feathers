@@ -11,13 +11,13 @@ module.exports = connect.behavior('data/feathers-session', function () {
   }
 
   var Session = this.Map;
-  var app = this.feathersClient;
+  var feathersClient = this.feathersClient;
 
   return {
     createData: function (data) {
       return new Promise(function (resolve, reject) {
-        return app.authenticate(data)
-          .then(app.authentication.verifyJWT)
+        return feathersClient.authenticate(data)
+          .then(feathersClient.authentication.verifyJWT)
           .then(function (payload) {
             return resolve(new Session(payload));
           })
@@ -26,7 +26,7 @@ module.exports = connect.behavior('data/feathers-session', function () {
     },
     getData: function () {
       return new Promise(function (resolve, reject) {
-        app.authentication.getJWT()
+        feathersClient.authentication.getJWT()
         .then(function (data) {
           if (data) {
             return resolve(data);
@@ -36,7 +36,7 @@ module.exports = connect.behavior('data/feathers-session', function () {
       });
     },
     destroyData: function () {
-      return app.logout();
+      return feathersClient.logout();
     }
   };
 });
