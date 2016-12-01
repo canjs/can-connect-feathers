@@ -5,5 +5,5 @@
 
 Calls the [can-connect-feathers/service/service.options.feathersService feathersService] `find` method to retrieve list data for a particular `set`.
 
-@param {can-set/Set} set A object that represents the set of data needed to be loaded.
+@param {can-set/Set} set A object that represents the set of data needed to be loaded.  The `set` object is passed to the Feathers service's `find` method as the query params: `.find({query: set})`.
 @return {Promise<can-connect.listData>} A promise that resolves to the ListData format.
