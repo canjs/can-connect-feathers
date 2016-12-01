@@ -7,7 +7,7 @@ var rest = require('feathers-rest/client');
 var jQuery = require('jquery');
 var io = require('socket.io-client');
 
-QUnit.module('can-connect-feathers');
+QUnit.module('can-connect-feathers/service');
 
 // Run basic tests for the feathers-socketio provider.
 clearCookies();
