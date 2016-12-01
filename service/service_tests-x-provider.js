@@ -62,10 +62,21 @@ module.exports = function runProviderTests (options) {
     QUnit.test('findAll', function (assert) {
       var done = assert.async();
 
-      Message.findAll({}).then(messages => {
-        assert.ok(messages, 'Got a response from findAll');
-        assert.equal(messages instanceof Message.List, true, 'got a Message.List back');
-        done();
+      var randomNumber = Math.random();
+      var messageText = `Welcome to can-connect-feathers! ${randomNumber}` 
+
+      var message = new Message({
+        text: messageText
+      });
+      message.save().then(function (msg) {
+        // Make sure the message was deleted.
+        Message.findAll({text: messageText}).then(messages => {
+          assert.ok(messages, 'Got a response from findAll');
+          assert.equal(messages.length, 1, 'Query params were properly passed.');
+          assert.equal(messages[0].text, messageText, 'Got back the correct message.');
+          assert.equal(messages instanceof Message.List, true, 'got a Message.List back');
+          done();
+        });
       });
     });
 
