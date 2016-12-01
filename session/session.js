@@ -31,9 +31,11 @@ module.exports = connect.behavior('data/feathers-session', function () {
         Session.connection.createInstance(payload);
         Session.trigger('created', [payload]);
       } else {
+        console.log('error');
         throw new Error('invalid');
       }
     } catch (error) {
+      console.log(error);
       throw new Error('An invalid token was received through the feathers-authentication-popups authAgent');
     }
   });
