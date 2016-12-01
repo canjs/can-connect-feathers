@@ -36,16 +36,6 @@
     ]
   },
   "main": "dist/cjs/can-connect-feathers",
-  "browser": {
-    "transform": [
-      "cssify"
-    ]
-  },
-  "browserify": {
-    "transform": [
-      "cssify"
-    ]
-  },
   "keywords": [
     "canjs",
     "can",
@@ -71,18 +61,16 @@
     "npmAlgorithm": "flat"
   },
   "dependencies": {
+    "can-event": "^3.0.1",
     "can-util": "^3.0.0-pre.70",
-    "cookie-storage": "^2.0.2",
+    "feathers-authentication-popups": "^0.1.2",
     "feathers-errors": "^2.4.0",
-    "jquery": "^3.1.0",
-    "jwt-decode": "^2.1.0",
-    "qs": "^6.2.1"
+    "jwt-decode": "^2.1.0"
   },
   "devDependencies": {
     "can-connect": "^1.0.12",
     "can-define": "^1.0.4",
     "concurrently": "^3.1.0",
-    "cssify": "^1.0.3",
     "documentjs": "^0.4.2",
     "done-serve": "^0.2.0",
     "donejs-cli": "^0.8.0",
@@ -92,6 +80,7 @@
     "feathers-rest": "^1.5.0",
     "feathers-socketio": "^1.4.1",
     "generator-donejs": "^0.9.0",
+    "jquery": "^3.1.0",
     "semistandard": "^9.1.0",
     "socket.io-client": "^1.7.1",
     "steal": "^0.16.0",
