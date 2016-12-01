@@ -19,7 +19,7 @@ module.exports = connect.behavior('data/feathers-service', function () {
     },
 
     getListData: function (params) {
-      return service.find(params);
+      return service.find({query: params});
     },
 
     getData: function (params) {
