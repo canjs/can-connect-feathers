@@ -2,7 +2,7 @@ var connect = require('can-connect');
 var errors = require('feathers-errors');
 
 module.exports = connect.behavior('data/feathers-session', function () {
-  var helpURL = 'http://canjs.github.io/canjs/doc/can-connect-feathers.html';
+  var helpURL = 'https://v3.canjs.com/doc/can-connect-feathers.html';
   if (!this.feathersClient) {
     throw new Error('You must provide a feathersClient instance to the feathers-session behavior. See ' + helpURL);
   }

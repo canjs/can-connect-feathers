@@ -1,7 +1,7 @@
 var connect = require('can-connect');
 
 module.exports = connect.behavior('data/feathers-service', function () {
-  var helpURL = 'http://canjs.github.io/canjs/doc/can-connect-feathers.html';
+  var helpURL = 'https://v3.canjs.com/doc/can-connect-feathers.html';
   if (!this.feathersService) {
     throw new Error('You must provide a feathersService to the feathers-service behavior: ' + helpURL);
   }
@@ -11,7 +11,7 @@ module.exports = connect.behavior('data/feathers-service', function () {
   return {
     init: function () {
       var self = this;
-      // Connect to realtime events.
+      // Connect to real-time events.
       service.on('created', function (message) { self.createInstance(message); });
       service.on('updated', function (message) { self.updateInstance(message); });
       service.on('patched', function (message) { self.updateInstance(message); });
