@@ -70,3 +70,7 @@ connect([
   name: 'session'
 });
 ```
+
+## Working with feathers-authentication-popups
+
+The `feathers-session` behavior is preconfigured to listen to `login` messages coming in over the [feathers-authentication-popups](https://github.com/feathersjs/feathers-authentication-popups) `authAgent`.  When any message is received through the authAgent, its validity is checked.  If it's a valid JWT token, a Session instance will be created automatically, which will dispatch a `created` event on the connected Session Map.
