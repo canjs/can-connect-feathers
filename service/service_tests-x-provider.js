@@ -28,7 +28,7 @@ module.exports = function runProviderTests (options) {
       .configure(hooks())
       .configure(auth());
 
-    var Message = DefineMap.extend({
+    var Message = DefineMap.extend('Message', {
       _id: '*',
       text: 'string'
     });
@@ -49,10 +49,8 @@ module.exports = function runProviderTests (options) {
       dataCallbacks
     ];
 
-    var feathersService = app.service('messages');
-
     connect(behaviors, {
-      feathersService, // Connect the instance to your model.
+      feathersService: app.service('messages'),
       idProp: '_id',
       Map: Message,
       List: Message.List,

@@ -29,7 +29,7 @@ module.exports = function runSessionTests (options) {
       .configure(hooks())
       .configure(auth());
 
-    var Message = DefineMap.extend({
+    var Message = DefineMap.extend('Message', {
       _id: '*',
       text: 'string'
     });
@@ -60,7 +60,7 @@ module.exports = function runSessionTests (options) {
       name: 'message'
     });
 
-    var User = DefineMap.extend({
+    var User = DefineMap.extend('User', {
       _id: '*',
       email: 'string'
     });
@@ -100,6 +100,7 @@ module.exports = function runSessionTests (options) {
     });
 
     var sessionBehaviors = [
+      feathersSession,
       dataParse,
       construct,
       constructStore,
@@ -107,8 +108,7 @@ module.exports = function runSessionTests (options) {
       canMap,
       canRef,
       dataCallbacks,
-      realtime,
-      feathersSession
+      realtime
     ];
 
     var Session = DefineMap.extend('Session', {
