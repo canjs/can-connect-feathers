@@ -4,6 +4,7 @@ var authAgent = require('feathers-authentication-popups').authAgent;
 var canEvent = require('can-event');
 var decode = require('jwt-decode');
 var payloadIsValid = require('../utils').payloadIsValid;
+var hasValidToken = require('../utils').hasValidToken;
 
 module.exports = connect.behavior('data/feathers-session', function () {
   var helpURL = 'https://v3.canjs.com/doc/can-connect-feathers.html';
@@ -52,14 +53,17 @@ module.exports = connect.behavior('data/feathers-session', function () {
     },
     getData: function () {
       return new Promise(function (resolve, reject) {
-        feathersClient.authentication.getJWT()
-        .then(function (data) {
-          if (data) {
-            data = typeof data === 'string' ? {token: data} : data;
-            return resolve(data);
-          }
+        var tokenLocation = feathersClient.authentication.tokenKey || feathersClient.authentication.cookie;
+        if (hasValidToken(tokenLocation)) {
+          feathersClient.authenticate()
+            .then(feathersClient.authentication.verifyJWT)
+            .then(function (payload) {
+              return resolve(new Session(payload));
+            })
+            .catch(reject);
+        } else {
           reject(new errors.NotAuthenticated('Not Authenticated'));
-        });
+        }
       });
     },
     destroyData: function () {
