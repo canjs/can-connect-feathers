@@ -65,7 +65,8 @@
     "can-util": "^3.0.0-pre.70",
     "feathers-authentication-popups": "^0.1.2",
     "feathers-errors": "^2.4.0",
-    "jwt-decode": "^2.1.0"
+    "jwt-decode": "^2.1.0",
+    "steal-socket.io": "^4.0.5"
   },
   "devDependencies": {
     "can-connect": "^1.0.12",

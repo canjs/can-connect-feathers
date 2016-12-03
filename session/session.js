@@ -3,11 +3,7 @@ var errors = require('feathers-errors');
 var authAgent = require('feathers-authentication-popups').authAgent;
 var canEvent = require('can-event');
 var decode = require('jwt-decode');
-
-// Pass a decoded payload and it will return a boolean based on if it hasn't expired.
-function payloadIsValid (payload) {
-  return payload && payload.exp * 1000 > new Date().getTime();
-}
+var payloadIsValid = require('../utils').payloadIsValid;
 
 module.exports = connect.behavior('data/feathers-session', function () {
   var helpURL = 'https://v3.canjs.com/doc/can-connect-feathers.html';
@@ -23,22 +19,27 @@ module.exports = connect.behavior('data/feathers-session', function () {
 
   Object.assign(Session, canEvent);
 
-  // Listen to feathers-authentication-popups messages.
-  authAgent.on('login', function (token) {
-    try {
-      var payload = decode(token);
-      if (payloadIsValid(payload)) {
-        Session.connection.createInstance(payload);
-        Session.trigger('created', [payload]);
-      } else {
-        throw new Error('invalid');
-      }
-    } catch (error) {
-      throw new Error('An invalid token was received through the feathers-authentication-popups authAgent');
-    }
-  });
-
   return {
+    init: function() {
+      var self = this;
+      // Listen to feathers-authentication-popups messages.
+      authAgent.on('login', function (token) {
+        try {
+          var payload = decode(token);
+          if (!payloadIsValid(payload)) {
+            throw new Error('invalid token');
+          }
+        } catch (error) {
+          throw new Error('An invalid token was received through the feathers-authentication-popups authAgent');
+        }
+        feathersClient.authenticate({type: 'token', token: token})
+          .then(function(response){
+            var payload = decode(response.token);
+            self.createInstance(payload);
+            Session.trigger('created', [payload]);
+          });
+      });
+    },
     createData: function (data) {
       return new Promise(function (resolve, reject) {
         return feathersClient.authenticate(data)
@@ -54,6 +55,7 @@ module.exports = connect.behavior('data/feathers-session', function () {
         feathersClient.authentication.getJWT()
         .then(function (data) {
           if (data) {
+            data = typeof data === 'string' ? {token: data} : data;
             return resolve(data);
           }
           reject(new errors.NotAuthenticated('Not Authenticated'));
