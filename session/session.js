@@ -53,7 +53,8 @@ module.exports = connect.behavior('data/feathers-session', function () {
     },
     getData: function () {
       return new Promise(function (resolve, reject) {
-        var tokenLocation = feathersClient.authentication.tokenKey || feathersClient.authentication.cookie;
+        var options = feathersClient.authentication.options;
+        var tokenLocation = options.tokenKey || options.cookie;
         if (hasValidToken(tokenLocation)) {
           feathersClient.authenticate()
             .then(feathersClient.authentication.verifyJWT)
