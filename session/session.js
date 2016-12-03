@@ -52,6 +52,7 @@ module.exports = connect.behavior('data/feathers-session', function () {
       });
     },
     getData: function () {
+      var self = this;
       return new Promise(function (resolve, reject) {
         var options = feathersClient.authentication.options;
         var tokenLocation = options.tokenKey || options.cookie;
@@ -59,6 +60,8 @@ module.exports = connect.behavior('data/feathers-session', function () {
           feathersClient.authenticate()
             .then(feathersClient.authentication.verifyJWT)
             .then(function (payload) {
+              self.createInstance(payload);
+              Session.trigger('created', [payload]);
               return resolve(new Session(payload));
             })
             .catch(reject);
