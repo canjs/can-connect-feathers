@@ -1,5 +1,6 @@
 import QUnit from 'steal-qunit';
 import Feathers from './can-connect-feathers';
+import $ from 'jquery';
 import DefineMap from 'can-define/map/';
 import DefineList from 'can-define/list/';
 import superMap from 'can-connect/can/super-map/';
@@ -30,7 +31,8 @@ QUnit.test('Plugin initializes correctly', function(){
   var feathers = new Feathers({
     socketOptions: {
       reconnection: false
-    }
+    },
+    jquery: $
   });
   QUnit.equal(typeof Feathers, 'function', 'Default export is a class/function.');
   QUnit.equal(feathers.idProp, 'id', 'The default idProp is "id".');
@@ -66,7 +68,8 @@ QUnit.module('Basic REST Integration', {
     idProp: '_id',
     socketOptions:{
       transports: ['websocket']
-    }
+    },
+    jquery: $
   });
   var Message = DefineMap.extend({
     _id: '*',
@@ -177,7 +180,8 @@ QUnit.module('Basic Socket.io Integration', {
     idProp: '_id',
     socketOptions:{
       transports: ['websocket']
-    }
+    },
+    jquery: $
   });
   var Message = DefineMap.extend({
     _id: '*',
@@ -285,7 +289,8 @@ QUnit.module('REST Auth Integration', {
   var feathers = new Feathers({
     url: 'http://localhost:3333',
     idProp: '_id',
-    allowSocketIO: false
+    allowSocketIO: false,
+    jquery: $
   });
   var Message = DefineMap.extend('Message', {
     _id: '*',
@@ -547,7 +552,8 @@ QUnit.module('Socket.io Auth Integration', {
     idProp: '_id',
     socketOptions:{
       transports: ['websocket']
-    }
+    },
+    jquery: $
   });
   var Message = DefineMap.extend('Message', {
     _id: '*',

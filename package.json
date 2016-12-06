@@ -71,7 +71,6 @@
   "dependencies": {
     "cookie-storage": "^2.0.2",
     "feathers-errors": "^2.4.0",
-    "jquery": "^3.1.0",
     "jwt-decode": "^2.1.0",
     "qs": "^6.2.1",
     "steal-socket.io": "^2.0.5"
@@ -86,6 +85,7 @@
     "donejs-cli": "^0.8.0",
     "generator-donejs": "^0.9.0",
     "jshint": "^2.9.1",
+    "jquery": "^3.1.0",
     "steal": "^0.16.0",
     "steal-qunit": "^0.1.1",
     "steal-tools": "^0.16.0",

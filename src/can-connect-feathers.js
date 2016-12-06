@@ -1,7 +1,6 @@
 /* global window */
 
 import io from 'steal-socket.io';
-import $ from 'jquery';
 import cookie from 'cookie-storage';
 import decode from 'jwt-decode';
 import {stripSlashes, addAliases, isEmptyObject} from './utils';
@@ -32,14 +31,21 @@ class Feathers {
       // Set to false to disable socketio and force any socketio services to use rest.
       allowSocketIO: true,
       // socket.io connection options
-      socketOptions: {}
+      socketOptions: {},
+      // Provide your own version of jQuery
+      jquery: null
     };
-    $.extend(this, defaults, config);
 
     // Make sure the SSR server never attempts anything with sockets.
     if (window.doneSsr) {
       this.allowSocketIO = false;
     }
+
+    if (!config.jquery) {
+      throw new Error('You must provide a jQuery module as `config.jquery`');
+    }
+
+    config.jquery.extend(this, defaults, config);
 
     if(this.allowSocketIO) {
       this.connectSocket();
@@ -97,6 +103,7 @@ class Feathers {
    * automatically includes the JWT token if it's available.
    */
   makeXhr(id, params, location, type = 'GET'){
+    const $ = this.jquery;
     let url = this.makeUrl(location, params, id, type);
     let ajaxConfig = {
       url,
@@ -343,6 +350,7 @@ class Feathers {
    * wasn't found on the primary storage engine.
    */
   getSession(){
+    const $ = this.jquery;    
     let session, token = this.getToken();
     if (token) {
       let tokenData = decode(token);
@@ -357,6 +365,7 @@ class Feathers {
   }
 
   prepareAuthParams(params){
+    const $ = this.jquery;    
     let data = {
       type: 'token'
     };
