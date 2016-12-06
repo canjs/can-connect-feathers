@@ -30,17 +30,7 @@
     "document": "documentjs",
     "develop": "done-serve --static --develop --port 8080"
   },
-  "main": "dist/cjs/can-connect-feathers",
-  "browser": {
-    "transform": [
-      "cssify"
-    ]
-  },
-  "browserify": {
-    "transform": [
-      "cssify"
-    ]
-  },
+  "main": "can-connect-feathers",
   "keywords": [
     "canjs",
     "can",
@@ -79,7 +69,6 @@
     "can-connect": "^1.0.12",
     "can-define": "^1.0.4",
     "concurrently": "^3.1.0",
-    "cssify": "^1.0.3",
     "documentjs": "^0.4.2",
     "done-serve": "^0.2.0",
     "donejs-cli": "^0.8.0",
