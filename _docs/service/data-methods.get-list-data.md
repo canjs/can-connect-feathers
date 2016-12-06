@@ -1,4 +1,4 @@
-@property {FeathersClient} can-connect-feathers/service/service.data-methods.getListData getListData
+@function can-connect-feathers/service/service.data-methods.getListData getListData
 @parent can-connect-feathers/service/service.data-methods
 
 @signature `getListData(set)`

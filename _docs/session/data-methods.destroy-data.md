@@ -1,4 +1,4 @@
-@property {FeathersClient} can-connect-feathers/session/session.data-methods.destroyData destroyData
+@function can-connect-feathers/session/session.data-methods.destroyData destroyData
 @parent can-connect-feathers/session/session.data-methods
 
 @signature `destroyData()`

@@ -1,4 +1,4 @@
-@property {FeathersClient} can-connect-feathers/session/session.data-methods.getData getData
+@function can-connect-feathers/session/session.data-methods.getData getData
 @parent can-connect-feathers/session/session.data-methods
 
 @signature `getData()`

@@ -1,4 +1,4 @@
-@property {FeathersClient} can-connect-feathers/service/service.data-methods.createData createData
+@function can-connect-feathers/service/service.data-methods.createData createData
 @parent can-connect-feathers/service/service.data-methods
 
 @signature `createData(instanceData, cid)`

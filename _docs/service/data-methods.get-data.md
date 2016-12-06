@@ -1,4 +1,4 @@
-@function {FeathersClient} can-connect-feathers/service/service.data-methods.getData getData
+@function can-connect-feathers/service/service.data-methods.getData getData
 @parent can-connect-feathers/service/service.data-methods
 
 @signature `getData(params)`

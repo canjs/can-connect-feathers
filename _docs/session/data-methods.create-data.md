@@ -1,4 +1,4 @@
-@property {FeathersClient} can-connect-feathers/session/session.data-methods.createData createData
+@function can-connect-feathers/session/session.data-methods.createData createData
 @parent can-connect-feathers/session/session.data-methods
 
 @signature `createData(sessionData)`
