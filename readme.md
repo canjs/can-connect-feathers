@@ -14,11 +14,16 @@ Instantiate a `Feathers` instance for each Feathers API server:
 ```js
 // models/feathers.js
 import Feathers from 'can-connect-feathers';
+import $ from 'jquery';
 
-const feathers = new Feathers();
+const feathers = new Feathers({
+  jquery: $
+});
 
 export default feathers;
 ```
+
+> Note: The `jquery` config option is required as of version 2.0
 
 Use it in your can-connect model:
 ```js
