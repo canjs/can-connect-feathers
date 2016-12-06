@@ -73,7 +73,7 @@
     "feathers-errors": "^2.4.0",
     "jwt-decode": "^2.1.0",
     "qs": "^6.2.1",
-    "steal-socket.io": "^2.0.5"
+    "steal-socket.io": "^4.0.5"
   },
   "devDependencies": {
     "can-connect": "^1.0.12",
@@ -82,7 +82,7 @@
     "cssify": "^1.0.3",
     "documentjs": "^0.4.2",
     "done-serve": "^0.2.0",
-    "donejs-cli": "^0.8.0",
+    "donejs-cli": "^0.9.5",
     "generator-donejs": "^0.9.0",
     "jshint": "^2.9.1",
     "jquery": "^3.1.0",
