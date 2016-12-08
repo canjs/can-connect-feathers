@@ -21,7 +21,7 @@ module.exports = connect.behavior('data/feathers-session', function () {
   Object.assign(Session, canEvent);
 
   return {
-    init: function() {
+    init: function () {
       var self = this;
       // Listen to feathers-authentication-popups messages.
       authAgent.on('login', function (token) {
@@ -34,10 +34,11 @@ module.exports = connect.behavior('data/feathers-session', function () {
           throw new Error('An invalid token was received through the feathers-authentication-popups authAgent');
         }
         feathersClient.authenticate({type: 'token', token: token})
-          .then(function(response){
+          .then(function (response) {
             var payload = decode(response.token);
-            self.createInstance(payload);
-            Session.trigger('created', [payload]);
+            var session = new Session(payload);
+            self.createInstance(session);
+            Session.trigger('created', [session]);
           });
       });
     },
