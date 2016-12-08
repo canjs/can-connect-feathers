@@ -23,7 +23,6 @@ module.exports = connect.behavior('data/feathers-session', function () {
   function makeSession (connection, payload) {
     var session = new Session(payload);
     connection.createInstance(session);
-    Session.trigger('created', [session]);
     return session;
   }
 
