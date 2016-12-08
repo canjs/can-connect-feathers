@@ -20,6 +20,13 @@ module.exports = connect.behavior('data/feathers-session', function () {
 
   Object.assign(Session, canEvent);
 
+  function makeSession (connection, payload) {
+    var session = new Session(payload);
+    connection.createInstance(session);
+    Session.trigger('created', [session]);
+    return session;
+  }
+
   return {
     init: function () {
       var self = this;
@@ -36,9 +43,7 @@ module.exports = connect.behavior('data/feathers-session', function () {
         feathersClient.authenticate({type: 'token', token: token})
           .then(function (response) {
             var payload = decode(response.token);
-            var session = new Session(payload);
-            self.createInstance(session);
-            Session.trigger('created', [session]);
+            return makeSession(self, payload);
           });
       });
     },
@@ -61,9 +66,7 @@ module.exports = connect.behavior('data/feathers-session', function () {
           feathersClient.authenticate()
             .then(feathersClient.authentication.verifyJWT)
             .then(function (payload) {
-              self.createInstance(payload);
-              Session.trigger('created', [payload]);
-              return resolve(new Session(payload));
+              return makeSession(self, payload);
             })
             .catch(reject);
         } else {
