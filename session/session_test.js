@@ -5,7 +5,7 @@ var clearCookies = require('../test/clear-cookies');
 var socketio = require('feathers-socketio/client');
 var rest = require('feathers-rest/client');
 var jQuery = require('jquery');
-var io = require('socket.io-client');
+var io = require('socket.io-client/dist/socket.io');
 
 QUnit.module('can-connect-feathers/session');
 
