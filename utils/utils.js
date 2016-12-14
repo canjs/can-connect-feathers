@@ -1,16 +1,16 @@
 var decode = require('jwt-decode');
 
 // Reads and returns the contents of a cookie with the provided name.
-function readCookie(name) {
-  var nameEQ = name + "=";
+function readCookie (name) {
+  var nameEQ = name + '=';
   var ca = document.cookie.split(';');
-  for(var i=0;i < ca.length;i++) {
+  for (var i = 0; i < ca.length; i++) {
     var c = ca[i];
     while (c.charAt(0) === ' ') {
-      c = c.substring(1,c.length);
+      c = c.substring(1, c.length);
     }
     if (c.indexOf(nameEQ) === 0) {
-      return c.substring(nameEQ.length,c.length);
+      return c.substring(nameEQ.length, c.length);
     }
   }
   return null;
@@ -19,7 +19,7 @@ function readCookie(name) {
 // Reads the token from a cookie, sessionStorage, or localStorage, in that order.
 function getStoredToken (storageLocation) {
   var token = readCookie(storageLocation);
-  if (!token && (window && window.localStorage || window.sessionStorage) ) {
+  if (!token && (window && window.localStorage || window.sessionStorage)) {
     token = window.sessionStorage.getItem(storageLocation) || window.localStorage.getItem(storageLocation);
   }
   return token;
@@ -38,7 +38,7 @@ function hasValidToken (storageLocation) {
       var payload = decode(token);
       return payloadIsValid(payload);
     } catch (error) {
-      return false;      
+      return false;
     }
   }
   return false;

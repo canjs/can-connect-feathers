@@ -45,5 +45,5 @@ QUnit.test('hasValidToken', function (assert) {
   document.cookie = 'feathers-jwt=' + token;
   assert.equal(hasValidToken('feathers-jwt'), true, 'non-expired token was valid.');
 
-  document.cookie = 'feathers-jwt=';  
+  document.cookie = 'feathers-jwt=';
 });
