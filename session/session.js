@@ -7,7 +7,7 @@ var payloadIsValid = require('../utils').payloadIsValid;
 var hasValidToken = require('../utils').hasValidToken;
 
 module.exports = connect.behavior('data/feathers-session', function () {
-  var helpURL = 'https://v3.canjs.com/doc/can-connect-feathers.html';
+  var helpURL = 'https://canjs.com/doc/can-connect-feathers.html';
   if (!this.feathersClient) {
     throw new Error('You must provide a feathersClient instance to the feathers-session behavior. See ' + helpURL);
   }
