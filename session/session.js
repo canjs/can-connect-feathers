@@ -61,9 +61,9 @@ module.exports = connect.behavior('data/feathers-session', function () {
         var tokenLocation = options.tokenKey || options.cookie;
         if (hasValidToken(tokenLocation) && !window.doneSsr) {
           feathersClient.authenticate()
-            .then(feathersClient.passport.verifyJWT)
-            .then(function (payload) {
-              return resolve(makeSession(self, payload));
+            .then(function (data) {
+              var payload = decode(data.accessToken);
+              return makeSession(self, payload);
             })
             .catch(reject);
         } else {
