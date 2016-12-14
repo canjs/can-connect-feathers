@@ -25,11 +25,14 @@
     "body-parser": "^1.15.2",
     "compression": "^1.6.2",
     "cors": "^2.8.0",
-    "feathers": "^2.0.1",
-    "feathers-authentication": "^0.7.9",
+    "feathers": "^2.0.3",
+    "feathers-authentication": "1.0.0-beta-2",
+    "feathers-authentication-jwt": "^0.2.0",
+    "feathers-authentication-local": "^0.3.0",
     "feathers-configuration": "^0.2.3",
     "feathers-errors": "^2.4.0",
     "feathers-hooks": "^1.5.7",
+    "feathers-legacy-authentication-hooks": "^1.0.0",
     "feathers-nedb": "^2.4.1",
     "feathers-rest": "^1.4.4",
     "feathers-socketio": "^1.4.1",
@@ -40,6 +43,7 @@
     "winston": "^2.2.0"
   },
   "devDependencies": {
+    "feathers-configuration": "0.2.3",
     "jshint": "^2.9.3",
     "mocha": "^3.0.2",
     "request": "^2.74.0"

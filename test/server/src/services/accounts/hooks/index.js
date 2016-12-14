@@ -2,13 +2,17 @@
 
 // const globalHooks = require('../../../hooks');
 // const hooks = require('feathers-hooks');
-const auth = require('feathers-authentication').hooks;
+const newAuth = require('feathers-authentication');
+const auth = require('feathers-legacy-authentication-hooks');
 
 exports.before = {
   all: [
-    auth.verifyToken(),
-    auth.populateUser(),
-    auth.restrictToAuthenticated()
+    newAuth.hooks.authenticate('jwt'),
+    hook => {
+      if (!hook.params.authenticated) {
+        throw new Error('Not authenticated');
+      }
+    }
   ],
   find: [],
   get: [],

@@ -16,7 +16,7 @@ var realtime = require('can-connect/real-time/');
 
 var feathers = require('feathers/client');
 var hooks = require('feathers-hooks');
-var auth = require('feathers-authentication/client');
+var auth = require('feathers-authentication-client');
 
 module.exports = function runSessionTests (options) {
   QUnit.module(`Authentication: ${options.moduleName}`, {
@@ -114,25 +114,15 @@ module.exports = function runSessionTests (options) {
     var Session = DefineMap.extend('Session', {
       seal: false
     }, {
-      _id: '*',
       email: 'string',
       password: 'string',
-      data: {
-        type: User.Ref.type
-      },
-      token: 'string',
-      type: 'string'
-    });
-
-    Session.List = DefineList.extend({
-      '*': Session
+      strategy: 'string'
     });
 
     connect(sessionBehaviors, {
       feathersClient: app,
-      idProp: '_id',
+      idProp: 'exp',
       Map: Session,
-      List: Session.List,
       name: 'session'
     });
 
@@ -202,7 +192,7 @@ module.exports = function runSessionTests (options) {
           password: 'L1nds3y-Stirling-R0cks!'
         });
         var session = new Session({
-          type: 'local',
+          strategy: 'local',
           user: newLoginUser
         });
         session.save()
@@ -210,7 +200,8 @@ module.exports = function runSessionTests (options) {
           console.log('res', res);
         })
         .catch(function (err) {
-          assert.equal(err.name, 'NotAuthenticated', `got back error message: ${err.name}`);
+          var correctError = err.name.indexOf('NotAuthenticated') >= 0 || err.name.indexOf('BadRequest') >= 0;
+          assert.ok(correctError, `got back error message: ${err.name}`);
           done();
         });
       });
@@ -229,7 +220,7 @@ module.exports = function runSessionTests (options) {
 
         // Attempt to login with the user.
         var session = new Session({
-          type: 'local',
+          strategy: 'local',
           email: user.email,
           password: user.password
         });
@@ -275,7 +266,7 @@ module.exports = function runSessionTests (options) {
 
         // Attempt to login with the user.
         var session = new Session({
-          type: 'local',
+          strategy: 'local',
           email: user.email,
           password: user.password
         });
@@ -285,10 +276,10 @@ module.exports = function runSessionTests (options) {
           assert.ok(newSession, 'successfully logged in');
           assert.ok(newSession instanceof Session, 'got back a session instance');
 
-          app.authentication.getJWT().then(token => {
+          app.passport.getJWT().then(accessToken => {
             app.logout();
 
-            var anotherSession = new Session({ type: 'token', token });
+            var anotherSession = new Session({ strategy: 'jwt', accessToken });
             anotherSession.save().then(newlyCreatedSession => {
               assert.ok(newlyCreatedSession, 'successfully logged in');
               assert.ok(newlyCreatedSession instanceof Session, 'got back a session instance');
@@ -300,7 +291,7 @@ module.exports = function runSessionTests (options) {
               account.save()
               .then(newAccount => {
                 assert.ok(newAccount, 'created an account');
-                assert.equal(newAccount.userId, session._id, 'the server assigned the userId correctly');
+                assert.equal(newAccount.userId, session.userId, 'the server assigned the userId correctly');
                 done();
               })
               .catch(err => {

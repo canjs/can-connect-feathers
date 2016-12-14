@@ -15,7 +15,7 @@ var realtime = require('can-connect/real-time/');
 
 var feathers = require('feathers/client');
 var hooks = require('feathers-hooks');
-var auth = require('feathers-authentication/client');
+var auth = require('feathers-authentication-client');
 
 module.exports = function runProviderTests (options) {
   QUnit.module(`Basics: ${options.moduleName}`, {

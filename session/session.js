@@ -39,33 +39,31 @@ module.exports = connect.behavior('data/feathers-session', function () {
         } catch (error) {
           throw new Error('An invalid token was received through the feathers-authentication-popups authAgent');
         }
-        feathersClient.authenticate({type: 'token', token: token})
-          .then(function (response) {
-            var payload = decode(response.token);
+        feathersClient.authenticate({strategy: 'jwt', token: token})
+          .then(function (data) {
+            var payload = decode(data.accessToken);
             return makeSession(self, payload);
           });
       });
     },
     createData: function (data) {
-      return new Promise(function (resolve, reject) {
-        return feathersClient.authenticate(data)
-          .then(feathersClient.authentication.verifyJWT)
-          .then(function (payload) {
-            return resolve(new Session(payload));
-          })
-          .catch(reject);
-      });
+      var self = this;
+      return feathersClient.authenticate(data)
+        .then(function (data) {
+          var payload = decode(data.accessToken);
+          return makeSession(self, payload);
+        });
     },
     getData: function () {
       var self = this;
       return new Promise(function (resolve, reject) {
-        var options = feathersClient.authentication.options;
+        var options = feathersClient.passport.options;
         var tokenLocation = options.tokenKey || options.cookie;
-        if (hasValidToken(tokenLocation)) {
+        if (hasValidToken(tokenLocation) && !window.doneSsr) {
           feathersClient.authenticate()
-            .then(feathersClient.authentication.verifyJWT)
+            .then(feathersClient.passport.verifyJWT)
             .then(function (payload) {
-              return makeSession(self, payload);
+              return resolve(makeSession(self, payload));
             })
             .catch(reject);
         } else {
