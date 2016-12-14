@@ -39,7 +39,7 @@ module.exports = connect.behavior('data/feathers-session', function () {
         } catch (error) {
           throw new Error('An invalid token was received through the feathers-authentication-popups authAgent');
         }
-        feathersClient.authenticate({strategy: 'jwt', token: token})
+        feathersClient.authenticate({strategy: 'jwt', accessToken: token})
           .then(function (data) {
             var payload = decode(data.accessToken);
             return makeSession(self, payload);
