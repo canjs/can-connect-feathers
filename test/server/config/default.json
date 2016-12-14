@@ -4,9 +4,9 @@
   "nedb": "../data/",
   "public": "../../../",
   "auth": {
-    "token": {
-      "secret": "2Yf74Ojn2gk22wySFejFiCrb4BQxwN5stDx4tx8qvnOEUoOMStc0f0wcolCRHbyCoPrUwHL/qE10TDQgiOlGDA=="
-    },
-    "local": {}
+    "secret": "2Yf74Ojn2gk22wySFejFiCrb4BQxwN5stDx4tx8qvnOEUoOMStc0f0wcolCRHbyCoPrUwHL/qE10TDQgiOlGDA==",
+    "local": {
+      "service": "users"
+    }
   }
 }
