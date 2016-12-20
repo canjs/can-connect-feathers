@@ -1,7 +1,6 @@
 var connect = require('can-connect');
 var errors = require('feathers-errors');
 var authAgent = require('feathers-authentication-popups').authAgent;
-var canEvent = require('can-event');
 var decode = require('jwt-decode');
 var payloadIsValid = require('../utils').payloadIsValid;
 var hasValidToken = require('../utils').hasValidToken;
@@ -15,20 +14,12 @@ module.exports = connect.behavior('data/feathers-session', function () {
     throw new Error('You must provide a Map instance to the feathers-session behavior. See ' + helpURL);
   }
 
-  var Session = this.Map;
   var feathersClient = this.feathersClient;
-
-  Object.assign(Session, canEvent);
-
-  function makeSession (connection, payload) {
-    var session = new Session(payload);
-    connection.createInstance(session);
-    return session;
-  }
+  var options = feathersClient.passport.options;
 
   return {
     init: function () {
-      var self = this;
+      var connection = this;
       // Listen to feathers-authentication-popups messages.
       authAgent.on('login', function (token) {
         try {
@@ -42,28 +33,24 @@ module.exports = connect.behavior('data/feathers-session', function () {
         feathersClient.authenticate({strategy: 'jwt', accessToken: token})
           .then(function (data) {
             var payload = decode(data.accessToken);
-            return makeSession(self, payload);
+            connection.createInstance(payload);
           });
       });
     },
     createData: function (data) {
-      var self = this;
       return feathersClient.authenticate(data)
         .then(function (data) {
-          var payload = decode(data.accessToken);
-          return makeSession(self, payload);
+          return decode(data.accessToken);
         });
     },
     getData: function () {
-      var self = this;
       return new Promise(function (resolve, reject) {
-        var options = feathersClient.passport.options;
         var tokenLocation = options.tokenKey || options.cookie;
         if (hasValidToken(tokenLocation) && !window.doneSsr) {
           feathersClient.authenticate()
             .then(function (data) {
               var payload = decode(data.accessToken);
-              return makeSession(self, payload);
+              return resolve(payload);
             })
             .catch(reject);
         } else {
@@ -72,7 +59,7 @@ module.exports = connect.behavior('data/feathers-session', function () {
       });
     },
     destroyData: function () {
-      return feathersClient.logout();
+      return Promise.resolve(feathersClient.logout());
     }
   };
 });
