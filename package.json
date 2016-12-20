@@ -57,11 +57,9 @@
       "generator-donejs",
       "donejs-cli",
       "steal-tools"
-    ],
-    "npmAlgorithm": "flat"
+    ]
   },
   "dependencies": {
-    "can-event": "^3.0.1",
     "can-util": "^3.0.0-pre.70",
     "feathers-authentication-popups": "^0.1.2",
     "feathers-errors": "^2.4.0",
@@ -69,25 +67,25 @@
     "steal-socket.io": "^4.0.5"
   },
   "devDependencies": {
-    "can-connect": "^1.0.15",
-    "can-define": "^1.0.4",
+    "can-connect": "^1.0.20",
+    "can-define": "^1.0.9",
     "concurrently": "^3.1.0",
-    "documentjs": "^0.4.2",
-    "done-serve": "^0.2.0",
-    "donejs-cli": "^0.8.0",
+    "documentjs": "^0.4.4",
+    "done-serve": "^0.2.5",
+    "donejs-cli": "^0.9.5",
     "feathers": "^2.0.3",
-    "feathers-authentication-client": "^0.1.5",
-    "feathers-hooks": "^1.5.8",
+    "feathers-authentication-client": "^0.1.6",
+    "feathers-hooks": "^1.7.1",
     "feathers-rest": "^1.5.0",
     "feathers-socketio": "^1.4.1",
     "generator-donejs": "^0.9.0",
     "jquery": "^3.1.0",
     "semistandard": "^9.1.0",
     "socket.io-client": "^1.7.2",
-    "steal": "^0.16.0",
-    "steal-qunit": "^0.1.1",
+    "steal": "^1.0.5",
+    "steal-qunit": "^1.0.0",
     "steal-socket.io": "^4.0.7",
-    "steal-tools": "^0.16.0",
-    "testee": "^0.2.4"
+    "steal-tools": "^1.0.1",
+    "testee": "^0.3.0"
   }
 }
