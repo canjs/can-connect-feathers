@@ -16,5 +16,5 @@ if (process.argv.indexOf('--timeout') >= 0) {
   setTimeout(function () {
     server.close();
     process.exit(0);
-  }, 10000);
+  }, 15000);
 }

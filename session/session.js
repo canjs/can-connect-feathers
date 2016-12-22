@@ -58,8 +58,10 @@ module.exports = connect.behavior('data/feathers-session', function () {
         }
       });
     },
-    destroyData: function () {
-      return Promise.resolve(feathersClient.logout());
+    destroyData: function (session) {
+      return feathersClient.logout().then(function () {
+        return session;
+      });
     }
   };
 });
