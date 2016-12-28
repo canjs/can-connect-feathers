@@ -16,11 +16,13 @@
     "preversion": "npm test && npm run build",
     "version": "git commit -am \"Update dist for release\" && git checkout -b release && git add -f dist/",
     "postversion": "git push --tags && git checkout master && git branch -D release && git push",
+    "testee-integration": "testee test/test-integration.html --browsers firefox",
     "testee": "testee test/test.html --browsers firefox",
     "install-server-deps": ". ./build-server.sh",
     "start-test": "node ./test/server/src/index.js --timeout",
     "start": "node ./test/server/src/index.js",
-    "test": "npm run lint && npm run install-server-deps && concurrently 'npm run start-test' 'npm run testee' ",
+    "test-integration": "npm run lint && npm run install-server-deps && concurrently 'npm run start-test' 'npm run testee-integration' ",
+    "test": "npm run lint && npm run testee",
     "lint": "semistandard --fix",
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
@@ -69,6 +71,9 @@
   "devDependencies": {
     "can-connect": "^1.0.20",
     "can-define": "^1.0.9",
+    "can-fixture": "^1.0.12",
+    "can-fixture-socket": "^0.5.11",
+    "can-set": "^1.0.3",
     "concurrently": "^3.1.0",
     "documentjs": "^0.4.4",
     "done-serve": "^0.2.5",
@@ -84,7 +89,7 @@
     "socket.io-client": "^1.7.2",
     "steal": "^1.0.5",
     "steal-qunit": "^1.0.0",
-    "steal-socket.io": "^4.0.7",
+    "steal-socket.io": "^4.0.8",
     "steal-tools": "^1.0.1",
     "testee": "^0.3.0"
   }
