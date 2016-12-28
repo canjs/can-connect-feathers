@@ -48,7 +48,7 @@
     "client",
     "realtime"
   ],
-  "system": {
+  "steal": {
     "main": "can-connect-feathers",
     "configDependencies": [
       "live-reload"
