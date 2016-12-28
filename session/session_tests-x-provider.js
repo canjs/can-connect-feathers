@@ -130,7 +130,8 @@ module.exports = function runSessionTests (options) {
       var done = assert.async();
 
       // Clear the token.
-      app.logout().then(() => {
+      app.logout()
+      .then(() => {
         Account.findAll({})
         .then(res => {
           console.log(res);
@@ -140,6 +141,9 @@ module.exports = function runSessionTests (options) {
           assert.equal(err.className, 'not-authenticated', 'got a not-authenticated error');
           done();
         });
+      })
+      .catch(err => {
+        console.log(err);
       });
     });
 
@@ -180,29 +184,34 @@ module.exports = function runSessionTests (options) {
       var done = assert.async();
 
       // Clear the token.
-      app.logout();
-
-      var user = new User({
-        email: 'marshall@bitovi.com',
-        password: 'L1nds3y-Stirling-R0cks!'
-      });
-      user.save().then(createdUser => {
-        var newLoginUser = new User({
+      app.logout().then(function () {
+        var user = new User({
           email: 'marshall@bitovi.com',
           password: 'L1nds3y-Stirling-R0cks!'
         });
-        var session = new Session({
-          strategy: 'local',
-          user: newLoginUser
-        });
-        session.save()
-        .then(function (res) {
-          console.log('res', res);
-        })
-        .catch(function (err) {
-          var correctError = err.name.indexOf('NotAuthenticated') >= 0 || err.name.indexOf('BadRequest') >= 0;
-          assert.ok(correctError, `got back error message: ${err.name}`);
-          done();
+        user.save().then(createdUser => {
+          var session = new Session({
+            strategy: 'local',
+            email: 'marshall@bitovi.com',
+            password: 'L1nds3y-Stirling-R0cks!'
+          });
+          session.save()
+          .then(function (res) {
+            assert.ok(res._id, 'Got session data back');
+            Session.get()
+            .then(function (res) {
+              assert.ok(res._id, 'Session.get returned session data');
+              user.destroy().then(done);
+            })
+            .catch(err => {
+              console.log(err);
+            });
+          })
+          .catch(function (err) {
+            var correctError = err.name.indexOf('NotAuthenticated') >= 0 || err.name.indexOf('BadRequest') >= 0;
+            assert.ok(correctError, `got back error message: ${err.name}`);
+            done();
+          });
         });
       });
     });

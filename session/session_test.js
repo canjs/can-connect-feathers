@@ -7,6 +7,9 @@ var rest = require('feathers-rest/client');
 var jQuery = require('jquery');
 var io = require('socket.io-client/dist/socket.io');
 
+var setupFixtures = require('./session_test-fixtures');
+setupFixtures(io);
+
 QUnit.module('can-connect-feathers/session');
 
 // QUnit.test('feathers-authentication-popups', function (assert) {
@@ -27,11 +30,11 @@ QUnit.module('can-connect-feathers/session');
 clearCookies();
 runCrossProviderTests({
   moduleName: 'feathers-rest',
-  provider: rest('http://localhost:3333').jquery(jQuery)
+  provider: rest('').jquery(jQuery)
 });
 
 // Run basic tests for the feathers-socketio provider.
-var socket = io('http://localhost:3333', {
+var socket = io('', {
   transports: ['websocket']
 });
 var socketioProvider = socketio(socket);

@@ -1,25 +1,27 @@
 var QUnit = require('steal-qunit');
-var runCrossProviderTests = require('./service_tests-x-provider');
-var clearCookies = require('../test/clear-cookies');
+var runCrossProviderTests = require('../session/session_tests-x-provider');
+var clearCookies = require('./clear-cookies');
 
 var socketio = require('feathers-socketio/client');
 var rest = require('feathers-rest/client');
 var jQuery = require('jquery');
 var io = require('socket.io-client/dist/socket.io');
 
-var fixtureSocket = require('can-fixture-socket');
-var mockServer = new fixtureSocket.Server(io);
-var fixture = require('can-fixture');
-var set = require('can-set');
+QUnit.module('can-connect-feathers/session');
 
-// Messages fixtures
-var messageAlgebra = new set.Algebra(
-    set.props.id('_id')
-);
-var messageStore = fixture.store([], messageAlgebra);
-mockServer.onFeathersService('messages', messageStore, {id: '_id'});
+// QUnit.test('feathers-authentication-popups', function (assert) {
+//   var done = assert.async();
 
-QUnit.module('can-connect-feathers/service');
+//   assert.throws(function () {
+//     window.authAgent.emit('login', 'blah');
+//   },
+//   /invalid token/,
+//   'The authAgent handler rejected an invalid token.');
+
+//   setTimeout(function () {
+//     done();
+//   }, 100);
+// });
 
 // Run basic tests for the feathers-socketio provider.
 clearCookies();
