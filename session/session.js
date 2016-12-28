@@ -7,14 +7,18 @@ var hasValidToken = require('../utils').hasValidToken;
 
 module.exports = connect.behavior('data/feathers-session', function () {
   var helpURL = 'https://canjs.com/doc/can-connect-feathers.html';
-  if (!this.feathersClient) {
+  var feathersClient = this.feathersClient;
+
+  if (!feathersClient) {
     throw new Error('You must provide a feathersClient instance to the feathers-session behavior. See ' + helpURL);
   }
   if (!this.Map) {
     throw new Error('You must provide a Map instance to the feathers-session behavior. See ' + helpURL);
   }
+  if (!feathersClient.passport) {
+    throw new Error('You must register the feathers-authentication-client plugin before using the feathers-session behavior. See ' + helpURL);
+  }
 
-  var feathersClient = this.feathersClient;
   var options = feathersClient.passport.options;
 
   return {
