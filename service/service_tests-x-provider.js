@@ -87,7 +87,7 @@ module.exports = function runProviderTests (options) {
       message.save().then(function (msg) {
         var id = msg._id;
         // Make sure the message was deleted.
-        Message.findOne(id).then(function (findResponse) {
+        Message.get(id).then(function (findResponse) {
           assert.deepEqual(msg, findResponse, 'got same instance in find');
           done();
         });
