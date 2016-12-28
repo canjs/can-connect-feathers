@@ -2,7 +2,7 @@ const stealTools = require('steal-tools');
 const path = require('path');
 
 stealTools.export({
-  system: {
+  steal: {
     config: path.join(__dirname, '/package.json!npm')
   },
   outputs: {
