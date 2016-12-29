@@ -62,7 +62,9 @@
     ]
   },
   "dependencies": {
+    "can-observation": "^3.0.5",
     "can-util": "^3.0.0-pre.70",
+    "can-zone-storage": "^1.0.0",
     "feathers-authentication-popups": "^0.1.2",
     "feathers-errors": "^2.4.0",
     "jwt-decode": "^2.1.0",
@@ -74,6 +76,7 @@
     "can-fixture": "^1.0.12",
     "can-fixture-socket": "^0.5.11",
     "can-set": "^1.0.3",
+    "can-zone": "^0.6.1",
     "concurrently": "^3.1.0",
     "documentjs": "^0.4.4",
     "done-serve": "^0.2.5",
