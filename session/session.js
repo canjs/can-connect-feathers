@@ -37,6 +37,15 @@ module.exports = connect.behavior('data/feathers-session', function () {
     }
   });
 
+  Session.on('created', function (ev, session) {
+    zoneStorage.setItem('can-connect-feathers-session', session);
+    Session.dispatch('current', [session]);
+  });
+  Session.on('destroyed', function (ev) {
+    Session.dispatch('current', []);
+    zoneStorage.removeItem('can-connect-feathers-session');
+  });
+
   return {
     init: function () {
       var connection = this;
@@ -79,7 +88,6 @@ module.exports = connect.behavior('data/feathers-session', function () {
       });
     },
     destroyData: function (session) {
-      zoneStorage.removeItem('can-connect-feathers-session');
       return feathersClient.logout().then(function () {
         return session;
       });

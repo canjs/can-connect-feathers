@@ -301,12 +301,12 @@ module.exports = function runSessionTests (options) {
               .then(newAccount => {
                 assert.ok(newAccount, 'created an account');
                 assert.equal(newAccount.userId, session.userId, 'the server assigned the userId correctly');
-                done();
+                newlyCreatedSession.destroy().then(function () {
+                  done();
+                });
               })
               .catch(err => {
-                console.error(err);
                 assert.notOk(err, `shouldn't have had a problem creating an account`);
-                done();
               });
             }).catch(e => {
               console.log(e);
@@ -321,35 +321,80 @@ module.exports = function runSessionTests (options) {
       });
     });
 
-    QUnit.test('Session.current', function (assert) {
+    QUnit.test('Session.current populates on login, clears on logout', function (assert) {
       var done = assert.async();
 
       new User({
         email: 'marshall@test.com',
         password: 'thisisatest'
       }).save().then(function (user) {
-        new Session({
+        assert.equal(Session.current, undefined, 'Session.current is undefined with no auth');
+
+        var handledOnce = false;
+        var handler = function (event, session) {
+          assert.ok(event, 'Reading Session.current triggered the "current" event');
+
+          if (session && !handledOnce) {
+            handledOnce = true;
+            assert.ok(Session.current._id, 'Session.current is now synchronously readable.');
+            assert.ok(Session.current.destroy, 'Session.current is a Session instance');
+
+            user.destroy().then(function () {
+              assert.ok('User destroyed', 'The user was cleaned up.');
+
+              Session.current.destroy();
+            });
+          } else {
+            Session.off('current', handler);
+            assert.ok('Logged out', 'The session was successfully destroyed');
+            done();
+          }
+        };
+
+        Session.on('current', handler);
+
+        return new Session({
           strategy: 'local',
           email: user.email,
           password: user.password
-        }).save().then(function (sessionData) {
-          // Setup a listener on 'current'.
-          Session.on('current', function (event, session) {
-            assert.ok(event, 'Reading Session.current triggered the "current" event');
-            assert.equal(sessionData._id, Session.current._id, 'Session.current is now synchronously readable.');
-            assert.ok(Session.current.destroy, 'Session.current is a Session instance');
+        }).save().catch(function (error) {
+          console.log(error);
+        });
+      });
+    });
 
-            Session.current.destroy().then(function () {
-              assert.ok('Logged out', 'The session was successfully destroyed');
+    QUnit.test('Session.current populates on created event, clears on destroyed', function (assert) {
+      var done = assert.async();
 
-              user.destroy().then(function () {
-                assert.ok('User destroyed', 'The user was cleaned up.');
-                done();
-              });
+      new User({
+        email: 'marshall@ci.com',
+        password: 'thisisatest'
+      }).save().then(function (user) {
+        var session = new Session({
+          strategy: 'local',
+          email: user.email,
+          password: user.password
+        });
+
+        // Setup a listener on 'current'.
+        Session.on('current', function (event, session) {
+          assert.ok(event, 'Creating a session triggered the "current" event');
+          if (session) {
+            assert.ok(session._id, 'Session.current is now synchronously readable.');
+
+            user.destroy().then(function () {
+              assert.ok('User destroyed', 'The user was cleaned up.');
+
+              Session.current.destroy();
             });
-          });
+          } else {
+            assert.ok(Session.current === undefined, 'Session.current was removed on destroyed event');
+            done();
+          }
+        });
 
-          assert.equal(Session.current, undefined, 'Session.current is undefined with no auth');
+        session.save().then(function (sessionData) {
+          console.log('sessionData', sessionData);
         })
         .catch(function (error) {
           console.log(error);
