@@ -4,6 +4,8 @@ var authAgent = require('feathers-authentication-popups').authAgent;
 var decode = require('jwt-decode');
 var payloadIsValid = require('../utils').payloadIsValid;
 var hasValidToken = require('../utils').hasValidToken;
+var Observation = require('can-observation');
+var zoneStorage = require('can-zone-storage');
 
 module.exports = connect.behavior('data/feathers-session', function () {
   var helpURL = 'https://canjs.com/doc/can-connect-feathers.html';
@@ -20,6 +22,20 @@ module.exports = connect.behavior('data/feathers-session', function () {
   }
 
   var options = feathersClient.passport.options;
+  var Session = this.Map;
+
+  Object.defineProperty(Session, 'current', {
+    get: function () {
+      Observation.add(Session, 'current');
+      if (!zoneStorage.getItem('can-connect-feathers-session')) {
+        Session.get().then(function (session) {
+          zoneStorage.setItem('can-connect-feathers-session', session);
+          Session.dispatch('current', [session]);
+        });
+      }
+      return zoneStorage.getItem('can-connect-feathers-session');
+    }
+  });
 
   return {
     init: function () {
@@ -63,6 +79,7 @@ module.exports = connect.behavior('data/feathers-session', function () {
       });
     },
     destroyData: function (session) {
+      zoneStorage.removeItem('can-connect-feathers-session');
       return feathersClient.logout().then(function () {
         return session;
       });

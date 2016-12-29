@@ -320,5 +320,41 @@ module.exports = function runSessionTests (options) {
         });
       });
     });
+
+    QUnit.test('Session.current', function (assert) {
+      var done = assert.async();
+
+      new User({
+        email: 'marshall@test.com',
+        password: 'thisisatest'
+      }).save().then(function (user) {
+        new Session({
+          strategy: 'local',
+          email: user.email,
+          password: user.password
+        }).save().then(function (sessionData) {
+          // Setup a listener on 'current'.
+          Session.on('current', function (event, session) {
+            assert.ok(event, 'Reading Session.current triggered the "current" event');
+            assert.equal(sessionData._id, Session.current._id, 'Session.current is now synchronously readable.');
+            assert.ok(Session.current.destroy, 'Session.current is a Session instance');
+
+            Session.current.destroy().then(function () {
+              assert.ok('Logged out', 'The session was successfully destroyed');
+
+              user.destroy().then(function () {
+                assert.ok('User destroyed', 'The user was cleaned up.');
+                done();
+              });
+            });
+          });
+
+          assert.equal(Session.current, undefined, 'Session.current is undefined with no auth');
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      });
+    });
   });
 };
