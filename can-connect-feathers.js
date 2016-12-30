@@ -1,4 +1,4 @@
 module.exports = {
-  service: require('./service/service'),
-  session: require('./session/session')
+	service: require('./service/service'),
+	session: require('./session/session')
 };

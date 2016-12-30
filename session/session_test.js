@@ -29,17 +29,17 @@ QUnit.module('can-connect-feathers/session');
 // Run basic tests for the feathers-socketio provider.
 clearCookies();
 runCrossProviderTests({
-  moduleName: 'feathers-rest',
-  provider: rest('').jquery(jQuery)
+	moduleName: 'feathers-rest',
+	provider: rest('').jquery(jQuery)
 });
 
 // Run basic tests for the feathers-socketio provider.
 var socket = io('', {
-  transports: ['websocket']
+	transports: ['websocket']
 });
 var socketioProvider = socketio(socket);
 clearCookies();
 runCrossProviderTests({
-  moduleName: 'feathers-socketio',
-  provider: socketioProvider
+	moduleName: 'feathers-socketio',
+	provider: socketioProvider
 });
