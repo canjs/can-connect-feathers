@@ -84,7 +84,7 @@
     "feathers-authentication-client": "^0.1.6",
     "feathers-hooks": "^1.7.1",
     "feathers-rest": "^1.5.0",
-    "feathers-socketio": "^1.4.1",
+    "feathers-socketio": "^1.4.2",
     "generator-donejs": "^0.9.0",
     "jquery": "^3.1.0",
     "jshint": "^2.9.4",
