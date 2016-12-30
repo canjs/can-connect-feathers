@@ -376,8 +376,7 @@ module.exports = function runSessionTests (options) {
 					password: user.password
 				});
 
-				// Setup a listener on 'current'.
-				Session.on('current', function (event, session) {
+				var handler = function (event, session) {
 					assert.ok(event, 'Creating a session triggered the "current" event');
 					if (session) {
 						assert.ok(session._id, 'Session.current is now synchronously readable.');
@@ -389,9 +388,11 @@ module.exports = function runSessionTests (options) {
 						});
 					} else {
 						assert.ok(Session.current === undefined, 'Session.current was removed on destroyed event');
+						Session.off('current', handler);
 						done();
 					}
-				});
+				};
+				Session.on('current', handler);
 
 				session.save().then(function (sessionData) {
 					console.log('sessionData', sessionData);
