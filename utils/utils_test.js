@@ -56,7 +56,7 @@ QUnit.test('convertLocalAuthData', function (assert) {
       email: 'marshall@bitovi.com',
       password: '1234'
     }
-  }
+  };
   var data = convertLocalAuthData(originalData);
   assert.ok(originalData !== data, 'Got a new object back from convertLocalAuthData');
   assert.equal(data.user, undefined, 'user property was removed');
