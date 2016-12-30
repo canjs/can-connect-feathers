@@ -9,6 +9,18 @@
 
  > Important Note:  Version 3.0 is not yet fully compatible with Done-SSR.  If you need SSR, please install the `2.x` version from npm and check the `2.x` branch's README.md for docs.
 
+- [Feathers Client Setup](#feathers-client-setup)
+- [Connecting to Services with the Service Behavior](#connecting-to-services-with-the-service-behavior)
+  - [Service behavior options](#service-behavior-options)
+  - [Service Behavior Example](#service-behavior-example)
+- [Handling Authentication with the Session Behavior](#handling-authentication-with-the-session-behavior)
+  - [Session Behavior Options](#session-behavior-options)
+  - [Obtaining current session data](#obtaining-current-session-data)
+  - [Handling OAuth Logins](#handling-oauth-logins)
+  - [Service Behavior Example](#service-behavior-example)
+- [Contributing](#contributing)
+- [Changelog](#changelog)
+
 ## Install
 
 ```
@@ -38,7 +50,7 @@ module.exports = feathersClient;
 
 See the [FeathersJS Documentation](http://docs.feathersjs.com) for more details.
 
-## Connecting to Services
+## Connecting to Services with the Service Behavior
 
 The service behavior simplifies the process of connecting to a Feathers service.  It maps can-connect's DataInterface methods to FeathersJS's [Service Interface](https://docs.feathersjs.com/services/readme.html#service-methods) methods.
 
@@ -135,7 +147,7 @@ module.exports = Todo;
 In the above example, both `Todo` and `Todo.connection` will have methods for handling data, as described in the [can-connect basic use](http://canjs.com/doc/can-connect.html#BasicUse) section.
 
 
-## Handling Authentication
+## Handling Authentication with the Session Behavior
 
 The session behavior connects some of can-connect's DataInterface methods to the [feathers-authentication-client](https://github.com/feathersjs/feathers-authentication-client) plugin.
 
