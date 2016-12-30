@@ -68,9 +68,10 @@ module.exports = connect.behavior('data/feathers-session', function () {
 			});
 		},
 		createData: function (data) {
-			return feathersClient.authenticate(data)
-				.then(function (data) {
-					return decode(data.accessToken);
+			var requestData = convertLocalAuthData(data);
+			return feathersClient.authenticate(requestData)
+				.then(function (response) {
+					return decode(response.accessToken);
 				});
 		},
 		getData: function () {

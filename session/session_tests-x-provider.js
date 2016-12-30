@@ -190,6 +190,7 @@ module.exports = function runSessionTests (options) {
 					password: 'L1nds3y-Stirling-R0cks!'
 				});
 				user.save().then(createdUser => {
+					// Make sure it works with feathers-authentication-local default properties.
 					var session = new Session({
 						strategy: 'local',
 						email: 'marshall@bitovi.com',
@@ -337,17 +338,16 @@ module.exports = function runSessionTests (options) {
 					if (session && !handledOnce) {
 						handledOnce = true;
 						assert.ok(Session.current._id, 'Session.current is now synchronously readable.');
-						assert.ok(Session.current.destroy, 'Session.current is a Session instance');
+						assert.ok(session instanceof Session, 'Session.current is a Session instance');
 
-						user.destroy().then(function () {
-							assert.ok('User destroyed', 'The user was cleaned up.');
-
-							Session.current.destroy();
-						});
+						Session.current.destroy();
 					} else {
 						Session.off('current', handler);
-						assert.ok('Logged out', 'The session was successfully destroyed');
-						done();
+						assert.equal(Session.current, undefined, 'The session was successfully destroyed');
+						user.destroy().then(function () {
+							assert.ok('User destroyed', 'The user was cleaned up.');
+							done();
+						});
 					}
 				};
 
@@ -355,8 +355,10 @@ module.exports = function runSessionTests (options) {
 
 				return new Session({
 					strategy: 'local',
-					email: user.email,
-					password: user.password
+					user: {
+						email: user.email,
+						password: user.password
+					}
 				}).save().catch(function (error) {
 					console.log(error);
 				});
@@ -372,8 +374,10 @@ module.exports = function runSessionTests (options) {
 			}).save().then(function (user) {
 				var session = new Session({
 					strategy: 'local',
-					email: user.email,
-					password: user.password
+					user: {
+						email: user.email,
+						password: user.password
+					}
 				});
 
 				var handler = function (event, session) {
