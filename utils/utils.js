@@ -1,4 +1,5 @@
 var decode = require('jwt-decode');
+var assign = require('can-util/js/assign/assign');
 
 // Reads and returns the contents of a cookie with the provided name.
 function readCookie (name) {
@@ -44,9 +45,21 @@ function hasValidToken (storageLocation) {
   return false;
 }
 
+function convertLocalAuthData (originalData) {
+  var data = assign({}, originalData);
+  if (data && data.strategy === 'local' && data.user) {
+    Object.keys(data.user).forEach(function (key) {
+      data[key] = data.user[key];
+    });
+    delete data.user;
+  }
+  return data;
+}
+
 module.exports = {
   readCookie: readCookie,
   getStoredToken: getStoredToken,
   hasValidToken: hasValidToken,
-  payloadIsValid: payloadIsValid
+  payloadIsValid: payloadIsValid,
+  convertLocalAuthData: convertLocalAuthData
 };

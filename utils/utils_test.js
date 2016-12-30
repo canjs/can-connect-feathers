@@ -4,6 +4,7 @@ var readCookie = require('./utils').readCookie;
 var getStoredToken = require('./utils').getStoredToken;
 var payloadIsValid = require('./utils').payloadIsValid;
 var hasValidToken = require('./utils').hasValidToken;
+var convertLocalAuthData = require('./utils').convertLocalAuthData;
 
 var token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZXhwIjo5NDc2MzkyNDgwLCJpYXQiOjE0NzYzOTI0ODAsImlzcyI6ImZlYXRoZXJzIn0.EzmokNutNr98ULGl1sr12OYAAEoZ9ZTl1dTWTQiA7Ro';
 
@@ -46,4 +47,29 @@ QUnit.test('hasValidToken', function (assert) {
   assert.equal(hasValidToken('feathers-jwt'), true, 'non-expired token was valid.');
 
   document.cookie = 'feathers-jwt=';
+});
+
+QUnit.test('convertLocalAuthData', function (assert) {
+  var originalData = {
+    strategy: 'local',
+    user: {
+      email: 'marshall@bitovi.com',
+      password: '1234'
+    }
+  }
+  var data = convertLocalAuthData(originalData);
+  assert.ok(originalData !== data, 'Got a new object back from convertLocalAuthData');
+  assert.equal(data.user, undefined, 'user property was removed');
+  assert.equal(data.email, 'marshall@bitovi.com', 'Email was set propertly.');
+  assert.equal(data.password, '1234', 'Password was set propertly');
+
+  var feathersLocalDefaults = {
+    strategy: 'local',
+    email: 'marshall@bitovi.com',
+    password: '1234'
+  };
+  var untouchedDefaults = convertLocalAuthData(feathersLocalDefaults);
+  assert.equal(untouchedDefaults.user, undefined, 'user property was removed');
+  assert.equal(untouchedDefaults.email, 'marshall@bitovi.com', 'Email was still in place.');
+  assert.equal(untouchedDefaults.password, '1234', 'Password was still in place');
 });
