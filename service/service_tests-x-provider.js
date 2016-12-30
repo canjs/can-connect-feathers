@@ -66,9 +66,9 @@ module.exports = function runProviderTests (options) {
 			var message = new Message({
 				text: messageText
 			});
-			message.save().then(function (msg) {
+			message.save().then(function () {
 				// Make sure the message was deleted.
-				Message.findAll({text: messageText}).then(messages => {
+				Message.findAll({text: messageText}).then(function (messages) {
 					assert.ok(messages, 'Got a response from findAll');
 					assert.equal(messages.length, 1, 'Query params were properly passed.');
 					assert.equal(messages[0].text, messageText, 'Got back the correct message.');

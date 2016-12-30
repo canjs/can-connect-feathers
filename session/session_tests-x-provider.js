@@ -131,18 +131,18 @@ module.exports = function runSessionTests (options) {
 
 			// Clear the token.
 			app.logout()
-			.then(() => {
+			.then(function () {
 				Account.findAll({})
-				.then(res => {
+				.then(function (res) {
 					console.log(res);
 				})
-				.catch(err => {
+				.catch(function (err) {
 					assert.ok(err, 'Got an error from findAll');
 					assert.equal(err.className, 'not-authenticated', 'got a not-authenticated error');
 					done();
 				});
 			})
-			.catch(err => {
+			.catch(function (err) {
 				console.log(err);
 			});
 		});
@@ -189,7 +189,7 @@ module.exports = function runSessionTests (options) {
 					email: 'marshall@bitovi.com',
 					password: 'L1nds3y-Stirling-R0cks!'
 				});
-				user.save().then(createdUser => {
+				user.save().then(function () {
 					// Make sure it works with feathers-authentication-local default properties.
 					var session = new Session({
 						strategy: 'local',
@@ -204,7 +204,7 @@ module.exports = function runSessionTests (options) {
 							assert.ok(res._id, 'Session.get returned session data');
 							user.destroy().then(done);
 						})
-						.catch(err => {
+						.catch(function (err) {
 							console.log(err);
 						});
 					})
@@ -225,7 +225,7 @@ module.exports = function runSessionTests (options) {
 				email: 'marshall@bitovi.com',
 				password: 'L1nds3y-Stirling-R0cks!'
 			});
-			user.save().then(createdUser => {
+			user.save().then(function (createdUser) {
 				assert.ok(createdUser instanceof User, 'created a new user');
 
 				// Attempt to login with the user.
@@ -236,7 +236,7 @@ module.exports = function runSessionTests (options) {
 				});
 				session.save()
 				// Handle login success.
-				.then(newSession => {
+				.then(function (newSession) {
 					assert.ok(newSession, 'successfully logged in');
 					assert.ok(newSession instanceof Session, 'got back a session instance');
 
@@ -245,11 +245,11 @@ module.exports = function runSessionTests (options) {
 						name: 'Checking'
 					});
 					account.save()
-					.then(newAccount => {
+					.then(function (newAccount) {
 						assert.ok(newAccount, 'created an account');
 						done();
 					})
-					.catch(err => {
+					.catch(function (err) {
 						console.error(err);
 						assert.notOk(err, `shouldn't have had a problem creating an account`);
 						done();
@@ -271,7 +271,7 @@ module.exports = function runSessionTests (options) {
 				email: 'marshall@bitovi.com',
 				password: 'L1nds3y-Stirling-R0cks!'
 			});
-			user.save().then(createdUser => {
+			user.save().then(function (createdUser) {
 				assert.ok(createdUser instanceof User, 'created a new user');
 
 				// Attempt to login with the user.
@@ -282,15 +282,15 @@ module.exports = function runSessionTests (options) {
 				});
 				session.save()
 				// Handle login success.
-				.then(newSession => {
+				.then(function (newSession) {
 					assert.ok(newSession, 'successfully logged in');
 					assert.ok(newSession instanceof Session, 'got back a session instance');
 
-					app.passport.getJWT().then(accessToken => {
+					app.passport.getJWT().then(function (accessToken) {
 						app.logout();
 
 						var anotherSession = new Session({ strategy: 'jwt', accessToken });
-						anotherSession.save().then(newlyCreatedSession => {
+						anotherSession.save().then(function (newlyCreatedSession) {
 							assert.ok(newlyCreatedSession, 'successfully logged in');
 							assert.ok(newlyCreatedSession instanceof Session, 'got back a session instance');
 
@@ -299,17 +299,17 @@ module.exports = function runSessionTests (options) {
 								name: 'Checking'
 							});
 							account.save()
-							.then(newAccount => {
+							.then(function (newAccount) {
 								assert.ok(newAccount, 'created an account');
 								assert.equal(newAccount.userId, session.userId, 'the server assigned the userId correctly');
 								newlyCreatedSession.destroy().then(function () {
 									done();
 								});
 							})
-							.catch(err => {
+							.catch(function (err) {
 								assert.notOk(err, `shouldn't have had a problem creating an account`);
 							});
-						}).catch(e => {
+						}).catch(function (e) {
 							console.log(e);
 						});
 					});
