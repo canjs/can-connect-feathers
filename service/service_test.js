@@ -25,11 +25,11 @@ QUnit.module('can-connect-feathers/service');
 clearCookies();
 runCrossProviderTests({
 	moduleName: 'feathers-rest',
-	provider: rest('http://localhost:3333').jquery(jQuery)
+	provider: rest('').jquery(jQuery)
 });
 
 // Run basic tests for the feathers-socketio provider.
-var socket = io('http://localhost:3333', {
+var socket = io('', {
 	transports: ['websocket']
 });
 var socketioProvider = socketio(socket);
