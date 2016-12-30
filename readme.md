@@ -35,19 +35,19 @@ Both of the included behaviors require a Feathers Client instance.  Here is a ba
 
 ```js
 // models/feathers.js
-var feathers = require('feathers/client');
-var socketio = require('feathers-socketio/client');
-var io = require('socket.io-client');
-var hooks = require('feathers-hooks');
-var auth = require('feathers-authentication-client');
-var socket = io('');
+import feathers from 'feathers/client';
+import socketio from 'feathers-socketio/client';
+import io from 'socket.io-client';
+import hooks from 'feathers-hooks';
+import auth from 'feathers-authentication-client';
+import socket from '';
 
 var feathersClient = feathers()
   .configure(hooks())
   .configure(socketio(socket))
   .configure(auth());
 
-module.exports = feathersClient;
+export default feathersClient;
 ```
 
 See the [FeathersJS Documentation](http://docs.feathersjs.com) for more details.
@@ -143,7 +143,7 @@ Todo.connection = connect([
   algebra: Todo.algebra
 });
 
-module.exports = Todo;
+export default Todo;
 ```
 
 In the above example, both `Todo` and `Todo.connection` will have methods for handling data, as described in the [can-connect basic use](http://canjs.com/doc/can-connect.html#BasicUse) section.
@@ -255,6 +255,8 @@ connect([
   Map: Session,
   name: 'session'
 });
+
+export default Session;
 ```
 
 ## Contributing
