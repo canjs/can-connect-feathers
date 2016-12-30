@@ -42,9 +42,9 @@ module.exports = connect.behavior('data/feathers-session', function () {
 		zoneStorage.setItem('can-connect-feathers-session', session);
 		Session.dispatch('current', [session]);
 	});
-	Session.on('destroyed', function (ev) {
-		Session.dispatch('current', []);
+	Session.on('destroyed', function () {
 		zoneStorage.removeItem('can-connect-feathers-session');
+		Session.dispatch('current', [undefined, zoneStorage.getItem('can-connect-feathers-session')]);
 	});
 
 	return {
