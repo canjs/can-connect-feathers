@@ -88,6 +88,24 @@ connect([
 });
 ```
 
-## Working with feathers-authentication-popups
+### Obtaining current session data
 
-The `feathers-session` behavior is preconfigured to listen to `login` messages coming in over the [feathers-authentication-popups](https://github.com/feathersjs/feathers-authentication-popups) `authAgent`.  When any message is received through the authAgent, its validity is checked.  If it's a valid JWT token, a Session instance will be created automatically, which will dispatch a `created` event on the connected Session Map.
+Once authentication has been established, the Map or DefineMap provided as the `Map` option on the can-connect Model will have a new `current` property defined.  So, if you passed a `Session` object, `Session.current` will always hold the current session data.  This greatly simplifies the session property in your application ViewModel.  Here's an abbreviated example.
+
+```js
+import Session from 'my-app/models/session';
+
+const AppViewModel = DefineMap.extend({
+  session: {
+    get () {
+      return Session.current;
+    }
+  }
+});
+```
+
+That's it!  The `session` property in the above example will automatically populate when the user authenticates.
+
+### Handling OAuth Logins
+
+The `feathers-session` behavior is preconfigured to listen to `login` messages coming in over the [feathers-authentication-popups](https://github.com/feathersjs/feathers-authentication-popups) `authAgent`.  When any message is received through the authAgent, its validity is checked.  If it's a valid JWT token, a Session instance will be created automatically.  This will both populate `Session.current` and dispatch a `created` event on the connected Session Map.

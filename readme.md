@@ -194,7 +194,7 @@ That's it!  The `session` property in the above example will automatically popul
 
 ### Handling OAuth Logins
 
-`can-connect-feathers` now includes support for `feathers-authentication-popups` messaging.  This means it will automatically handle logins from OAuth providers like Twitter, Facebook, GitHub, etc.  When a JWT token is received from a popup window, it will be decoded, its `exp` validated, and its payload will become the `session` data.
+The `feathers-session` behavior is preconfigured to listen to `login` messages coming in over the [feathers-authentication-popups](https://github.com/feathersjs/feathers-authentication-popups) `authAgent`.  When any message is received through the authAgent, its validity is checked.  If it's a valid JWT token, a Session instance will be created automatically.  This will both populate `Session.current` and dispatch a `created` event on the connected Session Map.
 
 ### Session Behavior Example
 
