@@ -63,6 +63,7 @@
   },
   "dependencies": {
     "can-observation": "^3.0.5",
+    "can-util": "^3.2.1",
     "can-zone-storage": "^1.0.0",
     "feathers-authentication-popups": "^0.1.2",
     "feathers-errors": "^2.4.0",
