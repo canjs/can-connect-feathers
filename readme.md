@@ -5,7 +5,7 @@
 `can-connect-feathers` is a set of behaviors for integrating [can-connect](http://canjs.com/doc/can-connect.html)  with [Feathers Client](https://docs.feathersjs.com/clients/feathers.html).
 
  - The service behavior connects to a Feathers service.
- - The session behavior connects to the [feathers-authentication](https://docs.feathersjs.com/authentication/client.html) methods on a Feathers Client instance.
+ - The session behavior connects to the [feathers-authentication-client](https://docs.feathersjs.com/authentication/client.html) methods on a Feathers Client instance.
 
  > Important Note:  Version 3.0 is not yet fully compatible with Done-SSR.  If you need SSR, please install the `2.x` version from npm and check the `2.x` branch's README.md for docs.
 
