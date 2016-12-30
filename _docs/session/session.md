@@ -9,18 +9,20 @@ Connects [can-connect/DataInterface] methods to the [feathers-authentication-cli
 
 ```js
 connect([
-  feathersSession
+  feathersSession,
+  realtime
 ], {
   feathersClient: feathersClient,
+  Map: SessionMap
 });
 ``` 
 
 @body
 
-The `feathers-session` behavior uses the [feathers-authentication-client](https://github.com/feathersjs/feathers-authentication-client) helps authenticate with a Feathers server.  Three of the [can-connect/DataInterface DataInterface] methods are used:
+The `feathers-session` behavior uses the [feathers-authentication-client](https://github.com/feathersjs/feathers-authentication-client) to authenticate with a Feathers server.  Three of the [can-connect/DataInterface DataInterface] methods are used:
 
- - [can-connect-feathers/session/session.data-methods.createData createData] attempts to authenticate with the Feathers server, which upon success returns a JSON Web Token (JWT).  The JWT contains a payload with information about the current session.
- - [can-connect-feathers/session/session.data-methods.getData] validates the JWT and returns its payload the token hasn't expired.
+ - [can-connect-feathers/session/session.data-methods.createData createData] attempts to authenticate with the Feathers server, which upon success returns a JSON Web Token (JWT).  The JWT contains a payload with information about the current session.  That payload is returned as the session object.
+ - [can-connect-feathers/session/session.data-methods.getData] validates a stored JWT and returns its payload if the token hasn't expired.
  - [can-connect-feathers/session/session.data-methods.destroyData] unauthenticates from the server and discards the JWT token on the client.
 
 ## Use
@@ -34,22 +36,35 @@ var DefineMap = require('can-define/map/');
 
 var feathersSessionBehavior require('can-connect-feathers/session');
 var dataParse require('can-connect/data/parse/');
-// var construct require('can-connect/constructor/');
-// var constructStore require('can-connect/constructor/store/');
-// var constructOnce require('can-connect/constructor/callbacks-once/');
+var construct require('can-connect/constructor/');
+var constructStore require('can-connect/constructor/store/');
+var constructCallbacksOnce require('can-connect/constructor/callbacks-once/');
 var canMap require('can-connect/can/map/');
 var canRef require('can-connect/can/ref/');
 var dataCallbacks require('can-connect/data/callbacks/');
+// Bring in your user model to setup the relation in your DefineMap.
+var User = require('./user');
 
 // Bring in the feathersClient instance.
 var feathersClient = require('./feathers');
 
-var Session = DefineMap.extend('Session', {
+export const Session = DefineMap.extend('Session', {
   seal: false
 }, {
-  userId: '*',
-  email: 'string',
-  password: 'string'
+  exp: 'any',
+  userId: 'any',
+  user: {
+    Type: User,
+    // Automatically populate the user data when a userId is received.
+    get (lastSetVal, resolve) {
+      if (lastSetVal) {
+        return lastSetVal;
+      }
+      if (this.userId) {
+        User.get({_id: this.userId}).then(resolve);
+      }
+    }
+  }
 });
 
 connect([
@@ -58,14 +73,16 @@ connect([
   dataParse,
   canMap,
   canRef,
-  // construct,
-  // constructStore,
-  // constructOnce,
+  construct,
+  constructStore,
+  constructCallbacksOnce,
+  // Include the realtime behavior.
+  realtime,
   dataCallbacks
 ], {
   // Pass the feathers client as the `feathersClient` property.
   feathersClient: feathersClient,
-  idProp: 'userId',
+  idProp: 'exp',
   Map: Session,
   name: 'session'
 });
