@@ -2,8 +2,9 @@ var connect = require('can-connect');
 var errors = require('feathers-errors');
 var authAgent = require('feathers-authentication-popups').authAgent;
 var decode = require('jwt-decode');
-var payloadIsValid = require('../utils').payloadIsValid;
-var hasValidToken = require('../utils').hasValidToken;
+var payloadIsValid = require('../utils/utils').payloadIsValid;
+var hasValidToken = require('../utils/utils').hasValidToken;
+var convertLocalAuthData = require('../utils/utils').convertLocalAuthData;
 var Observation = require('can-observation');
 var zoneStorage = require('can-zone-storage');
 
