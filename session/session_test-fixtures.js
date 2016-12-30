@@ -45,19 +45,28 @@ module.exports = function (io) {
 	fixture('/accounts', accountsHandler);
 	fixture('/accounts/{_id}', accountsHandler);
 
+
+	var error = {
+		"name": "NotAuthenticated",
+		"message": "not-authenticated",
+		"code": 401,
+		"className": "not-authenticated",
+		"errors": {}
+	};
+
 	// Accounts socket fixtures
 	mockServer.on('accounts::find', function (query, callback) {
 		if (isAuthenticated) {
 			fixtureSocket.requestHandlerToListener(accountStore.getList).apply(null, arguments);
 		} else {
-			callback(new errors.NotAuthenticated('not-authenticated'));
+			callback(error);
 		}
 	});
 	mockServer.on('accounts::create', function (data, params, callback) {
 		if (isAuthenticated) {
 			fixtureSocket.requestHandlerToListener(accountStore.create)(data, callback);
 		} else {
-			callback(new errors.NotAuthenticated('not-authenticated'));
+			callback(error);
 		}
 	});
 
