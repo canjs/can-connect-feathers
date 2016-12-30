@@ -9,6 +9,8 @@
 
  > Important Note:  Version 3.0 is not yet fully compatible with Done-SSR.  If you need SSR, please install the `2.x` version from npm and check the `2.x` branch's README.md for docs.
 
+## Table of Contents
+
 - [Feathers Client Setup](#feathers-client-setup)
 - [Connecting to Services with the Service Behavior](#connecting-to-services-with-the-service-behavior)
   - [Service behavior options](#service-behavior-options)
