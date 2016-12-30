@@ -43,7 +43,7 @@ Message.List = DefineList.extend({
 });
 
 export const messageConnection = superMap({
-  url: feathers.socketio('messages'), // Connect the instance to your model.
+  url: feathers.socketio('/api/messages'), // Connect the instance to your model.
   idProp: 'id',
   Map: Message,
   List: Message.List,

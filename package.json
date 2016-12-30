@@ -1,46 +1,43 @@
 {
   "name": "can-connect-feathers",
-  "version": "2.0.0",
+  "version": "3.0.0-pre.24",
   "description": "Feathers client library for DoneJS and can-connect",
-  "homepage": "https://github.com/feathersjs/can-connect-feathers",
+  "homepage": "https://github.com/canjs/can-connect-feathers",
   "repository": {
     "type": "git",
-    "url": "git://github.com/feathersjs/can-connect-feathers.git"
+    "url": "git://github.com/canjs/can-connect-feathers.git"
   },
   "author": {
     "name": "Marshall Thompson",
     "email": "marshall@creativeideal.net",
-    "url": "https://github.com/feathersjs"
+    "url": "https://github.com/icanjs"
   },
   "scripts": {
     "preversion": "npm test && npm run build",
     "version": "git commit -am \"Update dist for release\" && git checkout -b release && git add -f dist/",
     "postversion": "git push --tags && git checkout master && git branch -D release && git push",
+    "testee-integration": "testee test/test-integration.html --browsers firefox",
     "testee": "testee test/test.html --browsers firefox",
     "install-server-deps": ". ./build-server.sh",
-    "postinstall": "cd ./test/server && npm install",
     "start-test": "node ./test/server/src/index.js --timeout",
     "start": "node ./test/server/src/index.js",
-    "test": "npm run jshint && npm run install-server-deps && concurrently 'npm run start-test' 'npm run testee' ",
-    "jshint": "jshint ./*.js ./src/ --config",
+    "test-integration": "npm run jshint && npm run install-server-deps && concurrently 'npm run start-test' 'npm run testee-integration' ",
+    "test": "npm run jshint && npm run testee",
+    "jshint": "jshint --config .jshintrc --exclude node_modules/,dist/,.vscode/,_docs/,test/server/ .",
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
+    "release:prerelease": "npm version prerelease && npm publish --tag pegasus",
     "build": "node build.js",
     "document": "documentjs",
     "develop": "done-serve --static --develop --port 8080"
   },
+  "semistandard": {
+    "envs": [
+      "mocha"
+    ]
+  },
   "main": "dist/cjs/can-connect-feathers",
-  "browser": {
-    "transform": [
-      "cssify"
-    ]
-  },
-  "browserify": {
-    "transform": [
-      "cssify"
-    ]
-  },
   "keywords": [
     "canjs",
     "can",
@@ -51,7 +48,7 @@
     "client",
     "realtime"
   ],
-  "system": {
+  "steal": {
     "main": "can-connect-feathers",
     "configDependencies": [
       "live-reload"
@@ -62,33 +59,40 @@
       "generator-donejs",
       "donejs-cli",
       "steal-tools"
-    ],
-    "directories": {
-      "lib": "src"
-    },
-    "npmAlgorithm": "flat"
+    ]
   },
   "dependencies": {
-    "cookie-storage": "^2.0.2",
+    "can-observation": "^3.0.5",
+    "can-util": "^3.2.1",
+    "can-zone-storage": "^1.0.0",
+    "feathers-authentication-popups": "^0.1.2",
     "feathers-errors": "^2.4.0",
-    "jwt-decode": "^2.1.0",
-    "qs": "^6.2.1",
-    "steal-socket.io": "^2.0.5"
+    "jwt-decode": "^2.1.0"
   },
   "devDependencies": {
-    "can-connect": "^1.0.12",
-    "can-define": "^1.0.4",
+    "can-connect": "^1.0.21",
+    "can-define": "^1.0.10",
+    "can-fixture": "^1.0.12",
+    "can-fixture-socket": "^0.5.11",
+    "can-set": "^1.0.3",
+    "can-zone": "^0.6.1",
     "concurrently": "^3.1.0",
-    "cssify": "^1.0.3",
-    "documentjs": "^0.4.2",
-    "done-serve": "^0.2.0",
-    "donejs-cli": "^0.8.0",
+    "documentjs": "^0.4.4",
+    "done-serve": "^0.2.5",
+    "donejs-cli": "^0.9.5",
+    "feathers": "^2.0.3",
+    "feathers-authentication-client": "^0.1.6",
+    "feathers-hooks": "^1.7.1",
+    "feathers-rest": "^1.5.0",
+    "feathers-socketio": "^1.4.1",
     "generator-donejs": "^0.9.0",
-    "jshint": "^2.9.1",
     "jquery": "^3.1.0",
-    "steal": "^0.16.0",
-    "steal-qunit": "^0.1.1",
-    "steal-tools": "^0.16.0",
-    "testee": "^0.3.0-pre.2"
+    "jshint": "^2.9.4",
+    "socket.io-client": "^1.7.2",
+    "steal": "^1.0.5",
+    "steal-qunit": "^1.0.0",
+    "steal-socket.io": "^4.0.8",
+    "steal-tools": "^1.0.1",
+    "testee": "^0.3.0"
   }
 }

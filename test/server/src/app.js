@@ -20,7 +20,7 @@ app.configure(configuration(path.join(__dirname, '..')));
 app.use(compress())
   .options('*', cors())
   .use(cors())
-  .use('/', serveStatic( app.get('public') ))
+  .use('/', serveStatic(app.get('public')))
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: true }))
   .configure(hooks())
