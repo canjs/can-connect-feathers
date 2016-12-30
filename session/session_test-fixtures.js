@@ -32,7 +32,7 @@ module.exports = function (io) {
 		set.props.id('_id')
 	);
 	var accountStore = fixture.store([], accountAlgebra);
-	var accountsHandler = function (request, response, headers, ajaxSettings) {
+	var accountsHandler = function (request, response, headers) {
 		if (headers.authorization) {
 			if (request.method === 'post') {
 				accountStore.create(request, response);
@@ -66,9 +66,11 @@ module.exports = function (io) {
 
 	function getUserFromStore (authData) {
 		var users = userStore.getList().data;
-		return users.filter(user => user.email === authData.email)[0];
+		return users.filter(function (user) {
+			return user.email === authData.email;
+		})[0];
 	}
-	var authRestHandler = function (request, response, headers, ajaxSettings) {
+	var authRestHandler = function (request, response) {
 		var authData = request.data;
 		if (authData && authData.email) {
 			var user = getUserFromStore(authData);
