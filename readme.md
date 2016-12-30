@@ -2,196 +2,246 @@
 
 [![Build Status](https://travis-ci.org/canjs/can-connect-feathers.png?branch=master)](https://travis-ci.org/canjs/can-connect-feathers)
 
-The FeathersJS client library for DoneJS and can-connect
+`can-connect-feathers` is a set of behaviors for integrating [can-connect](http://canjs.com/doc/can-connect.html)  with [Feathers Client](https://docs.feathersjs.com/clients/feathers.html).
 
-## Quick start
-Install the plugin:
+ - The service behavior connects to a Feathers service.
+ - The session behavior connects to the [feathers-authentication](https://docs.feathersjs.com/authentication/client.html) methods on a Feathers Client instance.
+
+ > Important Note:  Version 3.0 is not yet fully compatible with Done-SSR.  If you need SSR, please install the `2.x` version from npm and check the `2.x` branch's README.md for docs.
+
+## Install
+
 ```
 npm install can-connect-feathers --save
 ```
 
-Instantiate a `Feathers` instance for each Feathers API server:
+## Feathers Client Setup
+
+Both of the included behaviors require a Feathers Client instance.  Here is a basic setup: 
+
 ```js
 // models/feathers.js
-import Feathers from 'can-connect-feathers';
-import $ from 'jquery';
+var feathers = require('feathers/client');
+var socketio = require('feathers-socketio/client');
+var io = require('socket.io-client');
+var hooks = require('feathers-hooks');
+var auth = require('feathers-authentication-client');
+var socket = io('');
 
-const feathers = new Feathers({
-  jquery: $
-});
+var feathersClient = feathers()
+  .configure(hooks())
+  .configure(socketio(socket))
+  .configure(auth());
 
-export default feathers;
+module.exports = feathersClient;
 ```
 
-> Note: The `jquery` config option is required as of version 2.0
+See the [FeathersJS Documentation](http://docs.feathersjs.com) for more details.
 
-Use it in your can-connect model:
+## Connecting to Services
+
+The service behavior simplifies the process of connecting to a Feathers service.  It maps can-connect's DataInterface methods to FeathersJS's [Service Interface](https://docs.feathersjs.com/services/readme.html#service-methods) methods.
+
+| DataInterface method | Feathers method | HTTP method | Example Path |
+|----------------------|-----------------|-------------|--------------|
+| .getListData()       | .find()         | GET         | /todos       |
+| .getData()           | .get()          | GET         | /todos/{id}  |
+| .createData()        | .create()       | POST        | /todos       |
+| .updateData()        | .update()       | PUT         | /todos/{id}  |
+| not yet implemented  | .patch()        | PATCH       | /todos/{id}  |
+| .destroyData()       | .remove()       | DELETE      | /todos/{id}  | 
+
+
+## Service Behavior Options
+
+The service behavior requires that a Feathers service object be passed as the `feathersService` option.  For can-connect's real-time functionality to work with this behavior, the [can-connect real-time behavior](http://canjs.com/doc/can-connect/real-time/real-time.html) must also be included as shown in the examples.
+
+Here's an abbreviated example.  See the next section for a full example.
+
 ```js
-// models/message.js
-import DefineMap from 'can-define/map/';
-import DefineList from 'can-define/list/';
-import superMap from 'can-connect/can/super-map/';
-import tag from 'can-connect/can/tag/';
-import feathers from './feathers'; // Import the feathers instance.
-
-export const Message = DefineMap.extend({
-  text: 'string'
+connect([
+  feathersService,
+  realtime
+], {
+  feathersService: feathersClient.service('/api/todos')
 });
-
-Message.List = DefineList.extend({
-  '*': Message
-});
-
-export const messageConnection = superMap({
-  url: feathers.socketio('/api/messages'), // Connect the instance to your model.
-  idProp: 'id',
-  Map: Message,
-  List: Message.List,
-  name: 'message'
-});
-
-tag('message-model', messageConnection);
-
-// Connect to realtime events.
-feathers.io.on('messages created', message => messageConnection.createInstance(message));
-feathers.io.on('messages updated', message => messageConnection.updateInstance(message));
-feathers.io.on('messages patched', message => messageConnection.updateInstance(message));
-feathers.io.on('messages removed', message => messageConnection.destroyInstance(message));
-
-export default Message;
 ```
 
-Your `Message` model is ready to go with all real-time features in place.
+### Service Behavior Example
 
-## Usage
-It's possible to use this plugin with or without DoneSSR.  If you're using SSR, you must have the [feathers-rest](http://docs.feathersjs.com/rest/readme.html) provider configured on your Feathers server.
-
-See [the usage page](usage.md) for more details.
-
-## Authentication
-Feathers requires a JWT token in the Authorization header to authenticate requests. This package includes methods to assist with token management.  The `feathers.authenticate()` method persists the token to a storage engine.  Request made through the `feathers.rest()` helper automatically look for the token on the storage engine.  The `feathers.logout()` method removes the token from storage.  Here is an example session model.  The magic happens in the `sessionConnection`.
+Here's an example Todo Model that uses the can-connect-feathers service behavior.  Comments indicating key locations have been added.
 
 ```js
-/* global window */
-
-import feathers from './feathers';
+// models/todo.js
 import connect from 'can-connect';
 import DefineMap from 'can-define/map/';
-import DefineList from 'can-define/list/';
+import DefineList from 'can-define/list/list';
+import set from "can-set";
 
-import dataUrl from 'can-connect/data/url/';
+// Bring in the feathers service behavior
+import feathersServiceBehavior from 'can-connect-feathers/service';
 import dataParse from 'can-connect/data/parse/';
+import realtime from 'can-connect/real-time/';
 import construct from 'can-connect/constructor/';
 import constructStore from 'can-connect/constructor/store/';
 import constructOnce from 'can-connect/constructor/callbacks-once/';
 import canMap from 'can-connect/can/map/';
 import canRef from 'can-connect/can/ref/';
 import dataCallbacks from 'can-connect/data/callbacks/';
-import realtime from 'can-connect/real-time/';
 
-var behaviors = [
-  dataUrl,
+// Bring in the feathersClient instance.
+import feathersClient from './feathers';
+
+// Use feathersClient.service(url) to create a service
+const todoService = feathersClient.service('/api/todos');
+
+const Todo = DefineMap.extend('Todo', {
+  _id: 'string',
+  description: 'string',
+  complete: 'boolean'
+});
+
+Todo.algebra = new set.Algebra(
+  set.comparators.id('_id')
+);
+
+Todo.List = DefineList.extend({'*': Todo});
+
+Todo.connection = connect([
+  // Include the feathers service behavior in the behaviors list.
+  feathersServiceBehavior,
   dataParse,
   construct,
   constructStore,
-  constructOnce,
+  constructCallbacksOnce,
   canMap,
   canRef,
   dataCallbacks,
+  // Include the realtime behavior.
   realtime
-];
+], {
+  idProp: '_id',
+  Map: Todo,
+  List: Todo.List,
+  // Pass the service as the `feathersService` property.
+  feathersService: todoService,
+  name: 'todos',
+  algebra: Todo.algebra
+});
+
+module.exports = Todo;
+```
+
+In the above example, both `Todo` and `Todo.connection` will have methods for handling data, as described in the [can-connect basic use](http://canjs.com/doc/can-connect.html#BasicUse) section.
+
+
+## Handling Authentication
+
+The session behavior connects some of can-connect's DataInterface methods to the [feathers-authentication-client](https://github.com/feathersjs/feathers-authentication-client) plugin.
+
+- `createData()` attempts to authenticate with the Feathers server, which upon success returns a JSON Web Token (JWT).  The JWT contains a payload with information about the current session.  That payload is returned as the session object.
+ - `getData()` validates a stored JWT and returns its payload if the token hasn't expired.
+ - `destroyData()` unauthenticates from the server and discards the JWT token on the client.
+
+
+### Session Behavior Options
+
+The session behavior requires that a FeathersClient instance be passed as the `feathersClient` option.  For can-connect's real-time functionality to work with this behavior, the [can-connect real-time behavior](http://canjs.com/doc/can-connect/real-time/real-time.html) must also be included as shown in the examples.  Also, this behavior requires that an observable Map or DefineMap is provided on the `Map` attribute.
+
+```js
+connect([
+  feathersSession,
+  realtime
+], {
+  feathersClient: feathersClient,
+  Map: Session
+});
+```
+
+> Pro Tip: Remember that the term "session" here is only for familiarity, since FeathersJS uses stateless JWT and not actual sessions on the server.
+
+### Obtaining current session data
+
+Once authentication has been established, the Map or DefineMap provided as the `Map` option on the can-connect Model will have a new `current` property defined.  So, if you passed a `Session` object, `Session.current` will always hold the current session data.  This greatly simplifies the session property in your application ViewModel.  Here's an abbreviated example.
+
+```js
+import Session from 'my-app/models/session';
+
+const AppViewModel = DefineMap.extend({
+  session: {
+    get () {
+      return Session.current;
+    }
+  }
+});
+```
+
+That's it!  The `session` property in the above example will automatically populate when the user authenticates.
+
+### Handling OAuth Logins
+
+`can-connect-feathers` now includes support for `feathers-authentication-popups` messaging.  This means it will automatically handle logins from OAuth providers like Twitter, Facebook, GitHub, etc.  When a JWT token is received from a popup window, it will be decoded, its `exp` validated, and its payload will become the `session` data.
+
+### Session Behavior Example
+
+Here's an example Todo Model that uses the can-connect-feathers service behavior.  Comments indicating key locations have been added.  Also note that you'll need to setup a `User` Model for this example to work.  It should use the `service` behavior.
+
+```js
+import connect from 'can-connect';
+import DefineMap from 'can-define/map/';
+
+import feathersSessionBehavior from 'can-connect-feathers/session';
+import dataParse from 'can-connect/data/parse/';
+import construct from 'can-connect/constructor/';
+import constructStore from 'can-connect/constructor/store/';
+import constructCallbacksOnce from 'can-connect/constructor/callbacks-once/';
+import canMap from 'can-connect/can/map/';
+import canRef from 'can-connect/can/ref/';
+import dataCallbacks from 'can-connect/data/callbacks/';
+
+// Bring in the feathersClient instance.
+import feathersClient from './feathers';
 
 export const Session = DefineMap.extend('Session', {
-  _id: '*',
-  username: 'string',
-  password: 'string'
-});
-
-Session.List = DefineList.extend({
-  '*': Session
-});
-
-export const sessionConnection = connect(behaviors, {
-  url: {
-    createData: data => feathers.authenticate(data),
-    destroyData: data => feathers.logout().then(() => {
-      window.localStorage.clear();
-      window.location.pathname = '/';
-    })
-  },
-  idProp: '_id',
-  Map: Session,
-  List: Session.List,
-  name: 'session'
-});
-
-export default Session;
-```
-
-### API
-* `feathers.authenticate(data)` - Can authenticate using either the `tokenEndpoint` or the `localEndpoint`. (see the Configuration section, below).  `token` authentication is the default, so calling `feathers.authenticate()` with no options will attempt to find the token in the storage engine and will send it with the request.  If the token is valid, the Feathers server will return a fresh token.  Whether using `rest` or `socketio` services, the `authenticate` method will attempt to authenticate a socket connection unless you use `allowSocketIO: false` in the options.
-
-To authenticate with username and password, pass in an object of this format:
-```js
-feathers.authenticate({
-  type: 'local',
-  email: 'email or username',
-  password: 'password'
-}).then(response => {
-  console.log('Yay! I logged in!');
-});
-```
-* `feathers.rest(location, idProp)` - This is used to configure can-connect's `url` behavior to use the REST adapter (XHR).  The `location` is required, but `idProp` is optional if the service uses the default `idProp`. (see the configuration options.)
-* `feathers.socketio(location, idProp)` - This is used to configure can-connect's `url` behavior to use the Socket.io adapter.  The `location` is required, but `idProp` is optional if the service uses the default `idProp`. (see the configuration options.)  During Server Side Rendering, requests will go over XHR, since DoneSSR doesn't have support for socket.io.
-* `feathers.logout()` - This simply removes the token from storage.  It's actually synchronous, but returns a promise if you prefer to use one.
-
-## Configuration
-When instantiating a `Feathers` instance, you can pass a configuration object to the constructor.  For most applications, the only options that will need to be specified will be the `url` and the `idProp`.
-```js
-import Feathers from 'can-connect-feathers';
-
-const feathers = new Feathers({
-  // The current server is assumed to be the API server.
-  url: '',
-  // Determines if the token is persisted to the `storage` provider.
-  storeToken: true,
-  // The storage engine used to persist the token on the client.
-  storage: cookieStorage,
-  // The key name of the location where the token will be stored.
-  tokenLocation: 'ssr-cookie',
-  // The default `idProp` for all services.
-  idProp: 'id',
-  // The endpoint for token authentication.
-  tokenEndpoint: 'auth/token',
-  // The endpoint for username/password authentication.
-  localEndpoint: 'auth/local',
-  // Store the token in a cookie for SSR by default.
-  ssr: true,
-  // Set to false to disable socketio and force any socketio services to switch to rest.
-  allowSocketIO: true,
-  // Options passed to the socket.io connection manager.
-  socketOptions: {
-    // Force socket.io-client to use websockets (if browser doesn't support websockets, this fails.)
-    transports: ['websocket'],
-    // Forces socket.io to open a new websocket instead of reusing an existing one.
-    forceNew: true
+  seal: false
+}, {
+  exp: 'any',
+  userId: 'any',
+  user: {
+    Type: User,
+    // Automatically populate the user data when a userId is received.
+    get (lastSetVal, resolve) {
+      if (lastSetVal) {
+        return lastSetVal;
+      }
+      if (this.userId) {
+        User.get({_id: this.userId}).then(resolve);
+      }
+    }
   }
 });
 
-export feathers;
+connect([
+  // Include the feathers session behavior in the behaviors list.
+  feathersSession,
+  dataParse,
+  canMap,
+  canRef,
+  construct,
+  constructStore,
+  constructCallbacksOnce,
+  // Include the realtime behavior.
+  realtime,
+  dataCallbacks
+], {
+  // Pass the feathers client as the `feathersClient` property.
+  feathersClient: feathersClient,
+  idProp: 'exp',
+  // Pass the Session Map
+  Map: Session,
+  name: 'session'
+});
 ```
-
-* `url` - This is the base url of the Feathers server with no trailing slash. The default setting assumes that the Feathers and SSR servers are at the same url.
-* `storeToken` - A boolean that determines if the token gets persisted to the provided `storage` engine. To truly turn off token storage, you also need to set the `ssr` option to `false`.  Note: This will make it so that the user has to login again after every refresh.
-* `storage` - You can provide your own Web Storage-compatible storage engine.  The default storage engine is a [cookie-storage](https://npmjs.org/cookie-storage) instance. Cookies, when used correctly to prevent CSRF attacks, are preferred over localStorage for a couple of reasons.  **(1)** The SSR server needs to be able to access the token on first load.  This is only possible with a cookie. **Because Feathers does not consume the cookie, we don't have to worry about CSRF attacks on the API server. Also, while it's common to enable CORS for the API server, make sure you disable CORS for the SSR server.**   **(2)** localStorage doesn't work in private mode on all browsers.  By using a cookie, the user will be able to still refresh the browser and the cookie will be deleted when the private browsing session ends.
-* `tokenLocation` - this is the key name of the location in the `storage` engine.  The default is `feathers-jwt`, which is the same default cookie name used by the [feathers-done-ssr](https://www.npmjs.com/package/feathers-done-ssr) package. The values will need to match on both packages in order for the SSR server to send authenticated requests on behalf of the user.
-* `idProp` - This is the key name of the `id` property to be used on all services.  For example, if your Feathers services mostly all use MongoDB, then set this to `_id`.  This can also be customized on a per-service basis.  This means that if most of your services use PostgreSQL, the default `idProp` of `id` will work for those services, but if you have a single NeDB, Mongoose, or MongoDB service, you can specify a different `idProp` in the `feathers.rest()` method.
-* `tokenEndpoint` - The endpoint for token authentication.  It needs to match the service location configured on the Feathers server.
-* `localEndpoint` - The endpoint for username/password authentication.  It needs to match the service location configured on the Feathers server.
-* `ssr` - You can set this to false to prevent the token from being stored in an SSR cookie.  Setting both `ssr` and `storeToken` to false will disable token storage completely.
-* `allowSocketIO` - A boolean that determines if socket.io is enabled.  If set to `false`, any services that use the `socketio` method will fall back to using `rest`.  Default is `true`.
-* `socketOptions` An object literal that gets passed to the socket.io connection.  Available options can be found in the [socket.io-client docs](https://github.com/socketio/socket.io-client#managerurlstring-optsobject) ).
-
 
 ## Contributing
 
@@ -201,7 +251,7 @@ To make a build of the distributables into `dist/` in the cloned repository run
 
 ```
 npm install
-node build
+npm run build
 ```
 
 ### Running the tests
@@ -211,6 +261,18 @@ Run tests manually with `npm run start` then visit [http://localhost:3333/test/t
 Automated tests from the command line can be run in Firefox with `npm test`.
 
 ## Changelog
+- `3.0.0`
+  - This is a big update with a dramatically different API.  
+  - Not yet compatible with Done-SSR.  Keep using the `2.x.x` version if you need SSR.
+  - You can now directly use the official Feathers Client library.
+  - Includes a service behavior for connecting to Feathers services.
+  - Includes a session behavior for assisting with Feathers's JWT authentication.
+    - Requires the `feathers-authentication-client` library to be used in the Feathers Client setup.
+    - Augments the provided `Map` constructor with a `current` property.  ie. Your `Session` Map will now have a `Session.current` property with the authenticated "session" data.  Remember that the term "session" is just a formality here, since Feathers uses stateless JWT and not actual sessions on the server.
+    - Includes `feathers-authentication-popups` support for automatically handling OAuth provider logins (Twitter, Facebook, GitHub)
+- `2.0.0` 
+  - This version is exactly the same as the `1.x.x` versions with a single breaking change.
+  - Solved a bug where the internal version of jQuery would conflict with the version used in your app. Added `jquery` as a required option.  You must provide the version of `jquery` that you plan to use in your app.
 - `1.1.7` - Feature: `getToken()` will always attempt to retrieve the token from `cookieStorage` after checking `localStorage`.   
 - `1.1.6` - Bugfix: Adds makeUrl function to fix URLs and rest query strings.
 - `1.1.5` - Bugfix: Don't stringify empty objects in the XHR data.
