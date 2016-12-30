@@ -9,7 +9,7 @@
 `can-connect-feathers` is a set of behaviors for integrating [can-connect] with [Feathers Client](https://docs.feathersjs.com/clients/feathers.html).
 
  - The [can-connect-feathers/service/service service] behavior connects to a Feathers service.
- - The [can-connect-feathers/session/session session] behavior connects to the [feathers-authentication](https://docs.feathersjs.com/authentication/client.html) methods on a Feathers Client instance.
+ - The [can-connect-feathers/session/session session] behavior connects to the [feathers-authentication-client](https://docs.feathersjs.com/authentication/client.html) methods on a Feathers Client instance.
 
 @body
 
