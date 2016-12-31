@@ -32,6 +32,11 @@ module.exports = connect.behavior('data/feathers-session', function () {
 				Session.get().then(function (session) {
 					zoneStorage.setItem('can-connect-feathers-session', session);
 					Session.dispatch('current', [session]);
+				})
+				.catch(function (error) {
+					if (!error.message || error.message.indexOf('not-authenticated') < 0) {
+						return Promise.reject(error);
+					}
 				});
 			}
 			return zoneStorage.getItem('can-connect-feathers-session');
