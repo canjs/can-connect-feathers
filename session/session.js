@@ -34,7 +34,7 @@ module.exports = connect.behavior('data/feathers-session', function () {
 					Session.dispatch('current', [session]);
 				})
 				.catch(function (error) {
-					if (!error.message || error.message.indexOf('not-authenticated') < 0) {
+					if (!error.className || error.className.indexOf('not-authenticated') < 0) {
 						return Promise.reject(error);
 					}
 				});
