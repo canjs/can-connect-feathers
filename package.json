@@ -32,11 +32,6 @@
     "document": "documentjs",
     "develop": "done-serve --static --develop --port 8080"
   },
-  "semistandard": {
-    "envs": [
-      "mocha"
-    ]
-  },
   "main": "dist/cjs/can-connect-feathers",
   "keywords": [
     "canjs",

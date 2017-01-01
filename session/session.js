@@ -6,7 +6,7 @@ var payloadIsValid = require('../utils/utils').payloadIsValid;
 var hasValidToken = require('../utils/utils').hasValidToken;
 var convertLocalAuthData = require('../utils/utils').convertLocalAuthData;
 var Observation = require('can-observation');
-var zoneStorage = require('can-zone-storage');
+var zoneStorage = require('./storage');
 
 module.exports = connect.behavior('data/feathers-session', function () {
 	var helpURL = 'https://canjs.com/doc/can-connect-feathers.html';
