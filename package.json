@@ -37,7 +37,7 @@
       "mocha"
     ]
   },
-  "main": "dist/cjs/can-connect-feathers",
+  "main": "can-connect-feathers",
   "keywords": [
     "canjs",
     "can",
