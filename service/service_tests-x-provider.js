@@ -74,7 +74,7 @@ module.exports = function runProviderTests (options) {
 		var done = assert.async();
 
 		var randomNumber = Math.random();
-		var messageText = `Welcome to can-connect-feathers! ${randomNumber}`;
+		var messageText = "Welcome to can-connect-feathers! "+randomNumber;
 
 		var message = new Message({
 			text: messageText
