@@ -23,7 +23,6 @@ module.exports = function runSessionTests (options) {
 
 	QUnit.module("can-connect-feathers/session - "+ options.moduleName, {
 		beforeEach () {
-			options.fixtures();
 			window.localStorage.clear();
 		}
 	});
