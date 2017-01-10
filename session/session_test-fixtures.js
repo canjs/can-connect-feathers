@@ -7,15 +7,6 @@ module.exports = function (io) {
 	var mockServer = new fixtureSocket.Server(io);
 	var isAuthenticated = false;
 
-	// Messages fixtures
-	var messageAlgebra = new set.Algebra(
-		set.props.id('_id')
-	);
-	var messageStore = fixture.store([], messageAlgebra);
-	fixture('/messages', messageStore);
-	fixture('/messages/{_id}', messageStore);
-	// Messages socket fixtures
-	mockServer.onFeathersService('messages', messageStore, {id: '_id'});
 
 	// Users fixtures
 	var userAlgebra = new set.Algebra(

@@ -1,4 +1,3 @@
-var QUnit = require('steal-qunit');
 var runCrossProviderTests = require('./service_tests-x-provider');
 var clearCookies = require('../test/clear-cookies');
 
@@ -17,15 +16,16 @@ var messageAlgebra = new set.Algebra(
 		set.props.id('_id')
 );
 var messageStore = fixture.store([], messageAlgebra);
-mockServer.onFeathersService('messages', messageStore, {id: '_id'});
 
-QUnit.module('can-connect-feathers/service');
 
-// Run basic tests for the feathers-socketio provider.
+// Run basic tests for the feathers-rest provider.
 clearCookies();
 runCrossProviderTests({
 	moduleName: 'feathers-rest',
-	provider: rest('').jquery(jQuery)
+	provider: rest('').jquery(jQuery),
+	fixtures: function(){
+		fixture('/messages', messageStore);
+	}
 });
 
 // Run basic tests for the feathers-socketio provider.
@@ -36,5 +36,8 @@ var socketioProvider = socketio(socket);
 clearCookies();
 runCrossProviderTests({
 	moduleName: 'feathers-socketio',
-	provider: socketioProvider
+	provider: socketioProvider,
+	fixtures: function(){
+		mockServer.onFeathersService('messages', messageStore, {id: '_id'});
+	}
 });
