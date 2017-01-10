@@ -32,7 +32,7 @@
     "document": "documentjs",
     "develop": "done-serve --static --develop --port 8080"
   },
-  "main": "dist/cjs/can-connect-feathers",
+  "main": "can-connect-feathers",
   "keywords": [
     "canjs",
     "can",
@@ -44,7 +44,6 @@
     "realtime"
   ],
   "steal": {
-    "main": "can-connect-feathers",
     "configDependencies": [
       "live-reload"
     ],
