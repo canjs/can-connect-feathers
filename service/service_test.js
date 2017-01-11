@@ -4,7 +4,7 @@ var clearCookies = require('../test/clear-cookies');
 var socketio = require('feathers-socketio/client');
 var rest = require('feathers-rest/client');
 var jQuery = require('jquery');
-var io = require('socket.io-client/dist/socket.io');
+var io = require('socket.io-client');
 
 var fixtureSocket = require('can-fixture-socket');
 var mockServer = new fixtureSocket.Server(io);
