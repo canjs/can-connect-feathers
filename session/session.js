@@ -3,6 +3,7 @@ var errors = require('feathers-errors');
 var authAgent = require('feathers-authentication-popups').authAgent;
 var decode = require('jwt-decode');
 var payloadIsValid = require('../utils/utils').payloadIsValid;
+var getStoredToken = require('../utils/utils').getStoredToken;
 var hasValidToken = require('../utils/utils').hasValidToken;
 var convertLocalAuthData = require('../utils/utils').convertLocalAuthData;
 var Observation = require('can-observation');
@@ -24,6 +25,7 @@ module.exports = connect.behavior('data/feathers-session', function () {
 
 	var options = feathersClient.passport.options;
 	var Session = this.Map;
+	var tokenLocation = options.tokenKey || options.cookie;
 
 	Object.defineProperty(Session, 'current', {
 		get: function () {
@@ -39,7 +41,12 @@ module.exports = connect.behavior('data/feathers-session', function () {
 					}
 				});
 			}
-			return zoneStorage.getItem('can-connect-feathers-session');
+			var tokenData;
+			if (hasValidToken(tokenLocation)) {
+				var token = getStoredToken(tokenLocation);
+				tokenData = decode(token);
+			}
+			return zoneStorage.getItem('can-connect-feathers-session') || tokenData;
 		}
 	});
 
@@ -81,7 +88,6 @@ module.exports = connect.behavior('data/feathers-session', function () {
 		},
 		getData: function () {
 			return new Promise(function (resolve, reject) {
-				var tokenLocation = options.tokenKey || options.cookie;
 				if (hasValidToken(tokenLocation) && !window.doneSsr) {
 					feathersClient.authenticate()
 						.then(function (data) {
