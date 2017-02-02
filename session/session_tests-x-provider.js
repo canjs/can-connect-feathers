@@ -152,6 +152,7 @@ module.exports = function runSessionTests (options) {
 		session.save()
 		.then(function (res) {
 			console.log('res', res);
+			assert.ok(false, 'should throw NotAuthenticated error instead');
 		})
 		.catch(function (err) {
 			assert.equal(err.name, 'NotAuthenticated', "got back error message: "+err.name);
@@ -194,6 +195,7 @@ module.exports = function runSessionTests (options) {
 				session.save()
 				.then(function (res) {
 					assert.ok(res._id, 'Got session data back');
+					assert.ok(res.isAuthenticated, 'isAuthenticated is set to true');
 					Session.get()
 					.then(function (res) {
 						assert.ok(res._id, 'Session.get returned session data');
