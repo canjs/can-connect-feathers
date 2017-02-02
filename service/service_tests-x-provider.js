@@ -63,13 +63,6 @@ module.exports = function runProviderTests (options) {
 		}
 	});
 
-
-
-
-
-
-
-
 	QUnit.test('findAll', function (assert) {
 		var done = assert.async();
 
