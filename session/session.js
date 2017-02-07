@@ -3,7 +3,6 @@ var errors = require('feathers-errors');
 var authAgent = require('feathers-authentication-popups').authAgent;
 var decode = require('jwt-decode');
 var payloadIsValid = require('../utils/utils').payloadIsValid;
-var getStoredToken = require('../utils/utils').getStoredToken;
 var hasValidToken = require('../utils/utils').hasValidToken;
 var convertLocalAuthData = require('../utils/utils').convertLocalAuthData;
 var Observation = require('can-observation');
@@ -25,7 +24,6 @@ module.exports = connect.behavior('data/feathers-session', function () {
 
 	var options = feathersClient.passport.options;
 	var Session = this.Map;
-	var tokenLocation = options.tokenKey || options.cookie;
 
 	Object.defineProperty(Session, 'current', {
 		get: function () {
@@ -41,12 +39,7 @@ module.exports = connect.behavior('data/feathers-session', function () {
 					}
 				});
 			}
-			var tokenData;
-			if (hasValidToken(tokenLocation)) {
-				var token = getStoredToken(tokenLocation);
-				tokenData = decode(token);
-			}
-			return zoneStorage.getItem('can-connect-feathers-session') || tokenData;
+			return zoneStorage.getItem('can-connect-feathers-session');
 		}
 	});
 
@@ -75,7 +68,6 @@ module.exports = connect.behavior('data/feathers-session', function () {
 				feathersClient.authenticate({strategy: 'jwt', accessToken: token})
 					.then(function (data) {
 						var payload = decode(data.accessToken);
-						payload.isAuthenticated = true;
 						connection.createInstance(payload);
 					});
 			});
@@ -84,18 +76,16 @@ module.exports = connect.behavior('data/feathers-session', function () {
 			var requestData = convertLocalAuthData(data);
 			return feathersClient.authenticate(requestData)
 				.then(function (response) {
-					var payload = decode(response.accessToken);
-					payload.isAuthenticated = true;
-					return payload;
+					return decode(response.accessToken);
 				});
 		},
 		getData: function () {
 			return new Promise(function (resolve, reject) {
+				var tokenLocation = options.tokenKey || options.cookie;
 				if (hasValidToken(tokenLocation) && !window.doneSsr) {
 					feathersClient.authenticate()
 						.then(function (data) {
 							var payload = decode(data.accessToken);
-							payload.isAuthenticated = true;
 							return resolve(payload);
 						})
 						.catch(reject);
