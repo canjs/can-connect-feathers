@@ -106,18 +106,6 @@ const AppViewModel = DefineMap.extend({
 
 That's it!  The `session` property in the above example will automatically populate when the user authenticates.
 
-### Detecting when the socket is authenticated
-
-You don't want to make requests that require auth before the Socket.io connection has been authenticated.  If you do, you'll see 
-`NotAuthenticated` errors in the console.  To prevent these errors you can watch for the `Session.current.isAuthenticated`
-attribute. If you have a component that immediately fetches data on render, you can conditionally render it:
-
-```hbs
-{{#if Session.current.isAuthenticated}}
-	<component-that-loads-data />
-{{/if}}
-```
-
 ### Handling OAuth Logins
 
 The `feathers-session` behavior is preconfigured to listen to `login` messages coming in over the [feathers-authentication-popups](https://github.com/feathersjs/feathers-authentication-popups) `authAgent`.  When any message is received through the `authAgent`, its validity is checked.  If it's a valid JWT token, a Session instance will be created automatically.  This will both populate `Session.current` and dispatch a `created` event on the connected Session Map.

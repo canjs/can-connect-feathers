@@ -75,7 +75,6 @@ module.exports = connect.behavior('data/feathers-session', function () {
 				feathersClient.authenticate({strategy: 'jwt', accessToken: token})
 					.then(function (data) {
 						var payload = decode(data.accessToken);
-						payload.isAuthenticated = true;
 						connection.createInstance(payload);
 					});
 			});
@@ -84,9 +83,7 @@ module.exports = connect.behavior('data/feathers-session', function () {
 			var requestData = convertLocalAuthData(data);
 			return feathersClient.authenticate(requestData)
 				.then(function (response) {
-					var payload = decode(response.accessToken)
-					payload.isAuthenticated = true;
-					return payload;
+					return decode(response.accessToken);
 				});
 		},
 		getData: function () {
@@ -95,7 +92,6 @@ module.exports = connect.behavior('data/feathers-session', function () {
 					feathersClient.authenticate()
 						.then(function (data) {
 							var payload = decode(data.accessToken);
-							payload.isAuthenticated = true;
 							return resolve(payload);
 						})
 						.catch(reject);
