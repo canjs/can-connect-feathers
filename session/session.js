@@ -28,9 +28,9 @@ module.exports = connect.behavior('data/feathers-session', function () {
 	Object.defineProperty(Session, 'current', {
 		get: function () {
 			Observation.add(Session, 'current');
-			if (!zoneStorage.getItem('can-connect-feathers-session')) {
+			if (zoneStorage.getItem('can-connect-feathers-session') === undefined) {
 
-				// set session to `undefined` when we start authentication (in case it was already `null`):
+				// set session to `undefined` when we start authentication:
 				zoneStorage.removeItem('can-connect-feathers-session');
 				
 				Session.get().then(function (session) {
