@@ -4,6 +4,7 @@ var DefineList = require('can-define/list/');
 // Behaviors
 var feathersBehavior = require('../service/');
 var feathersSession = require('./session');
+var zoneStorage = require('./storage');
 var connect = require('can-connect');
 var dataParse = require('can-connect/data/parse/');
 var construct = require('can-connect/constructor/');
@@ -19,13 +20,17 @@ var hooks = require('feathers-hooks');
 var auth = require('feathers-authentication-client');
 
 module.exports = function runSessionTests (options) {
-	var app, Account, Session, User;
+	var app, Account, Session, User, session;
 
 	QUnit.module("can-connect-feathers/session - "+ options.moduleName, {
 		beforeEach () {
 			// have to run this here so rest fixtures get found
 			options.fixtures();
 			window.localStorage.clear();
+			if (session) {
+				// We need to return a promise to make sure we complete the teardown:
+				return session.destroy();
+			}
 		}
 	});
 
@@ -112,7 +117,7 @@ module.exports = function runSessionTests (options) {
 		strategy: 'string'
 	});
 
-	connect(sessionBehaviors, {
+	Session.connection = connect(sessionBehaviors, {
 		feathersClient: app,
 		idProp: 'exp',
 		Map: Session,
@@ -148,7 +153,7 @@ module.exports = function runSessionTests (options) {
 		// Clear the token.
 		app.logout();
 
-		var session = new Session({});
+		session = new Session({});
 		session.save()
 		.then(function (res) {
 			console.log('res', res);
@@ -186,7 +191,7 @@ module.exports = function runSessionTests (options) {
 			});
 			user.save().then(function () {
 				// Make sure it works with feathers-authentication-local default properties.
-				var session = new Session({
+				session = new Session({
 					strategy: 'local',
 					email: 'marshall@bitovi.com',
 					password: 'L1nds3y-Stirling-R0cks!'
@@ -224,7 +229,7 @@ module.exports = function runSessionTests (options) {
 			assert.ok(createdUser instanceof User, 'created a new user');
 
 			// Attempt to login with the user.
-			var session = new Session({
+			session = new Session({
 				strategy: 'local',
 				email: user.email,
 				password: user.password
@@ -270,7 +275,7 @@ module.exports = function runSessionTests (options) {
 			assert.ok(createdUser instanceof User, 'created a new user');
 
 			// Attempt to login with the user.
-			var session = new Session({
+			session = new Session({
 				strategy: 'local',
 				email: user.email,
 				password: user.password
@@ -327,7 +332,8 @@ module.exports = function runSessionTests (options) {
 			assert.equal(Session.current, undefined, 'Session.current is undefined with no auth');
 
 			var handledOnce = false;
-			var handler = function (event, session) {
+			var handler = function (event, _session) {
+				session = _session;
 				assert.ok(event, 'Reading Session.current triggered the "current" event');
 
 				if (session && !handledOnce) {
@@ -367,7 +373,7 @@ module.exports = function runSessionTests (options) {
 			email: 'marshall@ci.com',
 			password: 'thisisatest'
 		}).save().then(function (user) {
-			var session = new Session({
+			session = new Session({
 				strategy: 'local',
 				user: {
 					email: user.email,
@@ -375,7 +381,8 @@ module.exports = function runSessionTests (options) {
 				}
 			});
 
-			var handler = function (event, session) {
+			var handler = function (event, _session) {
+				session = _session;
 				assert.ok(event, 'Creating a session triggered the "current" event');
 				if (session) {
 					assert.ok(session._id, 'Session.current is now synchronously readable.');
@@ -401,5 +408,32 @@ module.exports = function runSessionTests (options) {
 			});
 		});
 	});
-
+	
+	/*
+	 * Session.current should return one of the following values:
+	 * - `null` for non-authenticated (after authentication gets rejected)
+	 * - `undefined` when authentication is in process
+	 * - `instance` when authentication resolves
+	 */
+	QUnit.test('Session.current states', function(assert){
+		var done = assert.async();
+		
+		assert.ok(Session.current === undefined, 'Session.current should be undefined');
+		
+		var handler = function(ev, value){
+			assert.ok(value === null, 'Session.current should be null for non-authenticated');
+		};
+		
+		Session.bind('current', handler);
+		
+		new Session({}).save().then(function(){
+			assert.ok(false, 'session save should throw an error for non-authenticated user');
+			done();
+		}).catch(function(){
+			assert.ok(true, 'session save should throw an error for non-authenticated user');
+			assert.ok(zoneStorage.getItem('can-connect-feathers-session') === null, 'zoneStorage value for session should be null');
+			Session.unbind('current', handler);
+			done();
+		});
+	});
 };
