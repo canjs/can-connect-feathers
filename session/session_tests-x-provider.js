@@ -418,7 +418,7 @@ module.exports = function runSessionTests (options) {
 	QUnit.test('Session.current states', function(assert){
 		var done = assert.async();
 		
-		assert.ok(Session.current === undefined, 'Session.current should be undefined');
+		assert.ok(!Session.current, 'Session.current should be null or undefined');
 		
 		var handler = function(ev, value){
 			assert.ok(value === null, 'Session.current should be null for non-authenticated');
