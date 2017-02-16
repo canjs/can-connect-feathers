@@ -34,14 +34,14 @@ Setting up the Feathers Client is a prerequisite for using this behavior.  See t
 var connect = require('can-connect');
 var DefineMap = require('can-define/map/');
 
-var feathersSessionBehavior require('can-connect-feathers/session');
-var dataParse require('can-connect/data/parse/');
-var construct require('can-connect/constructor/');
-var constructStore require('can-connect/constructor/store/');
-var constructCallbacksOnce require('can-connect/constructor/callbacks-once/');
-var canMap require('can-connect/can/map/');
-var canRef require('can-connect/can/ref/');
-var dataCallbacks require('can-connect/data/callbacks/');
+var feathersSessionBehavior = require('can-connect-feathers/session');
+var dataParse = require('can-connect/data/parse/');
+var construct = require('can-connect/constructor/');
+var constructStore = require('can-connect/constructor/store/');
+var constructCallbacksOnce = require('can-connect/constructor/callbacks-once/');
+var canMap = require('can-connect/can/map/');
+var canRef = require('can-connect/can/ref/');
+var dataCallbacks = require('can-connect/data/callbacks/');
 // Bring in your user model to setup the relation in your DefineMap.
 var User = require('./user');
 
