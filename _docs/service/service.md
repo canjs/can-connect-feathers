@@ -77,13 +77,13 @@ Todo.connection = connect([
   // Include the feathers service behavior in the behaviors list.
   feathersServiceBehavior,
   dataParse,
-  // Include the realtime behavior.
   construct,
   constructStore,
   constructCallbacksOnce,
   canMap,
   canRef,
   dataCallbacks,
+  // Include the realtime behavior.
   realtime
 ], {
   idProp: '_id',
