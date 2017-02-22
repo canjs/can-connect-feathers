@@ -75,7 +75,7 @@
     "done-serve": "^0.2.5",
     "donejs-cli": "^0.9.5",
     "feathers": "^2.0.3",
-    "feathers-authentication-client": "^0.1.6",
+    "feathers-authentication-client": "^0.1.8",
     "feathers-hooks": "^1.7.1",
     "feathers-rest": "^1.5.0",
     "feathers-socketio": "^1.4.2",
