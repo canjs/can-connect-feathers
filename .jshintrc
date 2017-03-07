@@ -20,7 +20,8 @@
 		"raises": true,
 		"start": true,
 		"stop": true,
-		"global": true
+		"global": true,
+		"Promise": true
 	},
 	"curly": true,
 	"eqeqeq": true,
@@ -45,6 +46,5 @@
 	"browser": true,
 	"phantom": true,
 	"rhino": true,
-	"node": true,
-	"esnext": true
+	"node": true
 }

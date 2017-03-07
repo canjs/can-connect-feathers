@@ -22,7 +22,7 @@ module.exports = function runProviderTests (options) {
 	var Message;
 
 	QUnit.module("can-connect-feathers/service - "+options.moduleName, {
-		beforeEach () {
+		beforeEach: function () {
 			window.localStorage.clear();
 			options.fixtures();
 

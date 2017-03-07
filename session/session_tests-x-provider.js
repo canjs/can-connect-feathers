@@ -22,8 +22,8 @@ var auth = require('feathers-authentication-client');
 module.exports = function runSessionTests (options) {
 	var app, Account, Session, User, session;
 
-	QUnit.module("can-connect-feathers/session - "+ options.moduleName, {
-		beforeEach () {
+	QUnit.module("can-connect-feathers/session - " + options.moduleName, {
+		beforeEach: function () {
 			// have to run this here so rest fixtures get found
 			options.fixtures();
 			window.localStorage.clear();
@@ -289,7 +289,7 @@ module.exports = function runSessionTests (options) {
 				app.passport.getJWT().then(function (accessToken) {
 					app.logout();
 
-					var anotherSession = new Session({ strategy: 'jwt', accessToken });
+					var anotherSession = new Session({ strategy: 'jwt', accessToken: accessToken });
 					anotherSession.save().then(function (newlyCreatedSession) {
 						assert.ok(newlyCreatedSession, 'successfully logged in');
 						assert.ok(newlyCreatedSession instanceof Session, 'got back a session instance');

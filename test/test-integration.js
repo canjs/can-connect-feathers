@@ -1,3 +1,3 @@
-import '../service/service_test';
-import '../session/session_test';
-import '../utils/utils_test';
+require('../service/service_test');
+require('../session/session_test');
+require('../utils/utils_test');

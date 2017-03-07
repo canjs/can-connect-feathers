@@ -55,14 +55,14 @@ var authRestHandler = function (request, response) {
 		var user = getUserFromStore(authData);
 		if (user) {
 			document.cookie = 'feathers-jwt=' + accessToken;
-			response({accessToken});
+			response({accessToken: accessToken});
 		} else {
 			var error = new errors.NotAuthenticated('not-authenticated');
 			return response(401, error, undefined, error.message);
 		}
 	} else if (authData && authData.accessToken) {
 		document.cookie = 'feathers-jwt=' + accessToken;
-		response({accessToken});
+		response({accessToken: accessToken});
 	}
 };
 
@@ -120,7 +120,7 @@ runCrossProviderTests({
 			function authenticatedUser () {
 				isAuthenticated = true;
 				document.cookie = 'feathers-jwt=' + accessToken;
-				callback(null, {accessToken});
+				callback(null, {accessToken: accessToken});
 			}
 			if (request.strategy === 'jwt') {
 				return authenticatedUser();
