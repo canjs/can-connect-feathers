@@ -18,17 +18,19 @@
     "postversion": "git push --tags && git checkout master && git branch -D release && git push",
     "testee-integration": "testee test/test-integration.html --browsers firefox",
     "testee": "testee test/test.html --browsers firefox",
+    "testee-production": "testee test/test-production.html --browsers firefox",
     "install-server-deps": ". ./build-server.sh",
     "start-test": "node ./test/server/src/index.js --timeout",
     "start": "node ./test/server/src/index.js",
     "test-integration": "npm run jshint && npm run install-server-deps && concurrently 'npm run start-test' 'npm run testee-integration' ",
-    "test": "npm run jshint && npm run testee",
+    "test": "npm run jshint && npm run testee && npm run build-tests && npm run testee-production",
     "jshint": "jshint --config .jshintrc --exclude node_modules/,dist/,.vscode/,_docs/,test/server/ .",
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
     "release:prerelease": "npm version prerelease && npm publish --tag pegasus",
     "build": "node build.js",
+    "build-tests": "node build-tests.js",
     "document": "documentjs",
     "develop": "done-serve --static --develop --port 8080"
   },
@@ -53,7 +55,10 @@
       "generator-donejs",
       "donejs-cli",
       "steal-tools"
-    ]
+    ],
+		"plugins": [
+			"steal-qunit"
+		]
   },
   "dependencies": {
     "can-observation": "^3.0.5",
