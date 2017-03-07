@@ -19,7 +19,7 @@ Both of the included behaviors require a Feathers Client instance.  Here is a ba
 // models/feathers.js
 var feathers = require('feathers/client');
 var socketio = require('feathers-socketio/client');
-var io = require('socket.io-client');
+var io = require('socket.io-client/dist/socket.io');
 var hooks = require('feathers-hooks');
 var auth = require('feathers-authentication-client');
 var socket = io('');
@@ -32,4 +32,4 @@ var feathersClient = feathers()
 module.exports = feathersClient;
 ```
 
-> Pro tip: If you are planning on using Done-SSR, exchange the `socket.io-client` module for `steal-socket.io` in the above example.
+> Pro tip: If you are planning on using Done-SSR, exchange the `socket.io-client/dist/socket.io` module for `steal-socket.io` in the above example.
