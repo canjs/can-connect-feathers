@@ -1,5 +1,5 @@
-const stealTools = require('steal-tools');
-const path = require('path');
+var stealTools = require('steal-tools');
+var path = require('path');
 
 stealTools.export({
   steal: {
