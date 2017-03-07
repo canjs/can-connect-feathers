@@ -37,7 +37,7 @@ Both of the included behaviors require a Feathers Client instance.  Here is a ba
 // models/feathers.js
 import feathers from 'feathers/client';
 import socketio from 'feathers-socketio/client';
-import io from 'socket.io-client';
+import io from 'socket.io-client/dist/socket.io';
 import hooks from 'feathers-hooks';
 import auth from 'feathers-authentication-client';
 import socket from '';
