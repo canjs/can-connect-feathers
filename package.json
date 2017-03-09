@@ -23,6 +23,7 @@
     "start": "node ./test/server/src/index.js",
     "test-integration": "npm run jshint && npm run install-server-deps && concurrently 'npm run start-test' 'npm run testee-integration' ",
     "test": "npm run jshint && npm run testee",
+    "ci": "npm run build && npm run test && node test/test-sauce-labs.js",
     "jshint": "jshint --config .jshintrc --exclude node_modules/,dist/,.vscode/,_docs/,test/server/ .",
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
