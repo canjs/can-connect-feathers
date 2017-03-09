@@ -20,86 +20,8 @@ var account = new SauceLabs({
 	password: process.env.SAUCE_ACCESS_KEY
 });
 
-// https://github.com/SeleniumHQ/selenium/wiki/DesiredCapabilities
-var platforms = [{
-	browserName: 'firefox',
-	platform: 'Windows 10',
-	version: '49.0'
-}, {
-	browserName: 'googlechrome',
-	platform: 'Windows 10'
-}, {
-	browserName: 'safari',
-	platform: 'OS X 10.11',
-	version: '10.0'
-}, {
-	browserName: 'internet explorer',
-	platform: 'Windows 10',
-	version: '11.0'
-}, {
-	browserName: 'internet explorer',
-	platform: 'Windows 8',
-	version: '10.0'
-}, {
-	browserName: 'internet explorer',
-	platform: 'Windows 7',
-	version: '9'
-}, {
-	browserName: 'Safari',
-	'appium-version': '1.6.0',
-	platformName: 'iOS',
-	platformVersion: '10.0',
-	deviceName: 'iPhone 7 Simulator'
-}, {
-	browserName: 'MicrosoftEdge',
-	platform: 'Windows 10'
-}];
-
-// add properties to all platforms
-platforms.forEach((platform) => {
-	var name = 'qunit tests - ';
-
-	name += platform.deviceName ? platform.deviceName + ' ' : '';
-	name += platform.platform ? platform.platform + ' ' : '';
-	name += platform.platformName ? platform.platformName + ' ' : '';
-	name += platform.platformVersion ? platform.platformVersion + ' ' : '';
-	name += platform.browserName ? platform.browserName + ' ' : '';
-	name += platform.version ? platform.version + ' ' : '';
-
-	Object.assign(platform, {
-		name: name,
-
-		// https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options#TestConfigurationOptions-MaximumTestDuration
-		maxDuration: 1800,// seconds, default 1800, max 10800
-		commandTimeout: 300,// seconds, default 300, max 600
-		idleTimeout: idleTimeout,// seconds, default 90, max 1000
-
-		// https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options#TestConfigurationOptions-BuildNumbers
-		build: process.env.TRAVIS_JOB_ID,
-
-		// make sure jobs use tunnel provied by sauce_connect
-		// https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options#TestConfigurationOptions-IdentifiedTunnels
-		tunnelIdentifier: process.env.TRAVIS_JOB_NUMBER
-	});
-});
-
-// array of test functions
-var tests = [];
-
-platforms.forEach((platform) => {
-	tests.push(makeTest(platform));
-});
-
 var url = `http://${process.env.SAUCE_USERNAME}:${process.env.SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub`;
 var driver = webdriver.remote(url);
-
-series(tests, () => {
-	console.log(`All tests completed with status ${allPlatformsPassed}`);
-
-	driver.quit(() => {
-		process.exit(allPlatformsPassed ? 0 : 1);
-	});
-});
 
 // return a function that will run tests on a given platform
 function makeTest(platform) {
@@ -214,3 +136,81 @@ function makeTest(platform) {
 		});
 	};
 }
+
+// https://github.com/SeleniumHQ/selenium/wiki/DesiredCapabilities
+var platforms = [{
+	browserName: 'firefox',
+	platform: 'Windows 10',
+	version: '49.0'
+}, {
+	browserName: 'googlechrome',
+	platform: 'Windows 10'
+}, {
+	browserName: 'safari',
+	platform: 'OS X 10.11',
+	version: '10.0'
+}, {
+	browserName: 'internet explorer',
+	platform: 'Windows 10',
+	version: '11.0'
+}, {
+	browserName: 'internet explorer',
+	platform: 'Windows 8',
+	version: '10.0'
+}, {
+	browserName: 'internet explorer',
+	platform: 'Windows 7',
+	version: '9'
+}, {
+	browserName: 'Safari',
+	'appium-version': '1.6.0',
+	platformName: 'iOS',
+	platformVersion: '10.0',
+	deviceName: 'iPhone 7 Simulator'
+}, {
+	browserName: 'MicrosoftEdge',
+	platform: 'Windows 10'
+}];
+
+// add properties to all platforms
+platforms.forEach((platform) => {
+	var name = 'qunit tests - ';
+
+	name += platform.deviceName ? platform.deviceName + ' ' : '';
+	name += platform.platform ? platform.platform + ' ' : '';
+	name += platform.platformName ? platform.platformName + ' ' : '';
+	name += platform.platformVersion ? platform.platformVersion + ' ' : '';
+	name += platform.browserName ? platform.browserName + ' ' : '';
+	name += platform.version ? platform.version + ' ' : '';
+
+	Object.assign(platform, {
+		name: name,
+
+		// https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options#TestConfigurationOptions-MaximumTestDuration
+		maxDuration: 1800,// seconds, default 1800, max 10800
+		commandTimeout: 300,// seconds, default 300, max 600
+		idleTimeout: idleTimeout,// seconds, default 90, max 1000
+
+		// https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options#TestConfigurationOptions-BuildNumbers
+		build: process.env.TRAVIS_JOB_ID,
+
+		// make sure jobs use tunnel provied by sauce_connect
+		// https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options#TestConfigurationOptions-IdentifiedTunnels
+		tunnelIdentifier: process.env.TRAVIS_JOB_NUMBER
+	});
+});
+
+// array of test functions
+var tests = [];
+
+platforms.forEach((platform) => {
+	tests.push(makeTest(platform));
+});
+
+series(tests, () => {
+	console.log(`All tests completed with status ${allPlatformsPassed}`);
+
+	driver.quit(() => {
+		process.exit(allPlatformsPassed ? 0 : 1);
+	});
+});
