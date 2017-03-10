@@ -23,6 +23,8 @@
     "start": "node ./test/server/src/index.js",
     "test-integration": "npm run jshint && npm run install-server-deps && concurrently 'npm run start-test' 'npm run testee-integration' ",
     "test": "npm run jshint && npm run testee",
+    "http-server": "http-server -p 3000 --silent",
+    "ci": "node test/test-sauce-labs.js",
     "jshint": "jshint --config .jshintrc --exclude node_modules/,dist/,.vscode/,_docs/,test/server/ .",
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
@@ -64,6 +66,8 @@
     "jwt-decode": "^2.1.0"
   },
   "devDependencies": {
+    "async": "^2.1.5",
+    "babel-polyfill": "^6.23.0",
     "can-connect": "^1.0.21",
     "can-define": "^1.0.10",
     "can-fixture": "^1.0.12",
@@ -80,13 +84,16 @@
     "feathers-rest": "^1.5.0",
     "feathers-socketio": "^1.4.2",
     "generator-donejs": "^0.9.0",
+    "http-server": "^0.9.0",
     "jquery": "^3.1.0",
     "jshint": "^2.9.4",
+    "saucelabs": "^1.4.0",
     "socket.io-client": "^1.7.2",
     "steal": "^1.0.5",
     "steal-qunit": "^1.0.0",
     "steal-socket.io": "^4.0.8",
     "steal-tools": "^1.0.1",
-    "testee": "^0.3.0"
+    "testee": "^0.3.0",
+    "wd": "^1.1.3"
   }
 }
