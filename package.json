@@ -24,7 +24,7 @@
     "test-integration": "npm run jshint && npm run install-server-deps && concurrently 'npm run start-test' 'npm run testee-integration' ",
     "test": "npm run jshint && npm run testee",
     "http-server": "http-server -p 3000 --silent",
-    "ci": "npm run build && npm run test && node test/test-sauce-labs.js",
+    "ci": "node test/test-sauce-labs.js",
     "jshint": "jshint --config .jshintrc --exclude node_modules/,dist/,.vscode/,_docs/,test/server/ .",
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
