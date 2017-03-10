@@ -65,6 +65,7 @@
     "jwt-decode": "^2.1.0"
   },
   "devDependencies": {
+    "async": "^2.1.5",
     "babel-polyfill": "^6.23.0",
     "can-connect": "^1.0.21",
     "can-define": "^1.0.10",
