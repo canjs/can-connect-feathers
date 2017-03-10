@@ -26,7 +26,7 @@ var driver = webdriver.remote(url);
 // return a function that will run tests on a given platform
 function makeTest(platform) {
 	return function(cb) {
-		var url = 'http://localhost:3000/test/index.html?hidepassed';
+		var url = 'http://localhost:3000/test/test.html?hidepassed';
 		var jobTimeoutId, initTimeoutId;
 
 		console.log(`Running ${platform.name}`);
