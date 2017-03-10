@@ -9,6 +9,8 @@
 
  > Important Note:  Version 3.0 is not yet fully compatible with Done-SSR.  If you need SSR, please install the `2.x` version from npm and check the `2.x` branch's README.md for docs.
 
+ [![Sauce Test Status](https://saucelabs.com/browser-matrix/canjs.svg)](https://saucelabs.com/u/canjs)
+
 ## Table of Contents
 
 - [Feathers Client Setup](#feathers-client-setup)
