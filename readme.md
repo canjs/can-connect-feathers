@@ -2,6 +2,9 @@
 
 [![Build Status](https://travis-ci.org/canjs/can-connect-feathers.png?branch=master)](https://travis-ci.org/canjs/can-connect-feathers)
 
+ [![Sauce Test Status](https://saucelabs.com/browser-matrix/canjs.svg)](https://saucelabs.com/u/canjs)
+
+
 `can-connect-feathers` is a set of behaviors for integrating [can-connect](http://canjs.com/doc/can-connect.html)  with [Feathers Client](https://docs.feathersjs.com/clients/feathers.html).
 
  - The service behavior connects to a Feathers service.
@@ -9,7 +12,6 @@
 
  > Important Note:  Version 3.0 is not yet fully compatible with Done-SSR.  If you need SSR, please install the `2.x` version from npm and check the `2.x` branch's README.md for docs.
 
- [![Sauce Test Status](https://saucelabs.com/browser-matrix/canjs.svg)](https://saucelabs.com/u/canjs)
 
 ## Table of Contents
 
