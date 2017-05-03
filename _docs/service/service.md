@@ -47,13 +47,13 @@ var set = require("can-set");
 // Bring in the feathers service behavior
 var feathersServiceBehavior = require('can-connect-feathers/service');
 var dataParse = require('can-connect/data/parse/');
-var realtime = require('can-connect/real-time/');
-var construct = require('can-connect/constructor/');
-var constructStore = require('can-connect/constructor/store/');
-var constructOnce = require('can-connect/constructor/callbacks-once/');
+var constructor = require('can-connect/constructor/');
+var constructorStore = require('can-connect/constructor/store/');
+var constructorCallbacksOnce = require('can-connect/constructor/callbacks-once/');
 var canMap = require('can-connect/can/map/');
 var canRef = require('can-connect/can/ref/');
 var dataCallbacks = require('can-connect/data/callbacks/');
+var realtime = require('can-connect/real-time/');
 
 // Bring in the feathersClient instance.
 var feathersClient = require('./feathers');
@@ -77,13 +77,13 @@ Todo.connection = connect([
   // Include the feathers service behavior in the behaviors list.
   feathersServiceBehavior,
   dataParse,
-  construct,
-  constructStore,
-  constructCallbacksOnce,
+  constructor,
+  constructorStore,
+  constructorCallbacksOnce,
   canMap,
   canRef,
+	// Include both the dataCallbacks and realtime behaviors.
   dataCallbacks,
-  // Include the realtime behavior.
   realtime
 ], {
   idProp: '_id',
