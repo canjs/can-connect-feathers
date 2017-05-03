@@ -4,10 +4,12 @@
 
 The FeathersJS client library for DoneJS and can-connect
 
+> Important Note: You'll want to continue using version `2.x` if you're utilizing server side rendering with [done-ssr](https://github.com/donejs/done-ssr). At this time, version 3.0 is not compatible with done-ssr.
+
 ## Quick start
 Install the plugin:
 ```
-npm install can-connect-feathers --save
+npm install can-connect-feathers@2 --save
 ```
 
 Instantiate a `Feathers` instance for each Feathers API server:
@@ -44,6 +46,12 @@ Message.List = DefineList.extend({
 
 export const messageConnection = superMap({
   url: feathers.socketio('messages'), // Connect the instance to your model.
+	/*
+   * If your model needs to be queried during server side rendering,
+	 * then you'll want to use REST as your transport method.
+	 *
+   * e.g. `url: feathers.rest('messages'),`
+	 */
   idProp: 'id',
   Map: Message,
   List: Message.List,
@@ -53,6 +61,7 @@ export const messageConnection = superMap({
 tag('message-model', messageConnection);
 
 // Connect to realtime events.
+// This is possible even if your primary connection method is REST.
 feathers.io.on('messages created', message => messageConnection.createInstance(message));
 feathers.io.on('messages updated', message => messageConnection.updateInstance(message));
 feathers.io.on('messages patched', message => messageConnection.updateInstance(message));
