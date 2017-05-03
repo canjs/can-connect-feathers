@@ -30,7 +30,7 @@ var accountAlgebra = new set.Algebra(
 	),
 	accountStore = fixture.store([], accountAlgebra),
 	accountsHandler = function (request, response, headers) {
-		if (headers.authorization) {
+		if (headers.authorization || headers.Authorization) {
 			if (request.method === 'post') {
 				accountStore.create(request, response);
 			}
