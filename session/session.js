@@ -7,6 +7,7 @@ var hasValidToken = require('../utils/utils').hasValidToken;
 var convertLocalAuthData = require('../utils/utils').convertLocalAuthData;
 var Observation = require('can-observation');
 var zoneStorage = require('./storage');
+var Zone = require('can-zone');
 
 module.exports = connect.behavior('data/feathers-session', function () {
 	var helpURL = 'https://canjs.com/doc/can-connect-feathers.html';
@@ -26,7 +27,7 @@ module.exports = connect.behavior('data/feathers-session', function () {
 	var Session = this.Map;
 
 	Object.defineProperty(Session, 'current', {
-		get: function () {
+		get: Zone.ignore(function () {
 			Observation.add(Session, 'current');
 			if (zoneStorage.getItem('can-connect-feathers-session') === undefined) {
 
@@ -49,7 +50,7 @@ module.exports = connect.behavior('data/feathers-session', function () {
 				});
 			}
 			return zoneStorage.getItem('can-connect-feathers-session');
-		}
+		})
 	});
 
 	Session.on('created', function (ev, session) {
