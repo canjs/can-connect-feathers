@@ -1,5 +1,7 @@
 # can-connect-feathers
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/canjs/can-connect-feathers.svg)](https://greenkeeper.io/)
+
 [![Build Status](https://travis-ci.org/canjs/can-connect-feathers.png?branch=master)](https://travis-ci.org/canjs/can-connect-feathers)
 
  [![Sauce Test Status](https://saucelabs.com/browser-matrix/canjs.svg)](https://saucelabs.com/u/canjs)
