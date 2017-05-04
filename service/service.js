@@ -1,5 +1,17 @@
 var connect = require('can-connect');
 
+function getIdProp (model, idProp) {
+	var algebraIdProp;
+	var algebraClause = model.algebra && model.algebra.clauses && model.algebra.clauses.id;
+	if (algebraClause) {
+		algebraIdProp = Object.keys(algebraClause)[0];
+	}
+	if (!algebraIdProp && !idProp) {
+		throw new Error('An idProp was not set in the Model for ' + model + '. Things may not work as expected.');
+	}
+	return algebraIdProp || idProp;
+}
+
 module.exports = connect.behavior('data/feathers-service', function () {
 	var helpURL = 'https://canjs.com/doc/can-connect-feathers.html';
 	if (!this.feathersService) {
@@ -24,12 +36,13 @@ module.exports = connect.behavior('data/feathers-service', function () {
 
 		getData: function (params) {
 			var id = null;
+			var idProp = getIdProp(this, this.idProp);
 			if (typeof params === 'string' || typeof params === 'number') {
 				id = params;
 				params = {};
-			} else if (params && typeof params[this.idProp] !== 'undefined') {
-				id = params[this.idProp];
-				delete params[this.idProp];
+			} else if (params && typeof params[idProp] !== 'undefined') {
+				id = params[idProp];
+				delete params[idProp];
 			}
 			return service.get(id, params);
 		},
@@ -39,11 +52,13 @@ module.exports = connect.behavior('data/feathers-service', function () {
 		},
 
 		updateData: function (instance) {
-			return service.update(instance[this.idProp], instance);
+			var idProp = getIdProp(instance, this.idProp);
+			return service.update(instance[idProp], instance);
 		},
 
 		destroyData: function (instance) {
-			return service.remove(instance[this.idProp]);
+			var idProp = getIdProp(instance, this.idProp);
+			return service.remove(instance[idProp]);
 		}
 	};
 });
