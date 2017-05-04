@@ -1,15 +1,15 @@
 var connect = require('can-connect');
 
-function getIdProp (model, idProp) {
+function getIdProp (Model) {
 	var algebraIdProp;
-	var algebraClause = model.algebra && model.algebra.clauses && model.algebra.clauses.id;
+	var algebraClause = Model.algebra && Model.algebra.clauses && Model.algebra.clauses.id;
 	if (algebraClause) {
 		algebraIdProp = Object.keys(algebraClause)[0];
 	}
-	if (!algebraIdProp && !idProp) {
-		throw new Error('An idProp was not set in the Model for ' + model + '. Things may not work as expected.');
+	if (!algebraIdProp && !Model.idProp) {
+		throw new Error('An idProp was not set in the Model for ' + Model + '. Things may not work as expected.');
 	}
-	return algebraIdProp || idProp;
+	return algebraIdProp || Model.idProp;
 }
 
 module.exports = connect.behavior('data/feathers-service', function () {
@@ -36,7 +36,7 @@ module.exports = connect.behavior('data/feathers-service', function () {
 
 		getData: function (params) {
 			var id = null;
-			var idProp = getIdProp(this, this.idProp);
+			var idProp = getIdProp(this);
 			if (typeof params === 'string' || typeof params === 'number') {
 				id = params;
 				params = {};
@@ -52,12 +52,12 @@ module.exports = connect.behavior('data/feathers-service', function () {
 		},
 
 		updateData: function (instance) {
-			var idProp = getIdProp(instance, this.idProp);
+			var idProp = getIdProp(this);
 			return service.update(instance[idProp], instance);
 		},
 
 		destroyData: function (instance) {
-			var idProp = getIdProp(instance, this.idProp);
+			var idProp = getIdProp(this);
 			return service.remove(instance[idProp]);
 		}
 	};
