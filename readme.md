@@ -33,29 +33,38 @@ Use it in your can-connect model:
 import DefineMap from 'can-define/map/';
 import DefineList from 'can-define/list/';
 import superMap from 'can-connect/can/super-map/';
+import set from 'can-set';
 import tag from 'can-connect/can/tag/';
 import feathers from './feathers'; // Import the feathers instance.
 
-export const Message = DefineMap.extend({
-  text: 'string'
-});
+export const Message = DefineMap.extend('Message', {
+		// Static Properties
+	}, {
+		// Prototype
+		text: 'string'
+	}
+);
 
 Message.List = DefineList.extend({
-  '*': Message
+  '#': Message
 });
+
+export const algebra = new set.Algebra(
+  set.props.id('_id')
+);
 
 export const messageConnection = superMap({
   url: feathers.socketio('messages'), // Connect the instance to your model.
 	/*
-   * If your model needs to be queried during server side rendering,
+	 * If your model needs to be queried during server side rendering,
 	 * then you'll want to use REST as your transport method.
 	 *
-   * e.g. `url: feathers.rest('messages'),`
+	 * e.g. `url: feathers.rest('messages'),`
 	 */
-  idProp: 'id',
   Map: Message,
   List: Message.List,
-  name: 'message'
+  name: 'message',
+  algebra
 });
 
 tag('message-model', messageConnection);
