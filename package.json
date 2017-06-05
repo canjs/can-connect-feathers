@@ -15,7 +15,7 @@
   "scripts": {
     "preversion": "npm test && npm run build",
     "version": "git commit -am \"Update dist for release\" && git checkout -b release && git add -f dist/",
-    "postversion": "git push --tags && git checkout master && git branch -D release && git push",
+    "postversion": "git push --tags && git checkout can-reflect && git branch -D release && git push",
     "testee-integration": "testee test/test-integration.html --browsers firefox",
     "testee": "testee test/test.html --browsers firefox",
     "install-server-deps": ". ./build-server.sh",
@@ -29,7 +29,7 @@
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
-    "release:prerelease": "npm version prerelease && npm publish --tag pegasus",
+    "release:prerelease": "npm version prerelease && npm publish --tag pre",
     "build": "node build.js",
     "document": "documentjs",
     "develop": "done-serve --static --develop --port 8080"
@@ -58,7 +58,7 @@
     ]
   },
   "dependencies": {
-    "can-observation": "^3.0.5",
+    "can-observation": "^3.2.0-pre.11",
     "can-util": "^3.2.1",
     "can-zone-storage": "^1.0.0",
     "feathers-authentication-popups": "^0.1.2",
@@ -68,8 +68,8 @@
   "devDependencies": {
     "async": "^2.1.5",
     "babel-polyfill": "^6.23.0",
-    "can-connect": "^1.0.21",
-    "can-define": "^1.0.10",
+    "can-connect": "^1.5.0-pre.0",
+    "can-define": "^1.2.0-pre.4",
     "can-fixture": "^1.0.12",
     "can-fixture-socket": "^0.6.0",
     "can-set": "^1.0.3",
