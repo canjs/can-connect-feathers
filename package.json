@@ -93,6 +93,7 @@
     "steal-qunit": "^1.0.0",
     "steal-socket.io": "^4.0.8",
     "steal-tools": "^1.0.1",
+    "test-saucelabs": "0.0.1",
     "testee": "^0.3.0",
     "wd": "^1.1.3"
   }
