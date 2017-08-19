@@ -34,7 +34,7 @@
     "document": "documentjs",
     "develop": "done-serve --static --develop --port 8080"
   },
-  "main": "can-connect-feathers",
+  "main": "can-connect-feathers.js",
   "keywords": [
     "canjs",
     "can",
