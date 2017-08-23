@@ -1,6 +1,6 @@
 {
   "name": "can-connect-feathers",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Feathers client library for DoneJS and can-connect",
   "homepage": "https://github.com/feathersjs/can-connect-feathers",
   "repository": {
@@ -30,7 +30,7 @@
     "document": "documentjs",
     "develop": "done-serve --static --develop --port 8080"
   },
-  "main": "dist/cjs/can-connect-feathers",
+  "main": "dist/cjs/can-connect-feathers.js",
   "browser": {
     "transform": [
       "cssify"
