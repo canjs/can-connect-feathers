@@ -31,7 +31,6 @@
     "release:major": "npm version major && npm publish",
     "release:prerelease": "npm version prerelease && npm publish --tag pre",
     "build": "node build.js",
-    "document": "documentjs",
     "develop": "done-serve --static --develop --port 8080"
   },
   "main": "can-connect-feathers.js",
@@ -50,7 +49,6 @@
       "live-reload"
     ],
     "npmIgnore": [
-      "documentjs",
       "testee",
       "generator-donejs",
       "donejs-cli",
@@ -75,7 +73,6 @@
     "can-set": "^1.3.0",
     "can-zone": "^0.6.1",
     "concurrently": "^3.1.0",
-    "documentjs": "^0.4.4",
     "done-serve": "^1.2.0",
     "donejs-cli": "^1.0.1",
     "feathers": "^2.0.3",
