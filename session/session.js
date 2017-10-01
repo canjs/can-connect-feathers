@@ -7,7 +7,6 @@ var hasValidToken = require('../utils/utils').hasValidToken;
 var convertLocalAuthData = require('../utils/utils').convertLocalAuthData;
 var Observation = require('can-observation');
 var zoneStorage = require('./storage');
-var Zone = require('can-zone');
 
 module.exports = connect.behavior('data/feathers-session', function () {
 	var helpURL = 'https://canjs.com/doc/can-connect-feathers.html';
@@ -27,30 +26,30 @@ module.exports = connect.behavior('data/feathers-session', function () {
 	var Session = this.Map;
 
 	Object.defineProperty(Session, 'current', {
-		get: Zone.ignore(function () {
+		get: function () {
 			Observation.add(Session, 'current');
 			if (zoneStorage.getItem('can-connect-feathers-session') === undefined) {
 
 				// set session to `undefined` when we start authentication:
 				zoneStorage.removeItem('can-connect-feathers-session');
-				
+
 				Session.get().then(function (session) {
 					zoneStorage.setItem('can-connect-feathers-session', session);
 					Session.dispatch('current', [session]);
 				})
 				.catch(function (error) {
-					
+
 					// set session to `null` since we know that user is non-authenticated:
 					zoneStorage.setItem('can-connect-feathers-session', null);
 					Session.dispatch('current', [null]);
-					
+
 					if (!error.className || error.className.indexOf('not-authenticated') < 0) {
 						return Promise.reject(error);
 					}
 				});
 			}
 			return zoneStorage.getItem('can-connect-feathers-session');
-		})
+		}
 	});
 
 	Session.on('created', function (ev, session) {
@@ -90,7 +89,7 @@ module.exports = connect.behavior('data/feathers-session', function () {
 				});
 		},
 		getData: function () {
-			
+
 			return new Promise(function (resolve, reject) {
 				var tokenLocation = options.tokenKey || options.cookie;
 				if (hasValidToken(tokenLocation) && !window.doneSsr) {
