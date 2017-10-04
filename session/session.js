@@ -85,7 +85,7 @@ module.exports = connect.behavior('data/feathers-session', function () {
 			var requestData = convertLocalAuthData(data);
 			return feathersClient.authenticate(requestData)
 				.then(function (response) {
-					return decode(response.accessToken);
+					return response.accessToken ? decode(response.accessToken) : response;
 				});
 		},
 		getData: function () {

@@ -51,7 +51,9 @@ function getUserFromStore (authData) {
 }
 var authRestHandler = function (request, response) {
 	var authData = request.data;
-	if (authData && authData.email) {
+	if (authData && authData.isTwoFactorAuthExample) {
+		response({success: true});
+	} else if (authData && authData.email) {
 		var user = getUserFromStore(authData);
 		if (user) {
 			document.cookie = 'feathers-jwt=' + accessToken;
@@ -125,6 +127,11 @@ runCrossProviderTests({
 			if (request.strategy === 'jwt') {
 				return authenticatedUser();
 			}
+
+			if (request.isTwoFactorAuthExample) {
+				callback(null, {success: true});
+			}
+
 			var user = getUserFromStore(request);
 			if (user) {
 				return authenticatedUser();
