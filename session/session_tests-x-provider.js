@@ -263,6 +263,39 @@ module.exports = function runSessionTests (options) {
 		});
 	});
 
+	QUnit.test('authenticate type=local with 2fa style response', function (assert) {
+		var done = assert.async();
+
+		// Create a user.
+		var user = new User({
+			email: 'marshall@bitovi.com',
+			password: 'L1nds3y-Stirling-R0cks!'
+		});
+		user.save().then(function (createdUser) {
+			assert.ok(createdUser instanceof User, 'created a new user');
+
+			// Attempt to login with the user.
+			session = new Session({
+				strategy: 'local',
+				email: user.email,
+				password: user.password,
+				isTwoFactorAuthExample: true
+			});
+			session.save()
+			// Handle login success.
+			.then(function (response) {
+				assert.ok(response, 'successfully completed first factor auth step');
+				// a two factor auth response will vary depending on server implementation. We're just matching up with the fixtures.
+				assert.ok(response.success, 'got back the success response');
+				done();
+			})
+			.catch(function (err) {
+				assert.notOk(err.name, "got back error message: "+err.name);
+				done();
+			});
+		});
+	});
+
 	QUnit.test('authenticate type=token', function (assert) {
 		var done = assert.async();
 
@@ -408,7 +441,7 @@ module.exports = function runSessionTests (options) {
 			});
 		});
 	});
-	
+
 	/*
 	 * Session.current should return one of the following values:
 	 * - `null` for non-authenticated (after authentication gets rejected)
@@ -417,15 +450,15 @@ module.exports = function runSessionTests (options) {
 	 */
 	QUnit.test('Session.current states', function(assert){
 		var done = assert.async();
-		
+
 		assert.ok(!Session.current, 'Session.current should be null or undefined');
-		
+
 		var handler = function(ev, value){
 			assert.ok(value === null, 'Session.current should be null for non-authenticated');
 		};
-		
+
 		Session.bind('current', handler);
-		
+
 		new Session({}).save().then(function(){
 			assert.ok(false, 'session save should throw an error for non-authenticated user');
 			done();
