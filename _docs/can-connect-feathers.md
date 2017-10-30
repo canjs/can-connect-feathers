@@ -1,5 +1,6 @@
 @module {Object} can-connect-feathers
-@parent can-ecosystem
+@parent can-data-modeling
+@collection can-ecosystem
 @group can-connect-feathers.behaviors behaviors
 @description Integrate can-connect with the FeathersJS Client
 @package ../package.json
