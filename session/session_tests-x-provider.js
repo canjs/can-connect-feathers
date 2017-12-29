@@ -117,6 +117,10 @@ module.exports = function runSessionTests (options) {
 		strategy: 'string'
 	});
 
+	Account.List = DefineList.extend({
+		'*': Account
+	});
+	
 	Session.connection = connect(sessionBehaviors, {
 		feathersClient: app,
 		idProp: 'exp',
