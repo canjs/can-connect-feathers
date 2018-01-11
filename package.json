@@ -82,7 +82,7 @@
     "feathers-rest": "^1.5.0",
     "feathers-socketio": "^1.4.2",
     "generator-donejs": "^1.0.5",
-    "http-server": "^0.10.0",
+    "http-server": "^0.11.0",
     "jquery": "^3.1.0",
     "jshint": "^2.9.4",
     "saucelabs": "^1.4.0",
