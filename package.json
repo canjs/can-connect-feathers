@@ -54,7 +54,7 @@
     ]
   },
   "dependencies": {
-    "can-observation": "^4.0.0-pre.24",
+    "can-observation": "^4.0.0",
     "can-util": "^3.10.18",
     "can-zone-storage": "^1.0.0",
     "feathers-authentication-popups": "^0.1.2",
@@ -64,9 +64,9 @@
   "devDependencies": {
     "async": "^2.1.5",
     "babel-polyfill": "^6.23.0",
-    "can-connect": "^2.0.0-pre.16",
-    "can-define": "^2.0.0-pre.25",
-    "can-fixture": "^2.0.0-pre.2",
+    "can-connect": "^2.0.0",
+    "can-define": "^2.0.0",
+    "can-fixture": "^2.0.0",
     "can-fixture-socket": "^0.7.0",
     "can-set": "^1.4.0",
     "concurrently": "^3.1.0",
