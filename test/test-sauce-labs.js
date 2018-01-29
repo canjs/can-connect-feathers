@@ -3,45 +3,49 @@
 
 var testSauceLabs = require('test-saucelabs');
 
+var maxDuration = 10800; // seconds, default 1800, max 10800
+var commandTimeout = 600; // seconds, default 300, max 600
+var idleTimeout = 1000; // seconds, default 90, max 1000
+
+
 // https://github.com/SeleniumHQ/selenium/wiki/DesiredCapabilities
 var platforms = [{
 	browserName: 'firefox',
 	platform: 'Windows 10',
-	version: '49.0'
+	version: 'latest',
+	maxDuration: maxDuration,
+	commandTimeout: commandTimeout,
+	idleTimeout: idleTimeout
 }, {
 	browserName: 'googlechrome',
-	platform: 'Windows 10',
-	version: '57.0'
+	platform: 'OS X 10.12',
+	version: 'latest',
+	maxDuration: maxDuration,
+	commandTimeout: commandTimeout,
+	idleTimeout: idleTimeout
 }, {
 	browserName: 'safari',
-	platform: 'OS X 10.11',
-	version: '10.0'
-}, {
+	platform: 'OS X 10.12',
+	version: 'latest',
+	maxDuration: maxDuration,
+	commandTimeout: commandTimeout,
+	idleTimeout: idleTimeout
+}, {/*
 	browserName: 'internet explorer',
 	platform: 'Windows 10',
 	version: '11.0'
-}, {
-	browserName: 'internet explorer',
-	platform: 'Windows 8',
-	version: '10.0'
-}, {
-	browserName: 'internet explorer',
-	platform: 'Windows 7',
-	version: '9'
-}, {
-	browserName: 'Safari',
-	'appium-version': '1.6.3',
-	platformName: 'iOS',
-	platformVersion: '10.0',
-	deviceName: 'iPhone 7 Simulator'
-}, {
+}, { */
 	browserName: 'MicrosoftEdge',
-	platform: 'Windows 10'
+	platform: 'Windows 10',
+	maxDuration: maxDuration,
+	commandTimeout: commandTimeout,
+	idleTimeout: idleTimeout
 }];
 
 var url = 'http://localhost:3000/test/test.html?hidepassed';
 
 testSauceLabs({
 	urls: [{ name: "can-connect-feathers", url : url }],
-	platforms: platforms
+	platforms: platforms,
+	zeroAssertionsPass: false
 });
