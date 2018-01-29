@@ -31,8 +31,7 @@
     "release:major": "npm version major && npm publish",
     "release:prerelease": "npm version prerelease && npm publish --tag pre",
     "build": "node build.js",
-    "develop": "done-serve --static --develop --port 8080",
-    "detect-cycle": "detect-cyclic-packages --ignore done-serve"
+    "detect-cycle": "detect-cyclic-packages"
   },
   "main": "can-connect-feathers.js",
   "keywords": [
@@ -51,8 +50,6 @@
     ],
     "npmIgnore": [
       "testee",
-      "generator-donejs",
-      "donejs-cli",
       "steal-tools"
     ]
   },
@@ -74,14 +71,11 @@
     "can-set": "^1.4.0",
     "concurrently": "^3.1.0",
     "detect-cyclic-packages": "^1.1.0",
-    "done-serve": "^2.0.0-pre.0",
-    "donejs-cli": "^2.0.0-pre.2",
     "feathers": "^2.0.3",
     "feathers-authentication-client": "^0.3.2",
     "feathers-hooks": "^2.0.1",
     "feathers-rest": "^1.5.0",
     "feathers-socketio": "^1.4.2",
-    "generator-donejs": "^1.0.5",
     "http-server": "^0.10.0",
     "jquery": "^3.1.0",
     "jshint": "^2.9.4",
