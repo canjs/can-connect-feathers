@@ -8,7 +8,7 @@ var convertLocalAuthData = require('../utils/utils').convertLocalAuthData;
 var Observation = require('can-observation');
 var zoneStorage = require('./storage');
 
-module.exports = connect.behavior('data/feathers-session', function () {
+module.exports = connect.behavior('data/feathers-session', function (base) {
 	var helpURL = 'https://canjs.com/doc/can-connect-feathers.html';
 	var feathersClient = this.feathersClient;
 
@@ -63,6 +63,7 @@ module.exports = connect.behavior('data/feathers-session', function () {
 
 	return {
 		init: function () {
+			base.init.apply(this, arguments);
 			var connection = this;
 			// Listen to feathers-authentication-popups messages.
 			authAgent.on('login', function (token) {
