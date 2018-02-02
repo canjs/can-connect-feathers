@@ -12,6 +12,8 @@ connect([
   feathersService,
   realtime
 ], {
+  // if your feathersClient is a Promise 
+  // feathersService: feathersClient.then((con)=>con.service('/api/todos'))
   feathersService: feathersClient.service('/api/todos')
 });
 ```

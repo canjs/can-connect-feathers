@@ -18,16 +18,18 @@ module.exports = connect.behavior('data/feathers-service', function () {
 		throw new Error('You must provide a feathersService to the feathers-service behavior: ' + helpURL);
 	}
 
-	var service = this.feathersService;
+	var service = Promise.resolve(this.feathersService);
 
 	return {
 		init: function () {
 			var self = this;
 			// Connect to real-time events.
-			service.on('created', function (message) { self.createInstance(message); });
-			service.on('updated', function (message) { self.updateInstance(message); });
-			service.on('patched', function (message) { self.updateInstance(message); });
-			service.on('removed', function (message) { self.destroyInstance(message); });
+		        service.then(instance=>{
+			  instance.on('created', function (message) { self.createInstance(message); });
+			  instance.on('updated', function (message) { self.updateInstance(message); });
+			  instance.on('patched', function (message) { self.updateInstance(message); });
+			  instance.on('removed', function (message) { self.destroyInstance(message); });
+		        });
 		},
 
 		getListData: function (params) {

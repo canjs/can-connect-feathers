@@ -34,3 +34,26 @@ module.exports = feathersClient;
 ```
 
 > Pro tip: If you are planning on using Done-SSR, exchange the `socket.io-client/dist/socket.io` module for `steal-socket.io` in the above example.
+
+you can also define the client async as a Promise here is a little conditional loading example using StealJS
+
+```js
+// models/feathers-async.js
+/* global window */
+import loader from '@loader'; // a Global created when loaded with SystemJS or Steal
+
+let clientUrl;
+
+if (window && window.fetch) {
+  clientUrl = '~/models/feathers/v3/feathers-client.socketio.js'; // => Same content as models/feathers.js
+} else {
+  clientUrl = '~/models/feathers/v3/feathers-client.rest.js'; // => Feathers Client Configured with rest Provider
+} 
+
+export const feathersClient = loader.import(clientUrl).then((module)=>{ return module.feathersClient; }, err=>{
+  new Error('Feathers-client Error '+ clientUrl,err);
+}); 
+
+
+export default feathersClient;
+```
