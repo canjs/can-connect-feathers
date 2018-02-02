@@ -12,7 +12,7 @@ function getIdProp (Model) {
 	return algebraIdProp || Model.idProp;
 }
 
-module.exports = connect.behavior('data/feathers-service', function () {
+module.exports = connect.behavior('data/feathers-service', function (base) {
 	var helpURL = 'https://canjs.com/doc/can-connect-feathers.html';
 	if (!this.feathersService) {
 		throw new Error('You must provide a feathersService to the feathers-service behavior: ' + helpURL);
@@ -22,6 +22,7 @@ module.exports = connect.behavior('data/feathers-service', function () {
 
 	return {
 		init: function () {
+			base.init.apply(this, arguments);
 			var self = this;
 			// Connect to real-time events.
 			service.on('created', function (message) { self.createInstance(message); });
