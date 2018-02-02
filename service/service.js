@@ -21,7 +21,7 @@ module.exports = connect.behavior('data/feathers-service', function () {
 	var service = Promise.resolve(this.feathersService);
 
 	return {
-		init: function () {			
+		init: function () {
 			var self = this;
 			// Connect to real-time events.
 		        service.then(instance=>{
