@@ -7,7 +7,7 @@
 
 Connects [can-connect/DataInterface] methods to the [feathers-authentication-client](https://github.com/feathersjs/feathers-authentication-client) plugin methods for authentication.
 
-```js
+```javascript
 connect([
   feathersSession,
   realtime
@@ -29,24 +29,25 @@ The `feathers-session` behavior uses the [feathers-authentication-client](https:
 
 Setting up the Feathers Client is a prerequisite for using this behavior.  See the [can-connect-feathers] page for an example of a basic Feathers Client configuration.  With the Feathers client setup, it can be used with the `feathers-session` behavior as demonstrated in the example, below.
 
-```js
+```javascript
 // models/session.js
-var connect = require('can-connect');
-var DefineMap = require('can-define/map/');
+import connect from 'can-connect';
 
-var feathersSessionBehavior = require('can-connect-feathers/session');
-var dataParse = require('can-connect/data/parse/');
-var construct = require('can-connect/constructor/');
-var constructStore = require('can-connect/constructor/store/');
-var constructCallbacksOnce = require('can-connect/constructor/callbacks-once/');
-var canMap = require('can-connect/can/map/');
-var canRef = require('can-connect/can/ref/');
-var dataCallbacks = require('can-connect/data/callbacks/');
+import DefineMap from 'can-define/map/';
+import feathersSessionBehavior from 'can-connect-feathers/session';
+import dataParse from 'can-connect/data/parse/';
+import construct from 'can-connect/constructor/';
+import constructStore from 'can-connect/constructor/store/';
+import constructCallbacksOnce from 'can-connect/constructor/callbacks-once/';
+import canMap from 'can-connect/can/map/';
+import canRef from 'can-connect/can/ref/';
+import dataCallbacks from 'can-connect/data/callbacks/';
+
 // Bring in your user model to setup the relation in your DefineMap.
-var User = require('./user');
+import User from './user';
 
 // Bring in the feathersClient instance.
-var feathersClient = require('./feathers');
+import feathersClient from './feathers';
 
 export const Session = DefineMap.extend('Session', {
   seal: false
@@ -92,7 +93,7 @@ connect([
 
 Once authentication has been established, the Map or DefineMap provided as the `Map` option on the can-connect Model will have a new `current` property defined.  So, if you passed a `Session` object, `Session.current` will always hold the current session data.  This greatly simplifies the session property in your application ViewModel.  Here's an abbreviated example.
 
-```js
+```javascript
 import Session from 'my-app/models/session';
 
 const AppViewModel = DefineMap.extend({

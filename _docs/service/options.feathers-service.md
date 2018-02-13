@@ -5,10 +5,11 @@
 
 Specifies a [FeathersClient](https://docs.feathersjs.com/clients/feathers.html) Service instance to use for the data connection.  See the [can-connect-feathers] page for an example Feathers Client configuration.
 
-```js
+```javascript
 // Bring in the feathersClient instance and setup a service.
-var feathersClient = require('./feathers');
-var todoService = feathersClient.service('/api/todos');
+import feathersClient from './feathers';
+
+const todoService = feathersClient.service('/api/todos');
 
 connect([
   feathersService,
