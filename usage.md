@@ -4,7 +4,7 @@
 
 With StealJS, you can import this module directly in a template that is autorendered:
 
-```javascript
+```js
 import plugin from 'can-connect-feathers';
 ```
 
@@ -13,7 +13,7 @@ import plugin from 'can-connect-feathers';
 Use `require` to load `can-connect-feathers` and everything else
 needed to create a template that uses `can-connect-feathers`:
 
-```javascript
+```js
 import plugin from "can-connect-feathers";
 ```
 

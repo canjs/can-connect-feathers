@@ -16,7 +16,7 @@
 
 Both of the included behaviors require a Feathers Client instance.  Here is a basic setup: 
 
-```javascript
+```js
 // models/feathers.js
 import feathers from 'feathers/client';
 
@@ -27,9 +27,9 @@ import auth from 'feathers-authentication-client';
 const socket = io('');
 
 const feathersClient = feathers()
-  .configure(hooks())
-  .configure(socketio(socket))
-  .configure(auth());
+	.configure(hooks())
+	.configure(socketio(socket))
+	.configure(auth());
 
 export default feathersClient;
 ```

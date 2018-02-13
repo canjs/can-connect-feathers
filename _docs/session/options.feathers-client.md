@@ -5,15 +5,15 @@
 
 Specifies a FeathersClient instance to use for authentication.  The [feathers-authentication-client plugin](https://github.com/feathersjs/feathers-authentication-client) is required.  See the [can-connect-feathers] page for an example Feathers Client configuration.
 
-```javascript
+```js
 // Bring in the feathers client instance.
 import feathersClient from './feathers';
 
 connect([
-  feathersSession
+	feathersSession
 ], {
-  // Pass the feathers client as the `feathersClient` property.
-  feathersClient: feathersClient
+	// Pass the feathers client as the `feathersClient` property.
+	feathersClient: feathersClient
 });
 ```
 

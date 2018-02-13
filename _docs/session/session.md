@@ -7,13 +7,13 @@
 
 Connects [can-connect/DataInterface] methods to the [feathers-authentication-client](https://github.com/feathersjs/feathers-authentication-client) plugin methods for authentication.
 
-```javascript
+```js
 connect([
-  feathersSession,
-  realtime
+	feathersSession,
+	realtime
 ], {
-  feathersClient: feathersClient,
-  Map: SessionMap
+	feathersClient: feathersClient,
+	Map: SessionMap
 });
 ``` 
 
@@ -29,7 +29,7 @@ The `feathers-session` behavior uses the [feathers-authentication-client](https:
 
 Setting up the Feathers Client is a prerequisite for using this behavior.  See the [can-connect-feathers] page for an example of a basic Feathers Client configuration.  With the Feathers client setup, it can be used with the `feathers-session` behavior as demonstrated in the example, below.
 
-```javascript
+```js
 // models/session.js
 import connect from 'can-connect';
 
@@ -50,42 +50,42 @@ import User from './user';
 import feathersClient from './feathers';
 
 export const Session = DefineMap.extend('Session', {
-  seal: false
+	seal: false
 }, {
-  exp: 'any',
-  userId: 'any',
-  user: {
-    Type: User,
-    // Automatically populate the user data when a userId is received.
-    get (lastSetVal, resolve) {
-      if (lastSetVal) {
-        return lastSetVal;
-      }
-      if (this.userId) {
-        User.get({_id: this.userId}).then(resolve);
-      }
-    }
-  }
+	exp: 'any',
+	userId: 'any',
+	user: {
+		Type: User,
+		// Automatically populate the user data when a userId is received.
+		get (lastSetVal, resolve) {
+			if (lastSetVal) {
+				return lastSetVal;
+			}
+			if (this.userId) {
+				User.get({_id: this.userId}).then(resolve);
+			}
+		}
+	}
 });
 
 connect([
-  // Include the feathers session behavior in the behaviors list.
-  feathersSession,
-  dataParse,
-  canMap,
-  canRef,
-  construct,
-  constructStore,
-  constructCallbacksOnce,
-  // Include the realtime behavior.
-  realtime,
-  dataCallbacks
+	// Include the feathers session behavior in the behaviors list.
+	feathersSession,
+	dataParse,
+	canMap,
+	canRef,
+	construct,
+	constructStore,
+	constructCallbacksOnce,
+	// Include the realtime behavior.
+	realtime,
+	dataCallbacks
 ], {
-  // Pass the feathers client as the `feathersClient` property.
-  feathersClient: feathersClient,
-  idProp: 'exp',
-  Map: Session,
-  name: 'session'
+	// Pass the feathers client as the `feathersClient` property.
+	feathersClient: feathersClient,
+	idProp: 'exp',
+	Map: Session,
+	name: 'session'
 });
 ```
 
@@ -93,15 +93,15 @@ connect([
 
 Once authentication has been established, the Map or DefineMap provided as the `Map` option on the can-connect Model will have a new `current` property defined.  So, if you passed a `Session` object, `Session.current` will always hold the current session data.  This greatly simplifies the session property in your application ViewModel.  Here's an abbreviated example.
 
-```javascript
+```js
 import Session from 'my-app/models/session';
 
 const AppViewModel = DefineMap.extend({
-  session: {
-    get () {
-      return Session.current;
-    }
-  }
+	session: {
+		get () {
+			return Session.current;
+		}
+	}
 });
 ```
 
