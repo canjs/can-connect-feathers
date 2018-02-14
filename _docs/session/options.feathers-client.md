@@ -7,14 +7,15 @@ Specifies a FeathersClient instance to use for authentication.  The [feathers-au
 
 ```js
 // Bring in the feathers client instance.
-import feathersClient from './feathers';
+import feathersClient from "./feathers";
 
-connect([
+connect( [
 	feathersSession
 ], {
+
 	// Pass the feathers client as the `feathersClient` property.
 	feathersClient: feathersClient
-});
+} );
 ```
 
 See [can-connect-feathers/session/session] for a complete Session Model example.
