@@ -8,13 +8,13 @@
 Connects [can-connect/DataInterface] methods to the [feathers-authentication-client](https://github.com/feathersjs/feathers-authentication-client) plugin methods for authentication.
 
 ```js
-connect([
-  feathersSession,
-  realtime
+connect( [
+	feathersSession,
+	realtime
 ], {
-  feathersClient: feathersClient,
-  Map: SessionMap
-});
+	feathersClient: feathersClient,
+	Map: SessionMap
+} );
 ``` 
 
 @body
@@ -31,61 +31,66 @@ Setting up the Feathers Client is a prerequisite for using this behavior.  See t
 
 ```js
 // models/session.js
-var connect = require('can-connect');
-var DefineMap = require('can-define/map/');
+import connect from "can-connect";
 
-var feathersSessionBehavior = require('can-connect-feathers/session');
-var dataParse = require('can-connect/data/parse/');
-var construct = require('can-connect/constructor/');
-var constructStore = require('can-connect/constructor/store/');
-var constructCallbacksOnce = require('can-connect/constructor/callbacks-once/');
-var canMap = require('can-connect/can/map/');
-var canRef = require('can-connect/can/ref/');
-var dataCallbacks = require('can-connect/data/callbacks/');
+import DefineMap from "can-define/map/";
+import feathersSessionBehavior from "can-connect-feathers/session";
+import dataParse from "can-connect/data/parse/";
+import construct from "can-connect/constructor/";
+import constructStore from "can-connect/constructor/store/";
+import constructCallbacksOnce from "can-connect/constructor/callbacks-once/";
+import canMap from "can-connect/can/map/";
+import canRef from "can-connect/can/ref/";
+import dataCallbacks from "can-connect/data/callbacks/";
+
 // Bring in your user model to setup the relation in your DefineMap.
-var User = require('./user');
+import User from "./user";
 
 // Bring in the feathersClient instance.
-var feathersClient = require('./feathers');
+import feathersClient from "./feathers";
 
-export const Session = DefineMap.extend('Session', {
-  seal: false
+export const Session = DefineMap.extend( "Session", {
+	seal: false
 }, {
-  exp: 'any',
-  userId: 'any',
-  user: {
-    Type: User,
-    // Automatically populate the user data when a userId is received.
-    get (lastSetVal, resolve) {
-      if (lastSetVal) {
-        return lastSetVal;
-      }
-      if (this.userId) {
-        User.get({_id: this.userId}).then(resolve);
-      }
-    }
-  }
-});
+	exp: "any",
+	userId: "any",
+	user: {
+		Type: User,
 
-connect([
-  // Include the feathers session behavior in the behaviors list.
-  feathersSession,
-  dataParse,
-  canMap,
-  canRef,
-  construct,
-  constructStore,
-  constructCallbacksOnce,
-  // Include the realtime behavior.
-  realtime,
-  dataCallbacks
+		// Automatically populate the user data when a userId is received.
+		get( lastSetVal, resolve ) {
+			if ( lastSetVal ) {
+				return lastSetVal;
+			}
+			if ( this.userId ) {
+				User.get( { _id: this.userId } ).then( resolve );
+			}
+		}
+	}
+} );
+
+connect( [
+
+	// Include the feathers session behavior in the behaviors list.
+	feathersSession,
+	dataParse,
+	canMap,
+	canRef,
+	construct,
+	constructStore,
+	constructCallbacksOnce,
+
+	// Include the realtime behavior.
+	realtime,
+	dataCallbacks
 ], {
-  // Pass the feathers client as the `feathersClient` property.
-  feathersClient: feathersClient,
-  idProp: 'exp',
-  Map: Session,
-  name: 'session'
-});
+
+	// Pass the feathers client as the `feathersClient` property.
+	feathersClient: feathersClient,
+	idProp: "exp",
+	Map: Session,
+	name: "session"
+} );
 ```
 
 ### Obtaining current session data
@@ -93,15 +98,15 @@ connect([
 Once authentication has been established, the Map or DefineMap provided as the `Map` option on the can-connect Model will have a new `current` property defined.  So, if you passed a `Session` object, `Session.current` will always hold the current session data.  This greatly simplifies the session property in your application ViewModel.  Here's an abbreviated example.
 
 ```js
-import Session from 'my-app/models/session';
+import Session from "my-app/models/session";
 
-const AppViewModel = DefineMap.extend({
-  session: {
-    get () {
-      return Session.current;
-    }
-  }
-});
+const AppViewModel = DefineMap.extend( {
+	session: {
+		get() {
+			return Session.current;
+		}
+	}
+} );
 ```
 
 That's it!  The `session` property in the above example will automatically populate when the user authenticates.
