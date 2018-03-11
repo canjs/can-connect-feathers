@@ -9,6 +9,17 @@ var idleTimeout = 1000; // seconds, default 90, max 1000
 
 // https://github.com/SeleniumHQ/selenium/wiki/DesiredCapabilities
 var platforms = [{
+	browserName: 'Browser',
+	'appium-version': '1.7.1',
+	platform: 'Android 7.1',
+	deviceName: 'Android Emulator'
+}, {
+	browserName: 'Safari',
+	'appium-version': '1.6.3',
+	platformName: 'iOS',
+	platformVersion: '10.0',
+	deviceName: 'iPhone 7 Simulator'
+}, {
 	browserName: 'firefox',
 	platform: 'Windows 10',
 	version: 'latest',
