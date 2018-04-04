@@ -52,7 +52,7 @@ module.exports = function runProviderTests (options) {
 				'*': Message
 			});
 
-			connect(behaviors, {
+			Message.connection = connect(behaviors, {
 				feathersService: app.service('messages'),
 				idProp: '_id',
 				Map: Message,
@@ -120,6 +120,17 @@ module.exports = function runProviderTests (options) {
 				done();
 			});
 		});
+	});
+
+	QUnit.test('findOne with many params', function (assert) {
+		assert.expect(3);
+		Message.connection.feathersService.get = function (id, params) {
+			assert.equal(id, 123);
+			assert.ok( !params.query.hasOwnProperty('_id') );
+			assert.equal(params.query.foo, 'bar');
+			return Promise.resolve({});
+		};
+		Message.findOne({ _id: 123, foo: 'bar' });
 	});
 
 	QUnit.test('create', function (assert) {
