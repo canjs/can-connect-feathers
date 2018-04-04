@@ -45,7 +45,7 @@ module.exports = connect.behavior('data/feathers-service', function (base) {
 				id = params[idProp];
 				delete params[idProp];
 			}
-			return service.get(id, params);
+			return service.get(id, {query: params});
 		},
 
 		createData: function (data) {
