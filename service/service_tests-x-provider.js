@@ -16,6 +16,7 @@ var realtime = require('can-connect/real-time/');
 var feathers = require('feathers/client');
 var hooks = require('feathers-hooks');
 var auth = require('feathers-authentication-client');
+var set = require('can-set-legacy');
 
 module.exports = function runProviderTests (options) {
 
@@ -57,7 +58,8 @@ module.exports = function runProviderTests (options) {
 				idProp: '_id',
 				Map: Message,
 				List: Message.List,
-				name: 'message'
+				name: 'message',
+				queryLogic: new set.Algebra(set.props.id('_id'))
 			});
 
 		}

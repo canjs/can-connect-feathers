@@ -9,7 +9,7 @@ var io = require('socket.io-client/dist/socket.io');
 var fixtureSocket = require('can-fixture-socket');
 var mockServer = new fixtureSocket.Server(io);
 var fixture = require('can-fixture');
-var set = require('can-set');
+var set = require('can-set-legacy');
 
 // Messages fixtures
 var messageAlgebra = new set.Algebra(
