@@ -8,12 +8,12 @@
 Connects the [can-connect/DataInterface] methods to the Feathers [Service Interface](https://docs.feathersjs.com/services/readme.html#service-methods) methods.
 
 ```js
-connect([
-  feathersService,
-  realtime
+connect( [
+	feathersService,
+	realtime
 ], {
-  feathersService: feathersClient.service('/api/todos')
-});
+	feathersService: feathersClient.service( "/api/todos" )
+} );
 ```
 
 For can-connect's real-time functionality to work with this behavior, the [can-connect/real-time/real-time real-time behavior] must also be included as shown in the examples. 
@@ -39,63 +39,68 @@ Setting up the Feathers Client is a prerequisite for using this behavior.  See t
 
 ```js
 // models/todo.js
-var connect = require('can-connect');
-var DefineMap = require('can-define/map/');
-var DefineList = require('can-define/list/list');
-var set = require("can-set");
+import connect from "can-connect";
+
+import DefineMap from "can-define/map/";
+import DefineList from "can-define/list/list";
+import set from "can-set";
 
 // Bring in the feathers service behavior
-var feathersServiceBehavior = require('can-connect-feathers/service');
-var dataParse = require('can-connect/data/parse/');
-var constructor = require('can-connect/constructor/');
-var constructorStore = require('can-connect/constructor/store/');
-var constructorCallbacksOnce = require('can-connect/constructor/callbacks-once/');
-var canMap = require('can-connect/can/map/');
-var canRef = require('can-connect/can/ref/');
-var dataCallbacks = require('can-connect/data/callbacks/');
-var realtime = require('can-connect/real-time/');
+import feathersServiceBehavior from "can-connect-feathers/service";
+
+import dataParse from "can-connect/data/parse/";
+import constructor from "can-connect/constructor/";
+import constructorStore from "can-connect/constructor/store/";
+import constructorCallbacksOnce from "can-connect/constructor/callbacks-once/";
+import canMap from "can-connect/can/map/";
+import canRef from "can-connect/can/ref/";
+import dataCallbacks from "can-connect/data/callbacks/";
+import realtime from "can-connect/real-time/";
 
 // Bring in the feathersClient instance.
-var feathersClient = require('./feathers');
+import feathersClient from "./feathers";
 
 // Use feathersClient.service(url) to create a service
-var todoService = feathersClient.service('/api/todos');
+const todoService = feathersClient.service( "/api/todos" );
 
-var Todo = DefineMap.extend('Todo', {
-  _id: 'string',
-  description: 'string',
-  complete: 'boolean'
-});
+const Todo = DefineMap.extend( "Todo", {
+	_id: "string",
+	description: "string",
+	complete: "boolean"
+} );
 
 Todo.algebra = new set.Algebra(
-  set.comparators.id('_id')
+	set.comparators.id( "_id" )
 );
 
-Todo.List = DefineList.extend({'*': Todo});
+Todo.List = DefineList.extend( { "*": Todo } );
 
-Todo.connection = connect([
-  // Include the feathers service behavior in the behaviors list.
-  feathersServiceBehavior,
-  dataParse,
-  constructor,
-  constructorStore,
-  constructorCallbacksOnce,
-  canMap,
-  canRef,
+Todo.connection = connect( [
+
+	// Include the feathers service behavior in the behaviors list.
+	feathersServiceBehavior,
+	dataParse,
+	constructor,
+	constructorStore,
+	constructorCallbacksOnce,
+	canMap,
+	canRef,
+
 	// Include both the dataCallbacks and realtime behaviors.
-  dataCallbacks,
-  realtime
+	dataCallbacks,
+	realtime
 ], {
-  idProp: '_id',
-  Map: Todo,
-  List: Todo.List,
-  // Pass the service as the `feathersService` property.
-  feathersService: todoService,
-  name: 'todos',
-  algebra: Todo.algebra
-});
+	idProp: "_id",
+	Map: Todo,
+	List: Todo.List,
 
-module.exports = Todo;
+	// Pass the service as the `feathersService` property.
+	feathersService: todoService,
+	name: "todos",
+	algebra: Todo.algebra
+} );
+
+export default Todo;
 ```
 
 In the above example, both `Todo` and `Todo.connection` will have methods for handling data, as described in the [can-connect basic use] section.

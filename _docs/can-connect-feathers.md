@@ -1,5 +1,6 @@
 @module {Object} can-connect-feathers
-@parent can-ecosystem
+@parent can-data-modeling
+@collection can-ecosystem
 @group can-connect-feathers.behaviors behaviors
 @description Integrate can-connect with the FeathersJS Client
 @package ../package.json
@@ -17,19 +18,20 @@ Both of the included behaviors require a Feathers Client instance.  Here is a ba
 
 ```js
 // models/feathers.js
-var feathers = require('feathers/client');
-var socketio = require('feathers-socketio/client');
-var io = require('socket.io-client/dist/socket.io');
-var hooks = require('feathers-hooks');
-var auth = require('feathers-authentication-client');
-var socket = io('');
+import feathers from "feathers/client";
 
-var feathersClient = feathers()
-  .configure(hooks())
-  .configure(socketio(socket))
-  .configure(auth());
+import socketio from "feathers-socketio/client";
+import io from "socket.io-client/dist/socket.io";
+import hooks from "feathers-hooks";
+import auth from "feathers-authentication-client";
+const socket = io( "" );
 
-module.exports = feathersClient;
+const feathersClient = feathers()
+	.configure( hooks() )
+	.configure( socketio( socket ) )
+	.configure( auth() );
+
+export default feathersClient;
 ```
 
 > Pro tip: If you are planning on using Done-SSR, exchange the `socket.io-client/dist/socket.io` module for `steal-socket.io` in the above example.
