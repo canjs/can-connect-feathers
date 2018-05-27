@@ -5,7 +5,7 @@
 With StealJS, you can import this module directly in a template that is autorendered:
 
 ```js
-import plugin from 'can-connect-feathers';
+import plugin from "can-connect-feathers";
 ```
 
 ### CommonJS use
@@ -14,7 +14,7 @@ Use `require` to load `can-connect-feathers` and everything else
 needed to create a template that uses `can-connect-feathers`:
 
 ```js
-var plugin = require("can-connect-feathers");
+import plugin from "can-connect-feathers";
 ```
 
 ## AMD use

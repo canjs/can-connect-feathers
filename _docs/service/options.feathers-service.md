@@ -7,16 +7,18 @@ Specifies a [FeathersClient](https://docs.feathersjs.com/clients/feathers.html) 
 
 ```js
 // Bring in the feathersClient instance and setup a service.
-var feathersClient = require('./feathers');
-var todoService = feathersClient.service('/api/todos');
+import feathersClient from "./feathers";
 
-connect([
-  feathersService,
-  realtime
+const todoService = feathersClient.service( "/api/todos" );
+
+connect( [
+	feathersService,
+	realtime
 ], {
-  // Pass the service as the `feathersService` property
-  feathersService: todoService
-});
+
+	// Pass the service as the `feathersService` property
+	feathersService: todoService
+} );
 ```
 
 See [can-connect-feathers/service/service] for a complete Todo Model example.
