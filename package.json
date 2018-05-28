@@ -55,7 +55,7 @@
   },
   "dependencies": {
     "can-assign": "^1.0.0",
-    "can-observation": "^4.0.0",
+    "can-observation-recorder": "^1.0.0",
     "can-zone-storage": "^1.0.0",
     "feathers-authentication-popups": "^0.1.2",
     "feathers-errors": "^2.7.0",
