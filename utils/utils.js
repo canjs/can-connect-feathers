@@ -1,5 +1,5 @@
 var decode = require('jwt-decode');
-var assign = require('can-util/js/assign/assign');
+var assign = require('can-assign');
 
 // Reads and returns the contents of a cookie with the provided name.
 function readCookie (name) {
