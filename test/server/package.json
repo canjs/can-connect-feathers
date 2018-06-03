@@ -22,20 +22,18 @@
     "mocha": "mocha test/ --recursive"
   },
   "dependencies": {
+    "@feathersjs/authentication": "^2.1.0",
+    "@feathersjs/authentication-jwt": "^2.0.0",
+    "@feathersjs/authentication-local": "^1.2.0",
+    "@feathersjs/errors": "^3.3.0",
+    "@feathersjs/express": "^1.2.0",
+    "@feathersjs/feathers": "^3.1.0",
+    "@feathersjs/socketio": "^3.2.0",
     "body-parser": "^1.15.2",
     "compression": "^1.6.2",
     "cors": "^2.8.0",
-    "feathers": "^2.0.3",
-    "feathers-authentication": "1.0.0-beta-2",
-    "feathers-authentication-jwt": "^0.2.0",
-    "feathers-authentication-local": "^0.3.0",
-    "feathers-configuration": "^0.2.3",
-    "feathers-errors": "^2.4.0",
-    "feathers-hooks": "^1.5.7",
     "feathers-legacy-authentication-hooks": "^1.0.0",
     "feathers-nedb": "^2.4.1",
-    "feathers-rest": "^1.4.4",
-    "feathers-socketio": "^1.4.1",
     "nedb": "^1.8.0",
     "passport": "^0.3.2",
     "rimraf": "^2.5.4",
@@ -43,7 +41,7 @@
     "winston": "^2.2.0"
   },
   "devDependencies": {
-    "feathers-configuration": "0.2.3",
+    "@feathersjs/configuration": "^1.0.0",
     "jshint": "^2.9.3",
     "mocha": "^3.0.2",
     "request": "^2.74.0"

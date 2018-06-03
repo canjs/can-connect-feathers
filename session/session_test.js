@@ -1,14 +1,14 @@
 var runCrossProviderTests = require('./session_tests-x-provider');
 var clearCookies = require('../test/clear-cookies');
 
-var socketio = require('feathers-socketio/client');
-var rest = require('feathers-rest/client');
+var socketio = require('@feathersjs/socketio-client');
+var rest = require('@feathersjs/rest-client');
 var jQuery = require('jquery');
 var io = require('socket.io-client/dist/socket.io');
 var fixtureSocket = require('can-fixture-socket');
 var fixture = require('can-fixture');
 var set = require('can-set');
-var errors = require('feathers-errors');
+var errors = require('@feathersjs/errors');
 
 
 // Setup the shared fixture stuff to be used

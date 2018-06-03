@@ -14,20 +14,18 @@
 
 @body
 
-Both of the included behaviors require a Feathers Client instance.  Here is a basic setup: 
+Both of the included behaviors require a Feathers Client instance.  Here is a basic setup:
 
 ```js
 // models/feathers.js
-import feathers from "feathers/client";
+import feathers from "@feathersjs/feathers";
 
-import socketio from "feathers-socketio/client";
+import socketio from "@feathersjs/socketio-client";
 import io from "socket.io-client/dist/socket.io";
-import hooks from "feathers-hooks";
 import auth from "feathers-authentication-client";
 const socket = io( "" );
 
 const feathersClient = feathers()
-	.configure( hooks() )
 	.configure( socketio( socket ) )
 	.configure( auth() );
 

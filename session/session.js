@@ -1,5 +1,5 @@
 var connect = require('can-connect');
-var errors = require('feathers-errors');
+var errors = require('@feathersjs/errors');
 var authAgent = require('feathers-authentication-popups').authAgent;
 var decode = require('jwt-decode');
 var payloadIsValid = require('../utils/utils').payloadIsValid;

@@ -2,8 +2,8 @@ var QUnit = require('steal-qunit');
 var runCrossProviderTests = require('../session/session_tests-x-provider');
 var clearCookies = require('./clear-cookies');
 
-var socketio = require('feathers-socketio/client');
-var rest = require('feathers-rest/client');
+var socketio = require('@feathersjs/socketio-client');
+var rest = require('@feathersjs/rest-client');
 var jQuery = require('jquery');
 var io = require('socket.io-client/dist/socket.io');
 

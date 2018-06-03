@@ -13,9 +13,8 @@ var canRef = require('can-connect/can/ref/');
 var dataCallbacks = require('can-connect/data/callbacks/');
 var realtime = require('can-connect/real-time/');
 
-var feathers = require('feathers/client');
-var hooks = require('feathers-hooks');
-var auth = require('feathers-authentication-client');
+var feathers = require('@feathersjs/feathers');
+var auth = require('@feathersjs/authentication-client');
 
 module.exports = function runProviderTests (options) {
 
@@ -40,7 +39,6 @@ module.exports = function runProviderTests (options) {
 
 			var app = feathers()
 				.configure(options.provider)
-				.configure(hooks())
 				.configure(auth());
 
 			Message = DefineMap.extend('Message', {
