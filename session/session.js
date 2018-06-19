@@ -5,7 +5,7 @@ var decode = require('jwt-decode');
 var payloadIsValid = require('../utils/utils').payloadIsValid;
 var hasValidToken = require('../utils/utils').hasValidToken;
 var convertLocalAuthData = require('../utils/utils').convertLocalAuthData;
-var Observation = require('can-observation');
+var ObservationRecorder = require('can-observation-recorder');
 var zoneStorage = require('./storage');
 
 module.exports = connect.behavior('data/feathers-session', function (base) {
@@ -27,7 +27,7 @@ module.exports = connect.behavior('data/feathers-session', function (base) {
 
 	Object.defineProperty(Session, 'current', {
 		get: function () {
-			Observation.add(Session, 'current');
+			ObservationRecorder.add(Session, 'current');
 			if (zoneStorage.getItem('can-connect-feathers-session') === undefined) {
 
 				// set session to `undefined` when we start authentication:
