@@ -1,3 +1,4 @@
+"use strict";
 var connect = require('can-connect');
 
 function getIdProp (Model) {

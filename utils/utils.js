@@ -1,3 +1,4 @@
+"use strict";
 var decode = require('jwt-decode');
 var assign = require('can-assign');
 

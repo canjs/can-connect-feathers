@@ -1,3 +1,4 @@
+"use strict";
 var connect = require('can-connect');
 var errors = require('feathers-errors');
 var authAgent = require('feathers-authentication-popups').authAgent;
