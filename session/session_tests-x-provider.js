@@ -207,6 +207,7 @@ module.exports = function runSessionTests (options) {
 				session.save()
 				.then(function (res) {
 					assert.ok(res._id, 'Got session data back');
+					assert.ok(res.accessToken, 'Got full response data back');
 					Session.get()
 					.then(function (res) {
 						assert.ok(res._id, 'Session.get returned session data');

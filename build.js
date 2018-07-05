@@ -1,3 +1,4 @@
+"use strict";
 var stealTools = require('steal-tools');
 var path = require('path');
 

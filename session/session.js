@@ -1,3 +1,4 @@
+"use strict";
 var connect = require('can-connect');
 var errors = require('feathers-errors');
 var authAgent = require('feathers-authentication-popups').authAgent;
@@ -86,7 +87,10 @@ module.exports = connect.behavior('data/feathers-session', function (base) {
 			var requestData = convertLocalAuthData(data);
 			return feathersClient.authenticate(requestData)
 				.then(function (response) {
-					return response.accessToken ? decode(response.accessToken) : response;
+					if (response.accessToken) {
+						Object.assign(response, decode(response.accessToken));
+					}
+					return response;
 				});
 		},
 		getData: function () {
