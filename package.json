@@ -66,7 +66,7 @@
     "babel-polyfill": "^6.23.0",
     "can-connect": "^2.0.0",
     "can-define": "^2.0.0",
-    "can-fixture": "^2.0.0",
+    "can-fixture": "^3.0.0",
     "can-fixture-socket": "^1.0.0",
     "can-set": "^1.4.0",
     "concurrently": "^3.1.0",
