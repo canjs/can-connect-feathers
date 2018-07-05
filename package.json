@@ -64,7 +64,7 @@
   "devDependencies": {
     "async": "^2.1.5",
     "babel-polyfill": "^6.23.0",
-    "can-connect": "^2.0.0",
+    "can-connect": "^3.0.1",
     "can-define": "^2.0.0",
     "can-fixture": "^2.0.0",
     "can-fixture-socket": "^1.0.0",
