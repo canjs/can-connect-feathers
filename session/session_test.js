@@ -7,7 +7,7 @@ var jQuery = require('jquery');
 var io = require('socket.io-client/dist/socket.io');
 var fixtureSocket = require('can-fixture-socket');
 var fixture = require('can-fixture');
-var set = require('can-set');
+var set = require('can-set-legacy');
 var errors = require('feathers-errors');
 
 
@@ -32,7 +32,7 @@ var accountAlgebra = new set.Algebra(
 	accountsHandler = function (request, response, headers) {
 		if (headers.authorization || headers.Authorization) {
 			if (request.method === 'post') {
-				accountStore.create(request, response);
+				accountStore.createData(request, response);
 			}
 		} else {
 			var error = new errors.NotAuthenticated('not-authenticated');
@@ -105,14 +105,14 @@ runCrossProviderTests({
 
 		mockServer.on('accounts::find', function (query, callback) {
 			if (isAuthenticated) {
-				fixtureSocket.requestHandlerToListener(accountStore.getList).apply(null, arguments);
+				fixtureSocket.requestHandlerToListener(accountStore.getListData).apply(null, arguments);
 			} else {
 				callback(error);
 			}
 		});
 		mockServer.on('accounts::create', function (data, params, callback) {
 			if (isAuthenticated) {
-				fixtureSocket.requestHandlerToListener(accountStore.create)(data, callback);
+				fixtureSocket.requestHandlerToListener(accountStore.createData)(data, callback);
 			} else {
 				callback(error);
 			}

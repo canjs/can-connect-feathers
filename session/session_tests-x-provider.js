@@ -18,6 +18,7 @@ var realtime = require('can-connect/real-time/');
 var feathers = require('feathers/client');
 var hooks = require('feathers-hooks');
 var auth = require('feathers-authentication-client');
+var set = require("can-set-legacy");
 
 module.exports = function runSessionTests (options) {
 	var app, Account, Session, User, session;
@@ -74,7 +75,8 @@ module.exports = function runSessionTests (options) {
 		idProp: '_id',
 		Map: User,
 		List: User.List,
-		name: 'user'
+		name: 'user',
+		queryLogic: new set.Algebra(set.props.id('_id'))
 	});
 
 	Account = DefineMap.extend('Account', {
@@ -94,7 +96,8 @@ module.exports = function runSessionTests (options) {
 		idProp: '_id',
 		Map: Account,
 		List: Account.List,
-		name: 'account'
+		name: 'account',
+		queryLogic: new set.Algebra(set.props.id('_id'))
 	});
 
 	var sessionBehaviors = [
@@ -120,12 +123,13 @@ module.exports = function runSessionTests (options) {
 	Session.List = DefineList.extend({
 		'*': Session
 	});
-	
+
 	Session.connection = connect(sessionBehaviors, {
 		feathersClient: app,
 		idProp: 'exp',
 		Map: Session,
-		name: 'session'
+		name: 'session',
+		queryLogic: new set.Algebra(set.props.id('_id'))
 	});
 
 

@@ -16,13 +16,13 @@ connect( [
 } );
 ```
 
-For can-connect's real-time functionality to work with this behavior, the [can-connect/real-time/real-time real-time behavior] must also be included as shown in the examples. 
+For can-connect's real-time functionality to work with this behavior, the [can-connect/real-time/real-time real-time behavior] must also be included as shown in the examples.
 
 @body
 
 The `feathers-service` behavior maps can-connect's [can-connect/DataInterface] methods to FeathersJS's [Service Interface](https://docs.feathersjs.com/services/readme.html#service-methods) methods.
 
-``` 
+```
 | DataInterface method | Feathers method | HTTP method | Example Path |
 |----------------------|-----------------|-------------|--------------|
 | .getListData()       | .find()         | GET         | /todos       |
@@ -30,12 +30,12 @@ The `feathers-service` behavior maps can-connect's [can-connect/DataInterface] m
 | .createData()        | .create()       | POST        | /todos       |
 | .updateData()        | .update()       | PUT         | /todos/{id}  |
 | not yet implemented  | .patch()        | PATCH       | /todos/{id}  |
-| .destroyData()       | .remove()       | DELETE      | /todos/{id}  | 
+| .destroyData()       | .remove()       | DELETE      | /todos/{id}  |
 ```
 
 ## Use
 
-Setting up the Feathers Client is a prerequisite for using this behavior.  See the [can-connect-feathers] page for an example of a basic Feathers Client configuration.  With the Feathers client setup, it can be used with the `feathers-service` behavior as demonstrated in the example, below.  Also note that the [can-connect/real-time/real-time real-time] behavior is included to receive real-time push events from the server. 
+Setting up the Feathers Client is a prerequisite for using this behavior.  See the [can-connect-feathers] page for an example of a basic Feathers Client configuration.  With the Feathers client setup, it can be used with the `feathers-service` behavior as demonstrated in the example, below.  Also note that the [can-connect/real-time/real-time real-time] behavior is included to receive real-time push events from the server.
 
 ```js
 // models/todo.js
@@ -43,7 +43,7 @@ import connect from "can-connect";
 
 import DefineMap from "can-define/map/";
 import DefineList from "can-define/list/list";
-import set from "can-set";
+import set from "can-set-legacy";
 
 // Bring in the feathers service behavior
 import feathersServiceBehavior from "can-connect-feathers/service";
