@@ -86,7 +86,7 @@
     "steal-socket.io": "^4.0.8",
     "steal-tools": "^1.10.0",
     "test-saucelabs": "0.0.3",
-    "testee": "^0.8.0",
+    "testee": "^0.9.0",
     "wd": "^1.1.3"
   }
 }
