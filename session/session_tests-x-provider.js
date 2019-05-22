@@ -395,7 +395,7 @@ module.exports = function runSessionTests (options) {
 					user.destroy().then(function () {
 						assert.ok('User destroyed', 'The user was cleaned up.');
 						done();
-					});
+					}, done);
 				}
 			};
 
@@ -407,10 +407,8 @@ module.exports = function runSessionTests (options) {
 					email: user.email,
 					password: user.password
 				}
-			}).save().catch(function (error) {
-				console.log(error);
-			});
-		});
+			}).save().catch(done);
+		}, done);
 	});
 
 	QUnit.test('Session.current populates on created event, clears on destroyed', function (assert) {
@@ -438,7 +436,7 @@ module.exports = function runSessionTests (options) {
 						assert.ok('User destroyed', 'The user was cleaned up.');
 
 						Session.current.destroy();
-					});
+					}, done);
 				} else {
 					assert.ok(Session.current === undefined, 'Session.current was removed on destroyed event');
 					Session.off('current', handler);
@@ -449,11 +447,8 @@ module.exports = function runSessionTests (options) {
 
 			session.save().then(function (sessionData) {
 				console.log('sessionData', sessionData);
-			})
-			.catch(function (error) {
-				console.log(error);
-			});
-		});
+			}, done);
+		}, done);
 	});
 
 	/*
