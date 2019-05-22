@@ -14,6 +14,7 @@ var canMap = require('can-connect/can/map/');
 var canRef = require('can-connect/can/ref/');
 var dataCallbacks = require('can-connect/data/callbacks/');
 var realtime = require('can-connect/real-time/');
+var clearCookies = require('../test/clear-cookies');
 
 var feathers = require('feathers/client');
 var hooks = require('feathers-hooks');
@@ -32,6 +33,9 @@ module.exports = function runSessionTests (options) {
 				// We need to return a promise to make sure we complete the teardown:
 				return session.destroy();
 			}
+		},
+		afterEach: function() {
+			clearCookies();
 		}
 	});
 
