@@ -35,6 +35,7 @@ module.exports = function runSessionTests (options) {
 			}
 		},
 		afterEach: function() {
+			//clear feathers cookies
 			clearCookies();
 		}
 	});
