@@ -66,9 +66,9 @@
     "async": "^2.1.5",
     "babel-polyfill": "^6.23.0",
     "can-define": "^2.0.0",
-    "can-fixture": "^3.0.0-pre.8",
+    "can-fixture": "^3.0.0",
     "can-fixture-socket": "^1.0.0",
-    "can-set-legacy": "<2.0.0",
+    "can-set-legacy": "^1.0.0",
     "concurrently": "^3.1.0",
     "detect-cyclic-packages": "^1.1.0",
     "feathers": "^2.0.3",
@@ -81,12 +81,12 @@
     "jshint": "^2.9.4",
     "saucelabs": "^1.4.0",
     "socket.io-client": "^2.0.4",
-    "steal": "^1.6.2",
+    "steal": "^2.0.0",
     "steal-qunit": "^1.0.0",
     "steal-socket.io": "^4.0.8",
-    "steal-tools": "^1.10.0",
-    "test-saucelabs": "0.0.3",
-    "testee": "^0.8.0",
+    "steal-tools": "^2.0.0",
+    "test-saucelabs": "0.0.6",
+    "testee": "^0.9.0",
     "wd": "^1.1.3"
   }
 }
