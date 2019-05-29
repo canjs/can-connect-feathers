@@ -23,6 +23,11 @@ var set = require("can-set-legacy");
 module.exports = function runSessionTests (options) {
 	var app, Account, Session, User, session;
 
+	// Avoid unhandled rejections from can-connect/can/map/map
+	// See https://github.com/canjs/can-connect/issues/482 for more info.
+	// This line should be removed if the bug above is fixed.
+	QUnit.onUnhandledRejection = function() {};
+
 	QUnit.module("can-connect-feathers/session - " + options.moduleName, {
 		beforeEach: function () {
 			// have to run this here so rest fixtures get found
@@ -31,6 +36,12 @@ module.exports = function runSessionTests (options) {
 			if (session) {
 				// We need to return a promise to make sure we complete the teardown:
 				return session.destroy();
+			}
+		},
+		afterEach: function() {
+			var currentSession = Session.current;
+			if (currentSession) {
+				return currentSession.destroy();
 			}
 		}
 	});
