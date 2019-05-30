@@ -411,7 +411,7 @@ module.exports = function runSessionTests (options) {
 					assert.ok(Session.current._id, 'Session.current is now synchronously readable.');
 					assert.ok(session instanceof Session, 'Session.current is a Session instance');
 
-					Session.current.destroy().then(function(reponse){
+					Session.current.destroy().then(function(){
 						assert.ok('Session destroyed', 'Session destroyed');
 						done();
 					}).catch(function(err){
