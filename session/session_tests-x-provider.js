@@ -284,7 +284,7 @@ module.exports = function runSessionTests (options) {
 				assert.notOk(err.name, "got back error message: "+err.name);
 				done();
 			});
-		}).catch(function() {
+		}).catch(function(err) {
 			assert.notOk(err.name, "got back error message: "+err.name);
 			done();
 		});
@@ -411,8 +411,11 @@ module.exports = function runSessionTests (options) {
 					assert.ok(Session.current._id, 'Session.current is now synchronously readable.');
 					assert.ok(session instanceof Session, 'Session.current is a Session instance');
 
-					Session.current.destroy().then(function () {
-						assert.ok('User destroyed', 'The user was cleaned up.');
+					Session.current.destroy().then(function(reponse){
+						assert.ok('Session destroyed', 'Session destroyed');
+						done();
+					}).catch(function(err){
+						assert.notOk(err.name, "got back error message: "+err.name);
 						done();
 					});
 				} else {
@@ -420,6 +423,9 @@ module.exports = function runSessionTests (options) {
 					assert.equal(Session.current, undefined, 'The session was successfully destroyed');
 					user.destroy().then(function () {
 						assert.ok('User destroyed', 'The user was cleaned up.');
+						done();
+					}).catch(function(err){
+						assert.notOk(err.name, "got back error message: "+err.name);
 						done();
 					});
 				}
