@@ -161,7 +161,7 @@ module.exports = function runSessionTests (options) {
 			});
 		})
 		.catch(function (err) {
-			console.log(err);
+			assert.notOk(err.name);
 			done();
 		});
 	});
@@ -225,7 +225,8 @@ module.exports = function runSessionTests (options) {
 						user.destroy().then(done);
 					})
 					.catch(function (err) {
-						console.log(err);
+						assert.notOk(err.name, "got back error message: "+err.name);
+						done();
 					});
 				})
 				.catch(function (err) {
@@ -233,6 +234,9 @@ module.exports = function runSessionTests (options) {
 					assert.ok(correctError, "got back error message: "+err.name);
 					done();
 				});
+			}).catch(function(err) {
+				assert.notOk(err.name, "got back error message: "+err.name);
+				done();
 			});
 		});
 	});
@@ -280,6 +284,9 @@ module.exports = function runSessionTests (options) {
 				assert.notOk(err.name, "got back error message: "+err.name);
 				done();
 			});
+		}).catch(function() {
+			assert.notOk(err.name, "got back error message: "+err.name);
+			done();
 		});
 	});
 
@@ -313,6 +320,9 @@ module.exports = function runSessionTests (options) {
 				assert.notOk(err.name, "got back error message: "+err.name);
 				done();
 			});
+		}).catch(function(err) {
+			assert.notOk(err.name, "got back error message: "+err.name);
+			done();
 		});
 	});
 
@@ -363,8 +373,12 @@ module.exports = function runSessionTests (options) {
 							assert.notOk(err, "shouldn't have had a problem creating an account");
 						});
 					}).catch(function (e) {
-						console.log(e);
+						assert.notOk(e.name, "got back error message: "+e.name);
+						done();
 					});
+				}).catch(function(err) {
+					assert.notOk(err.name, "got back error message: "+err.name);
+					done();
 				});
 			})
 			// Leave this here for easier tracking if it breaks.
@@ -372,6 +386,9 @@ module.exports = function runSessionTests (options) {
 				assert.notOk(err.name, "got back error message: "+err.name);
 				done();
 			});
+		}).catch(function(err) {
+			assert.notOk(err.name, "got back error message: "+err.name);
+			done();
 		});
 	});
 
@@ -394,7 +411,10 @@ module.exports = function runSessionTests (options) {
 					assert.ok(Session.current._id, 'Session.current is now synchronously readable.');
 					assert.ok(session instanceof Session, 'Session.current is a Session instance');
 
-					Session.current.destroy();
+					Session.current.destroy().then(function () {
+						assert.ok('User destroyed', 'The user was cleaned up.');
+						done();
+					});
 				} else {
 					Session.off('current', handler);
 					assert.equal(Session.current, undefined, 'The session was successfully destroyed');
@@ -414,8 +434,12 @@ module.exports = function runSessionTests (options) {
 					password: user.password
 				}
 			}).save().catch(function (error) {
-				console.log(error);
+				assert.notOk(error.name, "got back error message: "+error.name);
+				done();
 			});
+		}).catch(function(err){
+			assert.notOk(err.name, "got back error message: "+err.name);
+			done();
 		});
 	});
 
@@ -444,6 +468,9 @@ module.exports = function runSessionTests (options) {
 						assert.ok('User destroyed', 'The user was cleaned up.');
 
 						Session.current.destroy();
+					}).catch(function(err) {
+						assert.notOk(err.name, "got back error message: "+err.name);
+						done();
 					});
 				} else {
 					assert.ok(Session.current === undefined, 'Session.current was removed on destroyed event');
@@ -457,8 +484,12 @@ module.exports = function runSessionTests (options) {
 				console.log('sessionData', sessionData);
 			})
 			.catch(function (error) {
-				console.log(error);
+				assert.notOk(error.name, "got back error message: "+error.name);
+				done();
 			});
+		}).catch(function(err){
+			assert.notOk(err.name, "got back error message: "+err.name);
+			done();
 		});
 	});
 
