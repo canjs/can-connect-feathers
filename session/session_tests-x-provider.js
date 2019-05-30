@@ -192,6 +192,7 @@ module.exports = function runSessionTests (options) {
 		Session.get()
 		.then(function (res) {
 			console.log('res', res);
+			done();
 		})
 		.catch(function (err) {
 			assert.equal(err.name, 'NotAuthenticated', "got back error message: "+err.name);
@@ -238,6 +239,9 @@ module.exports = function runSessionTests (options) {
 				assert.notOk(err.name, "got back error message: "+err.name);
 				done();
 			});
+		}).catch(function(err){
+			assert.notOk(err.name, "got back error message: "+err.name);
+			done();
 		});
 	});
 
@@ -371,6 +375,7 @@ module.exports = function runSessionTests (options) {
 						})
 						.catch(function (err) {
 							assert.notOk(err, "shouldn't have had a problem creating an account");
+							done();
 						});
 					}).catch(function (e) {
 						assert.notOk(e.name, "got back error message: "+e.name);
@@ -411,13 +416,7 @@ module.exports = function runSessionTests (options) {
 					assert.ok(Session.current._id, 'Session.current is now synchronously readable.');
 					assert.ok(session instanceof Session, 'Session.current is a Session instance');
 
-					Session.current.destroy().then(function(){
-						assert.ok('Session destroyed', 'Session destroyed');
-						done();
-					}).catch(function(err){
-						assert.notOk(err.name, "got back error message: "+err.name);
-						done();
-					});
+					Session.current.destroy();
 				} else {
 					Session.off('current', handler);
 					assert.equal(Session.current, undefined, 'The session was successfully destroyed');
@@ -450,7 +449,7 @@ module.exports = function runSessionTests (options) {
 	});
 
 	QUnit.test('Session.current populates on created event, clears on destroyed', function (assert) {
-		var done = assert.async();
+		var done = assert.async(2);
 
 		new User({
 			email: 'marshall@ci.com',
@@ -488,6 +487,7 @@ module.exports = function runSessionTests (options) {
 
 			session.save().then(function (sessionData) {
 				console.log('sessionData', sessionData);
+				done();
 			})
 			.catch(function (error) {
 				assert.notOk(error.name, "got back error message: "+error.name);
