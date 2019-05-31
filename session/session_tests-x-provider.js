@@ -23,6 +23,11 @@ var set = require("can-set-legacy");
 module.exports = function runSessionTests (options) {
 	var app, Account, Session, User, session;
 
+	// Avoid unhandled rejections from can-connect/can/map/map
+	// See https://github.com/canjs/can-connect/issues/482 for more info.
+	// This line should be removed if the bug above is fixed.
+	QUnit.onUnhandledRejection = function() {};
+
 	QUnit.module("can-connect-feathers/session - " + options.moduleName, {
 		beforeEach: function () {
 			// have to run this here so rest fixtures get found
@@ -31,6 +36,12 @@ module.exports = function runSessionTests (options) {
 			if (session) {
 				// We need to return a promise to make sure we complete the teardown:
 				return session.destroy();
+			}
+		},
+		afterEach: function() {
+			var currentSession = Session.current;
+			if (currentSession) {
+				return currentSession.destroy();
 			}
 		}
 	});
@@ -150,7 +161,7 @@ module.exports = function runSessionTests (options) {
 			});
 		})
 		.catch(function (err) {
-			console.log(err);
+			assert.notOk(err.name);
 			done();
 		});
 	});
@@ -181,6 +192,7 @@ module.exports = function runSessionTests (options) {
 		Session.get()
 		.then(function (res) {
 			console.log('res', res);
+			done();
 		})
 		.catch(function (err) {
 			assert.equal(err.name, 'NotAuthenticated', "got back error message: "+err.name);
@@ -214,7 +226,8 @@ module.exports = function runSessionTests (options) {
 						user.destroy().then(done);
 					})
 					.catch(function (err) {
-						console.log(err);
+						assert.notOk(err.name, "got back error message: "+err.name);
+						done();
 					});
 				})
 				.catch(function (err) {
@@ -222,7 +235,13 @@ module.exports = function runSessionTests (options) {
 					assert.ok(correctError, "got back error message: "+err.name);
 					done();
 				});
+			}).catch(function(err) {
+				assert.notOk(err.name, "got back error message: "+err.name);
+				done();
 			});
+		}).catch(function(err){
+			assert.notOk(err.name, "got back error message: "+err.name);
+			done();
 		});
 	});
 
@@ -269,6 +288,9 @@ module.exports = function runSessionTests (options) {
 				assert.notOk(err.name, "got back error message: "+err.name);
 				done();
 			});
+		}).catch(function(err) {
+			assert.notOk(err.name, "got back error message: "+err.name);
+			done();
 		});
 	});
 
@@ -302,6 +324,9 @@ module.exports = function runSessionTests (options) {
 				assert.notOk(err.name, "got back error message: "+err.name);
 				done();
 			});
+		}).catch(function(err) {
+			assert.notOk(err.name, "got back error message: "+err.name);
+			done();
 		});
 	});
 
@@ -350,10 +375,15 @@ module.exports = function runSessionTests (options) {
 						})
 						.catch(function (err) {
 							assert.notOk(err, "shouldn't have had a problem creating an account");
+							done();
 						});
 					}).catch(function (e) {
-						console.log(e);
+						assert.notOk(e.name, "got back error message: "+e.name);
+						done();
 					});
+				}).catch(function(err) {
+					assert.notOk(err.name, "got back error message: "+err.name);
+					done();
 				});
 			})
 			// Leave this here for easier tracking if it breaks.
@@ -361,6 +391,9 @@ module.exports = function runSessionTests (options) {
 				assert.notOk(err.name, "got back error message: "+err.name);
 				done();
 			});
+		}).catch(function(err) {
+			assert.notOk(err.name, "got back error message: "+err.name);
+			done();
 		});
 	});
 
@@ -390,6 +423,9 @@ module.exports = function runSessionTests (options) {
 					user.destroy().then(function () {
 						assert.ok('User destroyed', 'The user was cleaned up.');
 						done();
+					}).catch(function(err){
+						assert.notOk(err.name, "got back error message: "+err.name);
+						done();
 					});
 				}
 			};
@@ -403,13 +439,17 @@ module.exports = function runSessionTests (options) {
 					password: user.password
 				}
 			}).save().catch(function (error) {
-				console.log(error);
+				assert.notOk(error.name, "got back error message: "+error.name);
+				done();
 			});
+		}).catch(function(err){
+			assert.notOk(err.name, "got back error message: "+err.name);
+			done();
 		});
 	});
 
 	QUnit.test('Session.current populates on created event, clears on destroyed', function (assert) {
-		var done = assert.async();
+		var done = assert.async(2);
 
 		new User({
 			email: 'marshall@ci.com',
@@ -433,6 +473,9 @@ module.exports = function runSessionTests (options) {
 						assert.ok('User destroyed', 'The user was cleaned up.');
 
 						Session.current.destroy();
+					}).catch(function(err) {
+						assert.notOk(err.name, "got back error message: "+err.name);
+						done();
 					});
 				} else {
 					assert.ok(Session.current === undefined, 'Session.current was removed on destroyed event');
@@ -444,10 +487,15 @@ module.exports = function runSessionTests (options) {
 
 			session.save().then(function (sessionData) {
 				console.log('sessionData', sessionData);
+				done();
 			})
 			.catch(function (error) {
-				console.log(error);
+				assert.notOk(error.name, "got back error message: "+error.name);
+				done();
 			});
+		}).catch(function(err){
+			assert.notOk(err.name, "got back error message: "+err.name);
+			done();
 		});
 	});
 
