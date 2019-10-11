@@ -43,48 +43,41 @@
     "client",
     "realtime"
   ],
-  "steal": {
-    "configDependencies": [
-      "live-reload"
-    ],
-    "npmIgnore": [
-      "testee",
-      "steal-tools"
-    ]
-  },
   "dependencies": {
+    "@feathersjs/errors": "^4.3.4",
     "can-assign": "^1.0.0",
     "can-connect": "^3.0.0",
     "can-observation": "^4.0.0",
     "can-observation-recorder": "^1.1.2",
     "can-zone-storage": "^1.0.0",
     "feathers-authentication-popups": "^0.1.2",
-    "feathers-errors": "^2.7.0",
     "jwt-decode": "^2.1.0"
   },
   "devDependencies": {
+    "@feathersjs/authentication-client": "^4.3.5",
+    "@feathersjs/client": "^4.3.5",
+    "@feathersjs/express": "^4.3.5",
+    "@feathersjs/feathers": "^4.3.4",
+    "@feathersjs/rest-client": "^4.3.5",
+    "@feathersjs/socketio": "^4.3.5",
+    "@feathersjs/socketio-client": "^4.3.5",
     "async": "^2.1.5",
     "babel-polyfill": "^6.23.0",
-    "can-define": "^2.0.0",
-    "can-fixture": "^3.0.0",
-    "can-fixture-socket": "^1.0.0",
-    "can-set-legacy": "^1.0.0",
+    "can-define": "^2.8.0",
+    "can-fixture": "^3.1.7",
+    "can-fixture-socket": "^2.0.3",
+    "can-set-legacy": "<2.0.0",
     "concurrently": "^3.1.0",
     "detect-cyclic-packages": "^1.1.0",
-    "feathers": "^2.0.3",
-    "feathers-authentication-client": "^0.3.2",
-    "feathers-hooks": "^2.0.1",
-    "feathers-rest": "^1.5.0",
-    "feathers-socketio": "^2.0.1",
     "http-server": "^0.11.0",
     "jquery": "^3.1.0",
     "jshint": "^2.9.4",
     "saucelabs": "^1.4.0",
     "socket.io-client": "^2.0.4",
-    "steal": "^2.0.0",
+    "steal": "^2.2.3",
     "steal-qunit": "^2.0.0",
-    "steal-socket.io": "^4.0.8",
-    "steal-tools": "^2.0.0",
+    "steal-socket.io": "^4.2.0",
+    "steal-tools": "^2.2.2",
     "test-saucelabs": "0.0.6",
     "testee": "^0.9.0",
     "wd": "^1.1.3"

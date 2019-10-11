@@ -1,6 +1,6 @@
 "use strict";
 var connect = require('can-connect');
-var errors = require('feathers-errors');
+var errors = require('@feathersjs/errors');
 var authAgent = require('feathers-authentication-popups').authAgent;
 var decode = require('jwt-decode');
 var payloadIsValid = require('../utils/utils').payloadIsValid;
@@ -19,11 +19,11 @@ module.exports = connect.behavior('data/feathers-session', function (base) {
 	if (!this.Map) {
 		throw new Error('You must provide a Map instance to the feathers-session behavior. See ' + helpURL);
 	}
-	if (!feathersClient.passport) {
+	if (!feathersClient.authentication) {
 		throw new Error('You must register the feathers-authentication-client plugin before using the feathers-session behavior. See ' + helpURL);
 	}
 
-	var options = feathersClient.passport.options;
+	var options = feathersClient.authentication.options;
 	var Session = this.Map;
 
 	Object.defineProperty(Session, 'current', {
@@ -84,6 +84,11 @@ module.exports = connect.behavior('data/feathers-session', function (base) {
 			});
 		},
 		createData: function (data) {
+			/*var tokenLocation = options.storageKey || options.cookie;
+			if(!hasValidToken(tokenLocation)) {
+				return Promise.reject(new errors.NotAuthenticated('Not Authenticated'));
+			}*/
+
 			var requestData = convertLocalAuthData(data);
 			return feathersClient.authenticate(requestData)
 				.then(function (response) {
@@ -94,9 +99,8 @@ module.exports = connect.behavior('data/feathers-session', function (base) {
 				});
 		},
 		getData: function () {
-
 			return new Promise(function (resolve, reject) {
-				var tokenLocation = options.tokenKey || options.cookie;
+				var tokenLocation = options.storageKey || options.cookie;
 				if (hasValidToken(tokenLocation) && !window.doneSsr) {
 					feathersClient.authenticate()
 						.then(function (data) {
