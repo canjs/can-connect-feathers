@@ -1,14 +1,14 @@
 var runCrossProviderTests = require('./session_tests-x-provider');
 var clearCookies = require('../test/clear-cookies');
 
-var socketio = require('feathers-socketio/client');
-var rest = require('feathers-rest/client');
+var socketio = require('@feathersjs/socketio-client');
+var rest = require('@feathersjs/rest-client');
 var jQuery = require('jquery');
 var io = require('socket.io-client/dist/socket.io');
 var fixtureSocket = require('can-fixture-socket');
 var fixture = require('can-fixture');
 var set = require('can-set-legacy');
-var errors = require('feathers-errors');
+var errors = require('@feathersjs/errors');
 
 
 // Setup the shared fixture stuff to be used
@@ -50,6 +50,7 @@ function getUserFromStore (authData) {
 	})[0];
 }
 var authRestHandler = function (request, response) {
+	var error;
 	var authData = request.data;
 	if (authData && authData.isTwoFactorAuthExample) {
 		response({success: true});
@@ -59,17 +60,22 @@ var authRestHandler = function (request, response) {
 			document.cookie = 'feathers-jwt=' + accessToken;
 			response({accessToken: accessToken});
 		} else {
-			var error = new errors.NotAuthenticated('not-authenticated');
+			error = new errors.NotAuthenticated('not-authenticated');
 			return response(401, error, undefined, error.message);
 		}
 	} else if (authData && authData.accessToken) {
 		document.cookie = 'feathers-jwt=' + accessToken;
 		response({accessToken: accessToken});
+	} else if(request.method === "delete") {
+		response({});
+	} else {
+		error = new errors.NotAuthenticated('not-authenticated');
+		return response(401, error, undefined, error.message);
 	}
 };
 
 
-// Run basic tests for the feathers-socketio provider.
+// Run basic tests for the @feathers/socketio provider.
 clearCookies();
 runCrossProviderTests({
 	moduleName: 'feathers-rest',
@@ -86,10 +92,10 @@ runCrossProviderTests({
 
 
 
-// Run basic tests for the feathers-socketio provider.
+// Run basic tests for the feathersjs/socketio provider.
 clearCookies();
 runCrossProviderTests({
-	moduleName: 'feathers-socketio',
+	moduleName: '@feathersjs/socketio',
 	provider: function(){
 		var socket = io('', {
 			transports: ['websocket']
@@ -118,7 +124,7 @@ runCrossProviderTests({
 			}
 		});
 
-		mockServer.on('authenticate', function (request, callback) {
+		mockServer.on('authentication::create', function (request, args, callback) {
 			function authenticatedUser () {
 				isAuthenticated = true;
 				document.cookie = 'feathers-jwt=' + accessToken;
@@ -139,10 +145,9 @@ runCrossProviderTests({
 				callback(new errors.NotAuthenticated('not-authenticated'));
 			}
 		});
-		mockServer.on('logout', function (callback) {
+		mockServer.on('authentication::remove', function(id, params, callback) {
 			isAuthenticated = false;
 			callback();
 		});
-
 	}
 });

@@ -1,6 +1,6 @@
 var QUnit = require('steal-qunit');
-var DefineMap = require('can-define/map/');
-var DefineList = require('can-define/list/');
+var DefineMap = require('can-define/map/map');
+var DefineList = require('can-define/list/list');
 // Behaviors
 var serviceBehavior = require('./service');
 var connect = require('can-connect');
@@ -13,9 +13,9 @@ var canRef = require('can-connect/can/ref/');
 var dataCallbacks = require('can-connect/data/callbacks/');
 var realtime = require('can-connect/real-time/');
 
-var feathers = require('feathers/client');
-var hooks = require('feathers-hooks');
-var auth = require('feathers-authentication-client');
+var feathers = require('@feathersjs/client');
+//var hooks = require('feathers-hooks');
+var auth = require('@feathersjs/authentication-client');
 var set = require('can-set-legacy');
 
 module.exports = function runProviderTests (options) {
@@ -41,7 +41,7 @@ module.exports = function runProviderTests (options) {
 
 			var app = feathers()
 				.configure(options.provider)
-				.configure(hooks())
+				//.configure(hooks())
 				.configure(auth());
 
 			Message = DefineMap.extend('Message', {
