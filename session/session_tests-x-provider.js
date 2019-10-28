@@ -353,7 +353,7 @@ module.exports = function runSessionTests (options) {
 							done();
 						});
 					}).catch(function (e) {
-						assert.notOk(err, "should have been able to create a session");
+						assert.notOk(e, "should have been able to create a session");
 						done();
 					});
 				});

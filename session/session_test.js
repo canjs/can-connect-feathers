@@ -50,6 +50,7 @@ function getUserFromStore (authData) {
 	})[0];
 }
 var authRestHandler = function (request, response) {
+	var error;
 	var authData = request.data;
 	if (authData && authData.isTwoFactorAuthExample) {
 		response({success: true});
@@ -59,7 +60,7 @@ var authRestHandler = function (request, response) {
 			document.cookie = 'feathers-jwt=' + accessToken;
 			response({accessToken: accessToken});
 		} else {
-			var error = new errors.NotAuthenticated('not-authenticated');
+			error = new errors.NotAuthenticated('not-authenticated');
 			return response(401, error, undefined, error.message);
 		}
 	} else if (authData && authData.accessToken) {
@@ -68,7 +69,7 @@ var authRestHandler = function (request, response) {
 	} else if(request.method === "delete") {
 		response({});
 	} else {
-		var error = new errors.NotAuthenticated('not-authenticated');
+		error = new errors.NotAuthenticated('not-authenticated');
 		return response(401, error, undefined, error.message);
 	}
 };
