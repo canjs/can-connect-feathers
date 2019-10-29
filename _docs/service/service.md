@@ -39,10 +39,9 @@ Setting up the Feathers Client is a prerequisite for using this behavior.  See t
 
 ```js
 // models/todo.js
+import ObservableObject from "can-observable-object";
+import ObservableArray from "can-observable-array";
 import connect from "can-connect";
-
-import DefineMap from "can-define/map/map";
-import DefineList from "can-define/list/list";
 
 // Bring in the feathers service behavior
 import feathersServiceBehavior from "can-connect-feathers/service";
@@ -62,18 +61,20 @@ import feathersClient from "./feathers";
 // Use feathersClient.service(url) to create a service
 const todoService = feathersClient.service( "/api/todos" );
 
-const Todo = DefineMap.extend( "Todo", {
-	_id: {
-		type: "string",
-		identity: true
-	},
-	description: "string",
-	complete: "boolean"
-} );
+class Todo extends ObservableObject {
+	static props = {
+		_id: {
+			type: String,
+			identity: true
+		},
+		description: String,
+		complete: false
+	}
+}
 
-Todo.List = DefineList.extend({
-	"#": Todo
-});
+class TodoList extends ObservableArray {
+	static items = Todo;
+}
 
 Todo.connection = connect( [
 
@@ -91,8 +92,8 @@ Todo.connection = connect( [
 	realtime
 ], {
 	idProp: "_id",
-	Map: Todo,
-	List: Todo.List,
+	ObjectType: Todo,
+	ArrayType: TodoList,
 
 	// Pass the service as the `feathersService` property.
 	feathersService: todoService,
