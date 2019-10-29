@@ -5,7 +5,7 @@
 
 @signature `feathersService(baseConnect)`
 
-Connects the [can-connect/DataInterface] methods to the Feathers [Service Interface](https://docs.feathersjs.com/services/readme.html#service-methods) methods.
+Connects the [can-connect/DataInterface] methods to the Feathers [Service Interface](https://docs.feathersjs.com/api/services.html) methods.
 
 ```js
 connect( [
@@ -20,7 +20,7 @@ For can-connect's real-time functionality to work with this behavior, the [can-c
 
 @body
 
-The `feathers-service` behavior maps can-connect's [can-connect/DataInterface] methods to FeathersJS's [Service Interface](https://docs.feathersjs.com/services/readme.html#service-methods) methods.
+The `feathers-service` behavior maps can-connect's [can-connect/DataInterface] methods to FeathersJS's [Service Interface](https://docs.feathersjs.com/api/services.html) methods.
 
 ```
 | DataInterface method | Feathers method | HTTP method | Example Path |
@@ -41,9 +41,8 @@ Setting up the Feathers Client is a prerequisite for using this behavior.  See t
 // models/todo.js
 import connect from "can-connect";
 
-import DefineMap from "can-define/map/";
+import DefineMap from "can-define/map/map";
 import DefineList from "can-define/list/list";
-import set from "can-set-legacy";
 
 // Bring in the feathers service behavior
 import feathersServiceBehavior from "can-connect-feathers/service";
@@ -64,16 +63,17 @@ import feathersClient from "./feathers";
 const todoService = feathersClient.service( "/api/todos" );
 
 const Todo = DefineMap.extend( "Todo", {
-	_id: "string",
+	_id: {
+		type: "string",
+		identity: true
+	},
 	description: "string",
 	complete: "boolean"
 } );
 
-Todo.algebra = new set.Algebra(
-	set.comparators.id( "_id" )
-);
-
-Todo.List = DefineList.extend( { "*": Todo } );
+Todo.List = DefineList.extend({
+	"#": Todo
+});
 
 Todo.connection = connect( [
 
@@ -96,8 +96,7 @@ Todo.connection = connect( [
 
 	// Pass the service as the `feathersService` property.
 	feathersService: todoService,
-	name: "todos",
-	algebra: Todo.algebra
+	name: "todos"
 } );
 
 export default Todo;

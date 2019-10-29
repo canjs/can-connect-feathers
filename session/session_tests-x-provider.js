@@ -48,8 +48,7 @@ module.exports = function runSessionTests (options) {
 	options.fixtures();
 
 	app = feathers()
-		.configure(options.provider() )
-		//.configure(hooks())
+		.configure(options.provider())
 		.configure(auth());
 
 	var behaviors = [
