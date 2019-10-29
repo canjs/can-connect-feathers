@@ -3,7 +3,7 @@
 
 @type {FeathersService}
 
-Specifies a [FeathersClient](https://docs.feathersjs.com/clients/feathers.html) Service instance to use for the data connection.  See the [can-connect-feathers] page for an example Feathers Client configuration.
+Specifies a [FeathersClient](https://docs.feathersjs.com/api/client.html) Service instance to use for the data connection.  See the [can-connect-feathers] page for an example Feathers Client configuration.
 
 ```js
 // Bring in the feathersClient instance and setup a service.

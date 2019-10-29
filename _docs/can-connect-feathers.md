@@ -14,24 +14,22 @@
 
 @body
 
-Both of the included behaviors require a Feathers Client instance.  Here is a basic setup: 
+Both of the included behaviors require a Feathers Client instance.  Here is a basic setup:
 
 ```js
 // models/feathers.js
-import feathers from "feathers/client";
-
-import socketio from "feathers-socketio/client";
+import feathers from "@feathersjs/client";
+import socketio from "@feathersjs/socketio-client";
 import io from "socket.io-client/dist/socket.io";
-import hooks from "feathers-hooks";
-import auth from "feathers-authentication-client";
-const socket = io( "" );
+import auth from "@feathersjs/authentication-client";
 
-const feathersClient = feathers()
-	.configure( hooks() )
+const socket = io( "http://example.com" );
+
+const client = feathers()
 	.configure( socketio( socket ) )
 	.configure( auth() );
 
-export default feathersClient;
+export default client;
 ```
 
-> Pro tip: If you are planning on using Done-SSR, exchange the `socket.io-client/dist/socket.io` module for `steal-socket.io` in the above example.
+> Pro tip: If you are planning on using Done-SSR, exchange the `socket.io-client/dist/socket.io` module for [steal-socket.io](https://stealjs.com/docs/steal-socket.io.html) in the above example.

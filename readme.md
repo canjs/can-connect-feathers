@@ -12,8 +12,6 @@
  - The service behavior connects to a Feathers service.
  - The session behavior connects to the [feathers-authentication-client](https://docs.feathersjs.com/api/authentication/client.html) methods on a Feathers Client instance.
 
- > Important Note:  Version 3.0 is not yet fully compatible with [done-ssr](https://github.com/donejs/done-ssr).  If you need SSR, please install the `2.x` version from npm and check the [2.x branch’s README.md](https://github.com/canjs/can-connect-feathers/blob/2.x/readme.md) for docs.
-
 ## Documentation
 
 Read the [can-connect-feathers API docs on CanJS.com](https://canjs.com/doc/can-connect-feathers.html).
@@ -29,4 +27,3 @@ The [contribution guide](https://github.com/canjs/can-connect-feathers/blob/mast
 ## License
 
 [MIT](https://github.com/canjs/can-connect-feathers/blob/master/LICENSE.md)
-

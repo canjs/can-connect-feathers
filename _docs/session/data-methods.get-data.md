@@ -3,6 +3,6 @@
 
 @signature `getData()`
 
-Uses the [can-connect-feathers/session/session.options.feathersClient feathersClient] `getJWT` method to retrieve and verify the current JSON Web Token (JWT).
+Makes a request to the authentication endpoint to verify that the token is valid.
 
 @return {Promise<Object>} A promise that resolves to the JWT payload if the token was valid.

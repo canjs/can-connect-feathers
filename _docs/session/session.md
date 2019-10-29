@@ -5,7 +5,7 @@
 
 @signature `feathersSession(baseConnect)`
 
-Connects [can-connect/DataInterface] methods to the [feathers-authentication-client](https://github.com/feathersjs/feathers-authentication-client) plugin methods for authentication.
+Connects [can-connect/DataInterface] methods to the [@feathersjs/authentication-client](https://docs.feathersjs.com/api/authentication/client.html) plugin methods for authentication.
 
 ```js
 connect( [
@@ -15,11 +15,11 @@ connect( [
 	feathersClient: feathersClient,
 	Map: SessionMap
 } );
-``` 
+```
 
 @body
 
-The `feathers-session` behavior uses the [feathers-authentication-client](https://github.com/feathersjs/feathers-authentication-client) to authenticate with a Feathers server.  Three of the [can-connect/DataInterface DataInterface] methods are used:
+The `feathers-session` behavior uses the [Authentication client](https://docs.feathersjs.com/api/authentication/client.html) to authenticate with a Feathers server.  Three of the [can-connect/DataInterface DataInterface] methods are used:
 
  - [can-connect-feathers/session/session.data-methods.createData createData] attempts to authenticate with the Feathers server, which upon success returns a JSON Web Token (JWT).  The JWT contains a payload with information about the current session.  That payload is returned as the session object.
  - [can-connect-feathers/session/session.data-methods.getData] validates a stored JWT and returns its payload if the token hasn't expired.
